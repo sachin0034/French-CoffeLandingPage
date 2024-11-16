@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+.contact-form-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  background-color: #713d11;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px auto;
+  max-width: 1400px;
+  gap: 120px;
+}
+
+.contact-form {
+  flex: 1 1 60%;
+  padding: 20px;
+  background-color: #713d11;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif;
+}
+
+.contact-form h2 {
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.contact-form p {
+  font-size: 14px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.contact-form h2,p,label{
+  color: white;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 15px;
+  border: 3px solid #aa8b6f;
+  border-radius: 11px;
+  background-color: #aa8b6f;
+}
+
+.contact-form textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+.form-submit {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.contact-form button {
+  background-color: #ebe1d5;
+  color: #713d11;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.contact-image {
+  flex: 1 1 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-image img {
+  max-width: 100%;
+  border-radius: 10px;
+  height: auto;
+}
+
+@media (max-width: 1024px) {
+  .contact-form-container {
+    gap: 50px;
+    padding: 15px;
+    margin: 15px auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-form-container {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .contact-image {
+    display: none;
+  }
+
+  .form-submit {
+    justify-content: center;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .contact-form {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-form-container {
+    margin: 10px;
+    padding: 10px;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    padding: 8px;
+  }
+
+  .contact-form button {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .contact-form h2 {
+    font-size: 1.5rem;
+  }
+
+  .contact-form p {
+    font-size: 13px;
+  }
+}

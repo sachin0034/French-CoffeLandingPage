@@ -1,0 +1,178 @@
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-image: url('../../assets/images/Background.webp');
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: auto;
+    color: white;
+    position: relative;
+    z-index: 2;
+    padding: clamp(10px, 2vw, 20px) clamp(10px, 2vw, 20px) clamp(20px, 4vw, 40px);
+    top: 0;
+  }
+  
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+  }
+  
+  .header > * {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .header-top {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    position: relative;
+  }
+
+  .header-content h2{
+    font-size: clamp(10px, 1.5vw, 12px);
+  }
+  
+  .menu-icon {
+    position: absolute;
+    right: 90px;
+    font-size: clamp(24px, 3vw, 30px);
+    cursor: pointer;
+    /* margin-right: 9px; */
+  }
+  
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 0;
+    position: static;
+    top: 0;
+  }
+  
+  .logo {
+    height: clamp(60px, 8vw, 60px);
+    width: auto;
+  }
+  
+  .header-content {
+    text-align: center;
+    padding-bottom: 20px;
+    z-index: 2;
+  }
+  .header-content h2{
+    font-size: clamp(10px, 1.5vw, 12px);
+    margin-top: clamp(-20px, -3vw, -30px);
+    letter-spacing:3px;
+    word-spacing:5px;
+    line-height:30px
+    }
+    .header-content p{
+        line-height:10px;
+    }
+  
+  .reserve-button {
+
+    background-color: #713d11;
+    color: #fff;
+    padding: clamp(8px, 1.5vw, 10px) clamp(30px, 5vw, 50px);
+    border: 3px solid #EBE1D5;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: clamp(14px, 1.8vw, 15px);
+    font-weight: 600;
+    margin-top: clamp(60px, 8vw, 100px);
+    border:2px white solid;
+    letter-spacing:3px;
+  }
+  
+  .icon-section {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .icon-with-description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .icon-with-description p {
+    margin-top: 5px;
+    font-size: clamp(12px, 1.6vw, 14px);
+    max-width: clamp(120px, 15vw, 150px);
+  }
+  
+  @media (max-width: 1024px) {
+    .icon-section {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    
+    .icon-with-description {
+        flex: 0 0 45%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .header {
+      padding: 10px 10px 30px;
+    }
+  
+    .menu-icon {
+      font-size: 24px;
+      right: 45px;
+    }
+  
+    .logo {
+      height: 40px;
+    }
+  
+    .reserve-button {
+      font-size: 16px;
+      padding: 8px 16px;
+    }
+  
+    .icon-section {
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+  
+    .icon-with-description {
+        width: 100%;
+        max-width: 300px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .header-content h2 {
+        margin-top: -15px;
+        letter-spacing: 2px;
+        word-spacing: 3px;
+    }
+    
+    .reserve-button {
+        padding: 8px 30px;
+        letter-spacing: 2px;
+    }
+  }
+  
+  body {
+    margin: 0;
+    padding-top: 100px;
+    overflow-x: hidden;
+  }
+  
