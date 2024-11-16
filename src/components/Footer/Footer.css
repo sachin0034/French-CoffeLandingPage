@@ -1,7 +1,7 @@
 .footer {
     background-color: #f5e2cb;
     color: #713d11;
-    padding:50px 100px 20px 100px;
+    padding: 50px 100px 20px 100px;
     margin-top: 20px;
 }
 
@@ -24,15 +24,21 @@
     gap: 20px;
 }
 
-.social-icons img {
+.social-icons a {
+    display: inline-block;
+    transition: transform 0.2s;
+}
+
+.social-icons svg {
     width: 80px;
     height: 80px;
-    transition: transform 0.2s ease;
+    fill: #713d11; /* Icon color */
     background: transparent;
 }
 
-.social-icons img:hover {
+.social-icons a:hover svg {
     transform: scale(1.1);
+    fill: #5a3010; /* Darken color on hover */
 }
 
 .footer p {
@@ -45,8 +51,8 @@
     .footer {
         padding: 40px 60px 20px 60px;
     }
-    
-    .social-icons img {
+
+    .social-icons svg {
         width: 70px;
         height: 70px;
     }
@@ -56,7 +62,7 @@
     .footer {
         padding: 30px 20px;
     }
-    
+
     .footer-content {
         flex-direction: column;
         align-items: center;
@@ -72,7 +78,7 @@
         margin-top: 15px;
     }
 
-    .social-icons img {
+    .social-icons svg {
         height: 60px;
         width: 60px;
     }
@@ -87,11 +93,11 @@
         height: 80px;
     }
 
-    .social-icons img {
+    .social-icons svg {
         height: 50px;
         width: 50px;
     }
-    
+
     .social-icons {
         gap: 15px;
     }
