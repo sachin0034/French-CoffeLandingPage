@@ -1,20 +1,15 @@
-import React from 'react';
-import Header from './components/Header/Header';
-import Sections from './components/Sections/Sections';
-import ContactForm from './components/contactForm/ContactForm';
-import Footer from './components/Footer/Footer';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   return (
-    <div className="App" style={{backgroundColor:'#723d12'}}>
-      <Header />
-      <br></br>
-      <Sections />
-      <br></br>
-      <ContactForm />
-      <Footer />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+      </Routes>
+    </Router>
   );
 }
 
