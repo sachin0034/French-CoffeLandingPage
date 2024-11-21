@@ -260,12 +260,12 @@ body {
   }
 }
 
-h1, h2 {
-  font-family: 'Gilroy', sans-serif;
+h1, h2,h3 {
+  font-family: 'Gilroy-Bold', sans-serif;
   font-weight: bold;
 }
 
 p {
-  font-family: 'Gilroy', sans-serif;
+  font-family: 'Gilroy-Medium', sans-serif;
   font-weight: 400;
 }
