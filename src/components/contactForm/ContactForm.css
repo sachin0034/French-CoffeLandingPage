@@ -97,6 +97,16 @@
   height: auto;
 }
 
+h1, h2 {
+  font-family: 'Gilroy', sans-serif;
+  font-weight: bold;
+}
+
+p {
+  font-family: 'Gilroy', sans-serif;
+  font-weight: 400;
+}
+
 @media (max-width: 1024px) {
   .contact-form-container {
     gap: 50px;

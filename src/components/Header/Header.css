@@ -80,15 +80,7 @@
   line-height: 10px;
 }
 
-h1, h2 {
-  font-family: 'Gilroy', sans-serif;
-  font-weight: bold;
-}
 
-p {
-  font-family: 'Gilroy', sans-serif;
-  font-weight: 500;
-}
 
 
 .reserve-button {
@@ -266,4 +258,14 @@ body {
     width: 100%;
     max-width: 300px;
   }
+}
+
+h1, h2 {
+  font-family: 'Gilroy', sans-serif;
+  font-weight: bold;
+}
+
+p {
+  font-family: 'Gilroy', sans-serif;
+  font-weight: 400;
 }
