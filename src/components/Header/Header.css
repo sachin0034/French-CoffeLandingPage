@@ -80,6 +80,17 @@
   line-height: 10px;
 }
 
+h1, h2 {
+  font-family: 'Gilroy', sans-serif;
+  font-weight: bold;
+}
+
+p {
+  font-family: 'Gilroy', sans-serif;
+  font-weight: 500;
+}
+
+
 .reserve-button {
   background-color: #713d11;
   color: #fff;
@@ -172,4 +183,87 @@
 body {
   margin: 0;
   overflow-x: hidden;
+}
+
+
+.swiper-container {
+  display: none;
+}
+
+
+@media (max-width: 1024px) {
+  .swiper-container {
+    display: block;
+  }
+
+  .icon-static {
+    display: none;
+  }
+}
+
+
+@media (min-width: 1025px) {
+  .icon-static {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .swiper-container {
+    display: none;
+  }
+}
+
+
+
+
+
+.swiper-container {
+  display: none;
+  width: 100%; 
+  margin: 0 auto; 
+  padding: 20px 0;
+}
+
+@media (max-width: 1024px) {
+  .swiper-container {
+    display: block;
+    margin: 0 auto; 
+    max-width: 80%;
+  }
+  .icon-static {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 10px 10px 30px;
+  }
+
+  .menu-icon {
+    font-size: 24px;
+    right: 45px;
+  }
+
+  .logo {
+    height: 40px;
+  }
+
+  .reserve-button {
+    font-size: 16px;
+    padding: 8px 16px;
+  }
+
+  .icon-section {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    justify-content: center; 
+  }
+
+  .icon-with-description {
+    width: 100%;
+    max-width: 300px;
+  }
 }
