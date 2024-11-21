@@ -107,6 +107,9 @@ p {
   font-weight: 400;
 }
 
+h3{
+  letter-spacing: 4.5px;
+}
 
 @media (max-width: 1024px) {
   .contact-form-container {

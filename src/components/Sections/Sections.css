@@ -1,5 +1,6 @@
 
 
+
 .cards-container {
   display: flex;
   justify-content:space-between;
@@ -58,7 +59,10 @@
   margin-top: 10px;
   font-size: 30px;
   color: #713d11;
+  letter-spacing: 4.5px;
 }
+
+
 
 @media (max-width: 1200px) {
   .card {
