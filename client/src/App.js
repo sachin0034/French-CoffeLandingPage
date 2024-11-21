@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import "./assets/styles/fonts.css";
 import "react-toastify/dist/ReactToastify.css";
+import './assets/styles/fonts.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -12,6 +15,8 @@ import Menudetails from "./pages/Menudetails";
 
 function App() {
   return (
+    <>
+    <ToastContainer />
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -22,6 +27,7 @@ function App() {
         <Route path="/menu-details" element={<Menudetails />} />
       </Routes>
     </Router>
+    </>
   );
 }
 

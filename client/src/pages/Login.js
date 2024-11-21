@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const Login = () => {
+  const navigate = useNavigate();
   const [post, setPost] = useState({
-    name: "",
+    email: "",
     password: "",
   });
 
@@ -19,36 +21,54 @@ const Login = () => {
           "Content-Type": "application/json",
         },
       };
-      const data = await axios.post("", post, config);
-      console.log(data);
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/auth/login`,
+        post,
+        config
+      );
+
+      if (response.data.success) {
+        const token = response.data.token;
+        localStorage.setItem("token", token);
+        toast.success("Login successful!");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000);
+      } else {
+        toast.error(response.data.message || "Invalid credentials!");
+      }
     } catch (error) {
-      console.log("Error: " + error);
+      console.error("Error: ", error);
+      toast.error(
+        error.response?.data?.message || "Something went wrong. Please try again."
+      );
     }
   };
 
   return (
     <>
       <div className="flex flex-col md:flex-row h-screen">
-        {/* Image Section */}
-        <div className="md:hidden w-full flex justify-center  p-4 pb-10">
+        {/* Image Section for All Screens Below Medium (Mobile + Tablets) */}
+        <div className="w-full flex justify-center mt-8 md:hidden">
           <img
             src="https://media.cnn.com/api/v1/images/stellar/prod/190411154654-07-bouillon-restaurants-paris.jpg?q=w_3101,h_1744,x_0,y_0,c_fill"
             alt="Flowers"
-            className="w-3/4 h-auto rounded-2xl shadow-xl object-cover"
+            className="w-5/6 sm:w-3/4 md:w-3/4 h-auto rounded-2xl object-cover"
           />
         </div>
 
-        {/* Left Section */}
-        <div className="flex flex-col justify-center items-center md:w-1/2 bg-white px-6 md:px-12">
-          <div className="w-full max-w-md">
-            <h2 className="text-3xl font-bold mb-4 text-gray-800">
+        {/* Left Section (Login Form) */}
+        <div className="flex flex-col justify-center items-center md:w-1/2 bg-white px-6 md:px-12 mt-4 mx-4 md:mt-0 md:mx-0 max-w-7xl">
+          <div className="w-full max-w-md lg:w-4/5 lg:ml-8">
+            <h2 className="text-3xl font-bold mb-6 text-gray-800 mt-4 sm:mt-10 sm:ml-6 lg:w-2/3 lg:ml-8">
               Welcome Back 👋
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 mb-6 lg:w-4/5 lg:ml-8">
               Today is a new day. It's your day. You shape it. Sign in to start
               managing your projects.
             </p>
-            <form onSubmit={login}>
+            <form onSubmit={login} className="lg:w-4/5 lg:ml-8">
               <div className="mb-4">
                 <label
                   htmlFor="email"
@@ -62,7 +82,7 @@ const Login = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="Example@email.com"
                   required
-                  name="name"
+                  name="email"
                   onChange={handleInput}
                 />
               </div>
@@ -98,13 +118,13 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Right Section */}
-        <div className="hidden md:flex md:w-1/2 items-center justify-center p-4 ">
+        {/* Right Section for Medium and Larger Screens (Desktop) */}
+        <div className="hidden md:flex md:w-1/2 items-center justify-center p-4 lg:mt-2 lg:mx-4 mr-0 max-w-7xl">
           <img
             src="https://media.cnn.com/api/v1/images/stellar/prod/190411154654-07-bouillon-restaurants-paris.jpg?q=w_3101,h_1744,x_0,y_0,c_fill"
             alt="Flowers"
-            className="w-1/2 md:w-1/3 lg:w-3/4 h-auto rounded-2xl shadow-xl object-cover"
-                      />
+            className="w-7/8 lg:w-7/8 lg:h-[95vh] h-auto rounded-2xl object-cover"
+          />
         </div>
       </div>
     </>
