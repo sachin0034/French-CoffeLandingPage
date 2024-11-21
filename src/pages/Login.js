@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const Login = () => {
+  const navigate = useNavigate();
   const [post, setPost] = useState({
-    name: "",
+    email: "",
     password: "",
   });
 
@@ -19,10 +21,28 @@ const Login = () => {
           "Content-Type": "application/json",
         },
       };
-      const data = await axios.post("", post, config);
-      console.log(data);
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/auth/login`,
+        post,
+        config
+      );
+
+      if (response.data.success) {
+        const token = response.data.token;
+        localStorage.setItem("token", token);
+        toast.success("Login successful!");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000);
+      } else {
+        toast.error(response.data.message || "Invalid credentials!");
+      }
     } catch (error) {
-      console.log("Error: " + error);
+      console.error("Error: ", error);
+      toast.error(
+        error.response?.data?.message || "Something went wrong. Please try again."
+      );
     }
   };
 
@@ -62,7 +82,7 @@ const Login = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="Example@email.com"
                   required
-                  name="name"
+                  name="email"
                   onChange={handleInput}
                 />
               </div>

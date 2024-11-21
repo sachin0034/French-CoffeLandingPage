@@ -2,7 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import './assets/styles/fonts.css';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -10,6 +11,8 @@ import AddUser from "./pages/AddUser";
 
 function App() {
   return (
+    <>
+    <ToastContainer />
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -18,6 +21,7 @@ function App() {
         <Route path="/add-user" element={<AddUser />} />
       </Routes>
     </Router>
+    </>
   );
 }
 

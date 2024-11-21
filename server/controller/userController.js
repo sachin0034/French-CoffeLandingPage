@@ -46,7 +46,6 @@ const login = async (req, res) => {
 
 const signup = async (req, res) => {
   try {
-    console.log(req.body)
     const userExist = await userModel.findOne({ email: req.body.email });
     if (userExist) {
       return res.status(201).send({
