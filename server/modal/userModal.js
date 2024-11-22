@@ -16,6 +16,8 @@ const userModel = mongoose.Schema({
     type: String,
     required: true,
   },
+  resetToken: { type: String },
+  tokenExpiry: { type: Date },
   isAdmin: {
     type: Boolean,
     default: false,
@@ -24,4 +26,3 @@ const userModel = mongoose.Schema({
 
 const userSchema = mongoose.model("User", userModel);
 module.exports = userSchema;
-
