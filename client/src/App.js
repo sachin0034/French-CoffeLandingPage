@@ -19,12 +19,9 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ProfilePage from "./pages/Profile";
 
 function App() {
-
-
   return (
     <>
       <ToastContainer />
-
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
