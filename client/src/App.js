@@ -16,6 +16,7 @@ import MenuDescription from "./pages/MenuDescription";
 import UserList from "./pages/UserList";
 import ChefSuggestion from "./pages/ChefSuggesstin";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ProfilePage from "./pages/Profile";
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
           <Route path="/menu-details" element={<Menudetails />} />
           <Route path="/menu-description/:date" element={<MenuDescription />} />
           <Route path="/chef" element={<ChefSuggestion />} />
+          <Route path="/profile" element={<ProfilePage/>}></Route>
         </Routes>
       </Router>
     </>
