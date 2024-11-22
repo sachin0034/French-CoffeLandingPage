@@ -14,9 +14,11 @@ app.use(express.urlencoded({ extended: true }));
 
 const userRoute = require("./routes/userRoute");
 const menuRoute = require("./routes/menuRoute");
+const chefRoute = require("./routes/chefRoute");
 
 app.use("/api/auth", userRoute);
 app.use("/api/menu", menuRoute);
+app.use("/api/chef", chefRoute);
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

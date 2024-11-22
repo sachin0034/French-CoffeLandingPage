@@ -209,6 +209,29 @@ const Navbar = () => {
                 <span className="ms-3">Menu Details</span>
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="/chef"
+                className={({ isActive }) =>
+                  `flex items-center p-2 rounded-lg ${
+                    isActive
+                      ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                      : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  }`
+                }
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                >
+                  <path d="M12 2c2.21 0 4 1.79 4 4 0 .36-.05.7-.13 1.03A5.98 5.98 0 0 1 20 12c0 3.31-2.69 6-6 6H10c-3.31 0-6-2.69-6-6 0-2.58 1.64-4.79 4-5.64C8.05 6.7 8 6.36 8 6c0-2.21 1.79-4 4-4zm-3 13h6c1.66 0 3-1.34 3-3a3.003 3.003 0 0 0-5.77-1.06A5.99 5.99 0 0 1 12 8a5.99 5.99 0 0 1-2.23.94A3.003 3.003 0 0 0 7 12c0 1.66 1.34 3 3 3zm1.5 3h3c.83 0 1.5.67 1.5 1.5S15.33 21 14.5 21h-5c-.83 0-1.5-.67-1.5-1.5S9.67 18 10.5 18h3z" />
+                </svg>
+
+                <span className="ms-3">Chef Suggestion</span>
+              </NavLink>
+            </li>
           </ul>
         </div>
       </aside>

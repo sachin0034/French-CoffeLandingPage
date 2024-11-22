@@ -26,11 +26,11 @@ const UserList = () => {
       if (response.data.isValid) {
         return;
       } else {
-        navigate("login");
+        navigate("/login");
       }
     } catch (error) {
       console.error("Error during token validation:", error);
-      navigate("login");
+      navigate("/login");
     }
   };
 
