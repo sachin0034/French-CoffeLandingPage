@@ -1,14 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Sidebar/Sidebar";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const [isAddMenuModalOpen, setAddMenuModalOpen] = useState(false);
   const [isWeeklyMenuModalOpen, setWeeklyMenuModalOpen] = useState(false);
+  const [admin, isAdmin] = useState(false);
+  useEffect(() => {
+    const admin = localStorage.getItem("admin");
+    isAdmin(admin);
+  }, []);
+  const navigate = useNavigate();
+  const fetchDataValid = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/auth/validateToken`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.isValid) {
+        return;
+      } else {
+        navigate("login");
+      }
+    } catch (error) {
+      console.error("Error during token validation:", error);
+      navigate("login");
+    }
+  };
+
+  useEffect(() => {
+    fetchDataValid();
+  }, []);
   const [menuData, setMenuData] = useState({
     date: "",
     name: "",
     price: "",
     description: "",
+    menuType: "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,23 +65,29 @@ const Dashboard = () => {
         `${process.env.REACT_APP_SERVER}/api/menu/add-single`,
         menuData
       );
-      alert("Menu added successfully!");
+      toast.success("Menu added successfully!");
       console.log(response.data);
       setAddMenuModalOpen(false);
-      setMenuData({ date: "", name: "", price: "", description: "" });
+      setMenuData({
+        date: "",
+        name: "",
+        price: "",
+        description: "",
+        menuType: "",
+      });
     } catch (error) {
       console.error("Error adding menu:", error);
-      alert("Failed to add menu. Please try again.");
+      toast.error("Failed to add menu. Please try again.");
     }
   };
   const [weeklyMenu, setWeeklyMenu] = useState({
-    Monday: { name: "", description: "", price: "" },
-    Tuesday: { name: "", description: "", price: "" },
-    Wednesday: { name: "", description: "", price: "" },
-    Thursday: { name: "", description: "", price: "" },
-    Friday: { name: "", description: "", price: "" },
-    Saturday: { name: "", description: "", price: "" },
-    Sunday: { name: "", description: "", price: "" },
+    Monday: { date: "", name: "", description: "", price: "" },
+    Tuesday: { date: "", name: "", description: "", price: "" },
+    Wednesday: { date: "", name: "", description: "", price: "" },
+    Thursday: { date: "", name: "", description: "", price: "" },
+    Friday: { date: "", name: "", description: "", price: "" },
+    Saturday: { date: "", name: "", description: "", price: "" },
+    Sunday: { date: "", name: "", description: "", price: "" },
   });
 
   const handleInputChange = (day, field, value) => {
@@ -56,21 +103,22 @@ const Dashboard = () => {
   const handleSubmitWeekLy = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/menu/weekly`,
-        weeklyMenu
-      );
-      alert("Weekly menu added successfully!");
-      console.log(response.data);
-      setWeeklyMenu({
-        Monday: { name: "", description: "", price: "" },
-        Tuesday: { name: "", description: "", price: "" },
-        Wednesday: { name: "", description: "", price: "" },
-        Thursday: { name: "", description: "", price: "" },
-        Friday: { name: "", description: "", price: "" },
-        Saturday: { name: "", description: "", price: "" },
-        Sunday: { name: "", description: "", price: "" },
-      });
+      console.log(weeklyMenu);
+      // const response = await axios.post(
+      //   `${process.env.REACT_APP_SERVER}/api/menu/weekly`,
+      //   weeklyMenu
+      // );
+      // alert("Weekly menu added successfully!");
+      // console.log(response.data);
+      // setWeeklyMenu({
+      //   Monday: { date: "", name: "", description: "", price: "" },
+      //   Tuesday: { date: "", name: "", description: "", price: "" },
+      //   Wednesday: { date: "", name: "", description: "", price: "" },
+      //   Thursday: { date: "", name: "", description: "", price: "" },
+      //   Friday: { date: "", name: "", description: "", price: "" },
+      //   Saturday: { date: "", name: "", description: "", price: "" },
+      //   Sunday: { date: "", name: "", description: "", price: "" },
+      // });
       setWeeklyMenuModalOpen(false);
     } catch (error) {
       console.error("Error adding weekly menu:", error);
@@ -90,13 +138,13 @@ const Dashboard = () => {
               <h3 className="text-lg font-bold">Add Menu</h3>
               <p className="text-sm">Click here to add a new menu item.</p>
             </div>
-            <div
+            {/* <div
               className="p-6 bg-green-600 text-white rounded-lg shadow-md cursor-pointer hover:bg-green-700"
               onClick={() => setWeeklyMenuModalOpen(true)}
             >
               <h3 className="text-lg font-bold">Add weekly menu</h3>
               <p className="text-sm">Click here to add the weekly menu.</p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -104,7 +152,7 @@ const Dashboard = () => {
       {isAddMenuModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-7xl sm:max-w-8xl md:max-w-9xl lg:max-w-10xl xl:max-w-screen-xl p-10">
-            <h2 className="text-xl font-bold mb-4">Add Weekly Menu</h2>
+            <h2 className="text-xl font-bold mb-4">Add Daily Menu</h2>
             <form onSubmit={handleSubmit}>
               {/* Date Input */}
               <div className="mb-4">
@@ -119,6 +167,26 @@ const Dashboard = () => {
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Menu Type
+                </label>
+                <select
+                  name="menuType"
+                  value={menuData.menuType}
+                  onChange={handleChange}
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                  required
+                >
+                  <option value="" disabled>
+                    Select menu type
+                  </option>
+                  <option value="Breakfast">Breakfast</option>
+                  <option value="Lunch">Lunch</option>
+                  <option value="Dinner">Dinner</option>
+                </select>
               </div>
 
               {/* Menu Name */}
@@ -189,7 +257,7 @@ const Dashboard = () => {
         </div>
       )}
 
-      {isWeeklyMenuModalOpen && (
+      {/* {isWeeklyMenuModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-7xl sm:max-w-lg md:max-w-xl lg:max-w-2xl p-6 overflow-hidden max-h-[80vh]">
             <h2 className="text-xl font-bold mb-4">Add Weekly Menu</h2>
@@ -198,6 +266,21 @@ const Dashboard = () => {
                 {Object.keys(weeklyMenu).map((day) => (
                   <div key={day} className="mb-6">
                     <h3 className="text-lg font-semibold mb-2">{day}</h3>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Enter date
+                      </label>
+                      <input
+                        type="date"
+                        name="date"
+                        value={weeklyMenu[day].date}
+                        onChange={(e) =>
+                          handleInputChange(day, "date", e.target.value)
+                        }
+                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                        required
+                      />
+                    </div>
                     <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-700">
                         Menu Name
@@ -260,7 +343,7 @@ const Dashboard = () => {
             </form>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

@@ -9,6 +9,10 @@ const menuSchema = new mongoose.Schema(
     },
     items: [
       {
+        menuType:{
+          type:String,
+          required:true
+        },
         name: {
           type: String,
           required: [true, "Menu item name is required"],

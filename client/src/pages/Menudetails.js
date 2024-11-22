@@ -1,96 +1,65 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Sidebar/Sidebar";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Menudetails = () => {
   const [calendarData, setCalendarData] = useState({});
-  const [selectedDay, setSelectedDay] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
-  // Generate calendar data (previous 30 days, today, next 7 days)
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER}/api/menu/get-menu`
+      );
+      if (response.data.success) {
+        setCalendarData(response.data.data);
+      }
+    } catch (error) {
+      console.log("Errr" + error);
+    }
+  };
+
+  const fetchDataValid = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/auth/validateToken`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.isValid) {
+        return;
+      } else {
+        navigate("login");
+      }
+    } catch (error) {
+      console.error("Error during token validation:", error);
+      navigate("login");
+    }
+  };
+
   useEffect(() => {
-    const generateCalendarData = () => {
-      const today = new Date();
-      const data = {};
-
-      // Previous 30 days
-      for (let i = 0; i < 30; i++) {
-        const date = new Date(today);
-        date.setDate(today.getDate() - i);
-        const dateString = date.toISOString().split("T")[0];
-        data[dateString] = {
-          hasMenu: Math.random() > 0.5,
-          menu:
-            Math.random() > 0.5
-              ? {
-                  name: "Sample Menu",
-                  description: "Menu details here",
-                  price: 100,
-                }
-              : null,
-        };
-      }
-
-      // Today
-      const todayString = today.toISOString().split("T")[0];
-      data[todayString] = {
-        hasMenu: Math.random() > 0.5,
-        menu:
-          Math.random() > 0.5
-            ? {
-                name: "Today Menu",
-                description: "Today's menu details",
-                price: 120,
-              }
-            : null,
-      };
-
-      // Next 7 days
-      for (let i = 1; i <= 7; i++) {
-        const date = new Date(today);
-        date.setDate(today.getDate() + i);
-        const dateString = date.toISOString().split("T")[0];
-        data[dateString] = {
-          hasMenu: Math.random() > 0.5,
-          menu:
-            Math.random() > 0.5
-              ? {
-                  name: "Future Menu",
-                  description: "Upcoming menu details",
-                  price: 150,
-                }
-              : null,
-        };
-      }
-
-      setCalendarData(data);
-    };
-    generateCalendarData();
+    fetchDataValid();
   }, []);
 
-  // Handle date click
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const handleDateClick = (date) => {
-    setSelectedDay(date);
-    setShowModal(true);
-  };
-
-  // Handle delete menu
-  const handleDeleteMenu = () => {
-    setCalendarData((prevData) => ({
-      ...prevData,
-      [selectedDay]: { ...prevData[selectedDay], menu: null, hasMenu: false },
-    }));
-    setShowModal(false);
-  };
-
-  // Handle edit menu
-  const handleEditMenu = (key, value) => {
-    setCalendarData((prevData) => ({
-      ...prevData,
-      [selectedDay]: {
-        ...prevData[selectedDay],
-        menu: { ...prevData[selectedDay].menu, [key]: value },
-      },
-    }));
+    navigate(`/menu-description/${date}`);
   };
 
   const sortedDates = Object.keys(calendarData).sort(
@@ -143,73 +112,6 @@ const Menudetails = () => {
           })}
         </div>
       </div>
-
-      {/* Modal */}
-      {showModal && selectedDay && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-            <h2 className="text-xl font-bold mb-4">
-              Menu for {new Date(selectedDay).toLocaleDateString()}
-            </h2>
-            {calendarData[selectedDay].menu ? (
-              <div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Menu Name
-                  </label>
-                  <input
-                    type="text"
-                    value={calendarData[selectedDay].menu.name}
-                    onChange={(e) => handleEditMenu("name", e.target.value)}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Description
-                  </label>
-                  <textarea
-                    value={calendarData[selectedDay].menu.description}
-                    onChange={(e) =>
-                      handleEditMenu("description", e.target.value)
-                    }
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
-                  ></textarea>
-                </div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Price
-                  </label>
-                  <input
-                    type="number"
-                    value={calendarData[selectedDay].menu.price}
-                    onChange={(e) => handleEditMenu("price", e.target.value)}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
-                  />
-                </div>
-              </div>
-            ) : (
-              <p>No menu available for this date.</p>
-            )}
-            <div className="flex justify-end mt-4">
-              <button
-                onClick={() => setShowModal(false)}
-                className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2 hover:bg-gray-600"
-              >
-                Close
-              </button>
-              {calendarData[selectedDay].menu && (
-                <button
-                  onClick={handleDeleteMenu}
-                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                >
-                  Delete Menu
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

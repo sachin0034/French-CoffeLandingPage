@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../components/Sidebar/Sidebar";
+import { useNavigate } from "react-router-dom";
 
 const AddUser = () => {
   const [formData, setFormData] = useState({
@@ -16,12 +17,45 @@ const AddUser = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const navigate = useNavigate();
+  const fetchDataValid = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/auth/validateToken`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.isValid) {
+        return;
+      } else {
+        navigate("login");
+      }
+    } catch (error) {
+      console.error("Error during token validation:", error);
+      navigate("login");
+    }
+  };
+
+  useEffect(() => {
+    fetchDataValid();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(process.env.REACT_APP_SERVER)
-    console.log(formData)
+    console.log(process.env.REACT_APP_SERVER);
+    console.log(formData);
     try {
- 
       const response = await axios.post(
         `${process.env.REACT_APP_SERVER}/api/auth/register`,
         formData
@@ -40,14 +74,16 @@ const AddUser = () => {
       {/* {loading ? <Loader /> : null} */}
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
-          <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-white-800 dark:border-white-700">
-            <h2 className="text-2xl font-bold text-gray-700 mb-6">Add User</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-white-800 dark:border-white-700 max-w-4xl mx-auto">
+            <h2 className="text-3xl font-semibold text-gray-800 dark:text-black mb-8 text-center">
+              Add New User
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name Field */}
-              <div>
+              <div className="flex flex-col">
                 <label
                   htmlFor="name"
-                  className="block mb-2 text-sm font-medium text-black-900 dark:text-black"
+                  className="text-sm font-medium text-black-700 dark:text-black mb-2"
                 >
                   Name
                 </label>
@@ -57,17 +93,17 @@ const AddUser = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-black-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-black-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-white-800 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 shadow-md"
                   placeholder="Enter user's name"
                   required
                 />
               </div>
 
               {/* Email Field */}
-              <div>
+              <div className="flex flex-col">
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-black-900 dark:text-black"
+                  className="text-sm font-medium text-black-700 dark:text-black mb-2"
                 >
                   Email
                 </label>
@@ -77,17 +113,17 @@ const AddUser = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-black-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-black-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-white-800 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 shadow-md"
                   placeholder="Enter user's email"
                   required
                 />
               </div>
 
               {/* Password Field */}
-              <div>
+              <div className="flex flex-col">
                 <label
                   htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-black-900 dark:text-black"
+                  className="text-sm font-medium text-black-700 dark:text-black mb-2"
                 >
                   Password
                 </label>
@@ -97,17 +133,17 @@ const AddUser = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-black-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-black-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-white-800 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 shadow-md"
                   placeholder="Enter a password"
                   required
                 />
               </div>
 
               {/* Phone Field */}
-              <div>
+              <div className="flex flex-col">
                 <label
                   htmlFor="phone"
-                  className="block mb-2 text-sm font-medium text-black-900 dark:text-black"
+                  className="text-sm font-medium text-black-700 dark:text-black mb-2"
                 >
                   Phone
                 </label>
@@ -117,19 +153,21 @@ const AddUser = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-black-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-black-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-white-800 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 shadow-md"
                   placeholder="Enter user's phone number"
                   required
                 />
               </div>
 
               {/* Submit Button */}
-              <button
-                type="submit"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Add User
-              </button>
+              <div className="flex justify-center">
+                <button
+                  type="submit"
+                  className="text-white bg-black hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-black-300 font-medium rounded-lg text-sm px-6 py-3 w-full sm:w-auto shadow-md transition duration-200 ease-in-out"
+                >
+                  Add User
+                </button>
+              </div>
             </form>
           </div>
         </div>

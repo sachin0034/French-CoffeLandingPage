@@ -2,8 +2,10 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader/Loader";
 const Login = () => {
   const navigate = useNavigate();
+  const [loading,setLoading] = useState(false)
   const [post, setPost] = useState({
     email: "",
     password: "",
@@ -15,6 +17,7 @@ const Login = () => {
 
   const login = async (e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       const config = {
         headers: {
@@ -28,9 +31,11 @@ const Login = () => {
         config
       );
 
+      setLoading(false)
       if (response.data.success) {
         const token = response.data.token;
         localStorage.setItem("token", token);
+        localStorage.setItem("admin",response.data.isAdmin)
         toast.success("Login successful!");
         setTimeout(() => {
           navigate("/dashboard");
@@ -39,6 +44,7 @@ const Login = () => {
         toast.error(response.data.message || "Invalid credentials!");
       }
     } catch (error) {
+      setLoading(false)
       console.error("Error: ", error);
       toast.error(
         error.response?.data?.message || "Something went wrong. Please try again."
@@ -48,6 +54,7 @@ const Login = () => {
 
   return (
     <>
+
       <div className="flex flex-col md:flex-row h-screen">
         {/* Image Section for All Screens Below Medium (Mobile + Tablets) */}
         <div className="w-full flex justify-center mt-8 md:hidden">
@@ -68,6 +75,7 @@ const Login = () => {
               Today is a new day. It's your day. You shape it. Sign in to start
               managing your projects.
             </p>
+            {loading ? <Loader /> : null}
             <form onSubmit={login} className="lg:w-4/5 lg:ml-8">
               <div className="mb-4">
                 <label
