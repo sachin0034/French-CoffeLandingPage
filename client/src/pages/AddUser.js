@@ -53,8 +53,6 @@ const AddUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(process.env.REACT_APP_SERVER);
-    console.log(formData);
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_SERVER}/api/auth/register`,

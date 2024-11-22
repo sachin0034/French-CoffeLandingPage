@@ -15,6 +15,7 @@ import Menudetails from "./pages/Menudetails";
 import MenuDescription from "./pages/MenuDescription";
 import UserList from "./pages/UserList";
 import ChefSuggestion from "./pages/ChefSuggesstin";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/add-user" element={<AddUser />} />
           <Route path="/user-list" element={<UserList />} />
           <Route path="/add-new-password" element={<PasswordReset />} />
+          <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
           <Route path="/menu-details" element={<Menudetails />} />
           <Route path="/menu-description/:date" element={<MenuDescription />} />
           <Route path="/chef" element={<ChefSuggestion />} />
