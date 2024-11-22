@@ -6,7 +6,7 @@ app.use(cors());
 require("dotenv").config();
 const db = require("./config/dbConn");
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));

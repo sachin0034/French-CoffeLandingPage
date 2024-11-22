@@ -17,12 +17,9 @@ import UserList from "./pages/UserList";
 import ChefSuggestion from "./pages/ChefSuggesstin";
 
 function App() {
-
-
   return (
     <>
       <ToastContainer />
-
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
