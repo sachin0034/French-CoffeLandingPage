@@ -4,6 +4,17 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "arijitghosh1203@gmail.com", 
+    pass: "sbkz nlun jawd ykki", 
+  },
+});
+
 const login = async (req, res) => {
   try {
     const user = await userModel.findOne({ email: req.body.email });
@@ -95,9 +106,17 @@ const signup = async (req, res) => {
       to: email,
       subject: "Welcome to French-Coffee",
       html: `
-        <h1>Welcome, ${name}!</h1>
-        <p>Your account has been successfully created.</p>
-        <p>Click <a href="${resetLink}">here</a> to set your password.</p>
+        <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <h1 style="text-align: center; color: #d87f5d;">Welcome, ${req.body.name}!</h1>
+            <img src="https://img.freepik.com/premium-photo/coffee-cup-with-coffee-beans-coffee-beans_144356-12524.jpg" alt="Coffee Cup" style="display: block; margin: 0 auto; width: 120px; height: 120px;" />
+            <p style="font-size: 16px; line-height: 1.5; text-align: center; color: #333;">Your account has been successfully created.</p>
+            <p style="text-align: center; margin-top: 20px;">
+              <a href="${resetLink}" style="background-color: #d87f5d; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Set Your Password</a>
+            </p>
+            <p style="font-size: 14px; text-align: center; color: #999;">If you did not create this account, please contact us immediately.</p>
+          </div>
+        </div>
       `,
     });
 
@@ -155,9 +174,16 @@ const resetPassword = async (req, res) => {
       to: user.email,
       subject: "Password Updated",
       html: `
-        <h1>Password Updated Successfully</h1>
-        <p>Your password has been updated.</p>
-      `,
+      <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <h1 style="text-align: center; color: #d87f5d;">Password Updated Successfully</h1>
+          <img src="https://img.freepik.com/premium-photo/coffee-cup-with-coffee-beans-coffee-beans_144356-12524.jpg" alt="Coffee Cup" style="display: block; margin: 0 auto; width: 120px; height: 120px;" />
+          <p style="font-size: 16px; line-height: 1.5; text-align: center; color: #333;">Hello ${req.body.name},</p>
+          <p style="font-size: 16px; line-height: 1.5; text-align: center; color: #333;">Your password has been successfully updated.</p>
+          <p style="font-size: 14px; text-align: center; color: #999;">If you didn't initiate this change, please contact us immediately.</p>
+        </div>
+      </div>
+    `,
     });
 
     res.status(200).send({
@@ -171,6 +197,106 @@ const resetPassword = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
+
+
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    user.resetToken = token;
+    user.tokenExpiry = Date.now() + 3600000;  
+    await user.save();
+
+    const resetLink = `http://localhost:3000/reset-password/${token}`;
+   
+    const html = `
+      <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <h1 style="text-align: center; color: #d87f5d;">Welcome to French-Coffee, ${user.name}!</h1>
+          <img src="https://www.shutterstock.com/image-photo/coffee-mug-grinded-beans-concept-600nw-2500190129.jpg" alt="Coffee Cup" style="display: block; margin: 0 auto; width: 140px; height: 120px;" />
+          <p style="font-size: 16px; line-height: 1.5; text-align: center; color: #333;">Hello ${user.name},</p>
+          <p style="font-size: 16px; line-height: 1.5; text-align: center; color: #333;">You requested a password reset. Click the link below to reset your password:</p>
+          <p style="text-align: center; margin-top: 20px;">
+            <a href="${resetLink}" style="background-color: #d87f5d; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Reset Password</a>
+          </p>
+          <p style="font-size: 14px; text-align: center; color: #999;">If you did not request a password reset, please ignore this email.</p>
+        </div>
+      </div>
+    `;
+    
+    await transporter.sendMail({
+      from: '"French-Coffee" <arijitghosh1203@gmail.com>',
+      to: email,
+      subject: "Password Reset",
+      html: html,
+    });
+
+    res.json({ success: true, message: "Password reset link sent to email." });
+  } catch (error) {
+    console.error("Error in forgot password:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+
+const resetPasswordInLoginTime = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const user = await userModel.findOne({
+      resetToken: token,
+      tokenExpiry: { $gt: Date.now() },  
+    });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: "Invalid or expired token." });
+    }
+
+    user.password = await bcrypt.hash(password, 10);
+    user.resetToken = undefined;
+    user.tokenExpiry = undefined;
+    await user.save();
+
+    const confirmationHtml = `
+      <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <h1 style="text-align: center; color: #d87f5d;">Password Reset Successful</h1>
+          <img src="https://www.shutterstock.com/image-photo/coffee-mug-grinded-beans-concept-600nw-2500190129.jpg" alt="Coffee Cup" style="display: block; margin: 0 auto; width: 140px; height: 120px;" />
+          <p style="font-size: 16px; line-height: 1.5; text-align: center; color: #333;">Hello ${user.name},</p>
+          <p style="font-size: 16px; line-height: 1.5; text-align: center; color: #333;">Your password has been successfully reset!</p>
+          <p style="font-size: 14px; text-align: center; color: #999;">If you didn't initiate this change, please contact us immediately.</p>
+        </div>
+      </div>
+    `;
+    
+    await transporter.sendMail({
+      from: '"French-Coffee" <arijitghosh1203@gmail.com>',
+      to: user.email,
+      subject: "Password Reset Successful",
+      html: confirmationHtml,
+    });
+
+    res.json({ success: true, message: "Password reset successful." });
+  } catch (error) {
+    console.error("Error in reset password:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+
+
 
 const deleteUser = async (req, res) => {
   try {
@@ -223,6 +349,8 @@ module.exports = {
   login,
   signup,
   resetPassword,
+  forgotPassword,
+  resetPasswordInLoginTime,
   validateToken,
   deleteUser,
   getUser,
