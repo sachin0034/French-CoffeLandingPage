@@ -14,6 +14,7 @@ import PasswordReset from "./pages/PasswordReset";
 import Menudetails from "./pages/Menudetails";
 import MenuDescription from "./pages/MenuDescription";
 import UserList from "./pages/UserList";
+import ChefSuggestion from "./pages/ChefSuggesstin";
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="/add-new-password" element={<PasswordReset />} />
           <Route path="/menu-details" element={<Menudetails />} />
           <Route path="/menu-description/:date" element={<MenuDescription />} />
+          <Route path="/chef" element={<ChefSuggestion />} />
         </Routes>
       </Router>
     </>
