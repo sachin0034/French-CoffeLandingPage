@@ -130,13 +130,30 @@ const Dashboard = () => {
       <Navbar />
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div
-              className="p-6 bg-blue-600 text-white rounded-lg shadow-md cursor-pointer hover:bg-blue-700"
+              className="p-6 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-300"
               onClick={() => setAddMenuModalOpen(true)}
             >
-              <h3 className="text-lg font-bold">Add Menu</h3>
-              <p className="text-sm">Click here to add a new menu item.</p>
+              <div className="flex items-center space-x-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  className="w-8 h-8 text-white"
+                >
+                  <path d="M12 4a8 8 0 1 1-8 8 8.01 8.01 0 0 1 8-8Zm1 5h3a1 1 0 0 1 0 2h-3v3a1 1 0 0 1-2 0v-3H8a1 1 0 0 1 0-2h3V6a1 1 0 0 1 2 0v3Z" />
+                </svg>
+                <div>
+                  <h3 className="text-xl font-bold tracking-normal">
+                    Add Menu
+                  </h3>
+
+                  <p className="text-sm opacity-90">
+                    Click here to add a new menu item.
+                  </p>
+                </div>
+              </div>
             </div>
             {/* <div
               className="p-6 bg-green-600 text-white rounded-lg shadow-md cursor-pointer hover:bg-green-700"

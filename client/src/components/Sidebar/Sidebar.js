@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
- import profileLogo from "../../assets/images.png";
+import profileLogo from "../../assets/images.png";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -148,15 +148,14 @@ const Navbar = () => {
                   }
                 >
                   <svg
-                    className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                    aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"
-                    viewBox="0 0 22 21"
+                    viewBox="0 0 24 24"
+                    className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                   >
-                    <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-                    <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
+                    <path d="M15 14c2.67 0 8 1.34 8 4v2H7v-2c0-2.66 5.33-4 8-4Zm0-2a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM3 12v2h4v-2H3ZM5 8H1v2h4V8Zm0 8H1v2h4v-2Z" />
                   </svg>
+
                   <span className="ms-3">Add User </span>
                 </NavLink>
               </li>
@@ -174,15 +173,14 @@ const Navbar = () => {
                   }
                 >
                   <svg
-                    className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                    aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"
-                    viewBox="0 0 22 21"
+                    viewBox="0 0 24 24"
+                    className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                   >
-                    <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-                    <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
+                    <path d="M16 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-7-4a3 3 0 1 0-3 3 3 3 0 0 0 3-3Zm7 6c-3.33 0-10 1.67-10 5v2h20v-2c0-3.33-6.67-5-10-5ZM6 15a6.29 6.29 0 0 0-6 3v2h6Z" />
                   </svg>
+
                   <span className="ms-3">User List</span>
                 </NavLink>
               </li>
@@ -200,15 +198,14 @@ const Navbar = () => {
                 }
               >
                 <svg
-                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
-                  viewBox="0 0 22 21"
+                  viewBox="0 0 24 24"
+                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                 >
-                  <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-                  <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
+                  <path d="M3 6h18a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2Zm0 5h18a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2Zm0 5h18a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2Z" />
                 </svg>
+
                 <span className="ms-3">Menu Details</span>
               </NavLink>
             </li>
