@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [admin, isAdmin] = useState(false);
   useEffect(() => {
     const admin = localStorage.getItem("admin");
+
     isAdmin(admin);
   }, []);
   const navigate = useNavigate();

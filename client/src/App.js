@@ -17,6 +17,7 @@ import UserList from "./pages/UserList";
 import ChefSuggestion from "./pages/ChefSuggesstin";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ProfilePage from "./pages/Profile";
+import AdminContact from "./pages/AdminContact";
 
 function App() {
   return (
@@ -34,7 +35,8 @@ function App() {
           <Route path="/menu-details" element={<Menudetails />} />
           <Route path="/menu-description/:date" element={<MenuDescription />} />
           <Route path="/chef" element={<ChefSuggestion />} />
-          <Route path="/profile" element={<ProfilePage/>}></Route>
+          <Route path="/profile" element={<ProfilePage/>} />
+          <Route path="/contact" element={<AdminContact/>} />
         </Routes>
       </Router>
     </>

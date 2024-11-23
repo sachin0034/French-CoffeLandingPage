@@ -55,10 +55,14 @@ const Login = () => {
         config
       );
 
+      console.log(response.data);
+
       setLoading(false);
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("admin", response.data.isAdmin);
+        localStorage.setItem("admin", response.data.isAdmin);
+        localStorage.setItem("name", response.data.user.name);
         toast.success("Login successful!");
         setTimeout(() => {
           navigate("/dashboard");
@@ -69,18 +73,19 @@ const Login = () => {
     } catch (error) {
       setLoading(false);
       toast.error(
-        error.response?.data?.message || "Something went wrong. Please try again."
+        error.response?.data?.message ||
+          "Something went wrong. Please try again."
       );
     }
   };
 
   return (
     <>
-    {loading && (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <Loader />
-      </div>
-    )}
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <Loader />
+        </div>
+      )}
       <div className="flex flex-col md:flex-row h-screen bg-white">
         <div className="w-full flex justify-center mt-8 md:hidden">
           <img
@@ -98,10 +103,13 @@ const Login = () => {
             <p className="text-gray-600 mb-6 lg:w-4/5 lg:ml-8">
               Sign in to start managing your projects.
             </p>
-           
+
             <form onSubmit={login} className="lg:w-4/5 lg:ml-8">
               <div className="mb-4">
-                <label htmlFor="email" className="block text-sm text-gray-600 mb-1">
+                <label
+                  htmlFor="email"
+                  className="block text-sm text-gray-600 mb-1"
+                >
                   Email
                 </label>
                 <input
@@ -115,7 +123,10 @@ const Login = () => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="password" className="block text-sm text-gray-600 mb-1">
+                <label
+                  htmlFor="password"
+                  className="block text-sm text-gray-600 mb-1"
+                >
                   Password
                 </label>
                 <input
@@ -144,12 +155,8 @@ const Login = () => {
                 Log in
               </button>
             </form>
-            
           </div>
-       
         </div>
-
-      
 
         <div className="hidden md:flex md:w-1/2 items-center justify-center p-4 lg:mt-2 lg:mx-4 mr-0 max-w-7xl">
           <img
@@ -164,9 +171,14 @@ const Login = () => {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 rounded-lg shadow-md w-96 transition-all">
-            <h2 className="text-lg font-bold text-white mb-4">Forgot Password</h2>
+            <h2 className="text-lg font-bold text-white mb-4">
+              Forgot Password
+            </h2>
             <form onSubmit={handleForgotPassword}>
-              <label htmlFor="reset-email" className="block text-sm text-white mb-2">
+              <label
+                htmlFor="reset-email"
+                className="block text-sm text-white mb-2"
+              >
                 Enter your email to receive a password reset link:
               </label>
               <input
