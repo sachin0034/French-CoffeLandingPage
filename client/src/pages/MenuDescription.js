@@ -211,16 +211,26 @@ const MenuDescription = () => {
   const [activeTab, setActiveTab] = useState("breakfast");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-
+  const [searchQuery, setSearchQuery] = useState("");
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setCurrentPage(1);
+    setSearchQuery("");
   };
   const paginate = (data) => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return data.slice(startIndex, startIndex + itemsPerPage);
   };
-  const renderTable = (type, data) => (
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const renderTable = (type, data) => {
+    const filteredMenu = data.filter((item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    return (
     <div className="mb-8">
       <h2 className="text-lg font-semibold mb-4 capitalize">{type} Menu</h2>
       <div className="overflow-x-auto relative">
@@ -242,8 +252,8 @@ const MenuDescription = () => {
             </tr>
           </thead>
           <tbody>
-            {data.length > 0 ? (
-              data.map((item) => (
+            {filteredMenu.length > 0 ? (
+              filteredMenu.map((item) => (
                 <tr
                   key={item._id}
                   className="bg-white border-b dark:bg-white-800 dark:border-white-700"
@@ -298,13 +308,13 @@ const MenuDescription = () => {
       </div>
     </div>
   );
-
+  }
   return (
     <div>
       <Navbar />
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
-          <div className=" top-0 left-0 w-full bg-black shadow-lg flex justify-around items-center py-4 z-20">
+          <div className="top-0 left-0 w-full bg-gray-300 shadow-lg flex justify-around items-center py-4 z-20 rounded-b-lg shadow-lg">
             <button
               onClick={() => handleTabChange("breakfast")}
               className={`px-6 py-2 font-medium text-lg transition-all duration-300 ${
@@ -335,6 +345,15 @@ const MenuDescription = () => {
             >
               Dinner
             </button>
+          </div>
+          <div className="mt-6 flex justify-center">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder="Search menu..."
+              className="px-4 py-2 border rounded-lg shadow-md w-full max-w-md"
+            />
           </div>
 
           {/* Content based on Active Tab */}
