@@ -53,6 +53,7 @@ const Dashboard = () => {
     description: "",
     category: "",
     menuType: "",
+    dprice: "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -204,7 +205,7 @@ const Dashboard = () => {
 
       {isAddMenuModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl sm:max-w-4xl md:max-w-3xl lg:max-w-3xl xl:max-w-4xl p-10">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-sm sm:max-w-md md:max-w-sm lg:max-w-md xl:max-w-lg p-10 overflow-y-auto max-h-[70vh]">
             <h2 className="text-xl font-bold mb-4">Add Daily Menu</h2>
             <form onSubmit={handleSubmit}>
               {/* Date Input */}
@@ -222,6 +223,7 @@ const Dashboard = () => {
                 />
               </div>
 
+              {/* Category Input */}
               <div className="mb-4">
                 <label
                   htmlFor="category"
@@ -248,6 +250,7 @@ const Dashboard = () => {
                 </select>
               </div>
 
+              {/* Menu Type Input */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
                   Menu Type
@@ -268,7 +271,7 @@ const Dashboard = () => {
                 </select>
               </div>
 
-              {/* Menu Name */}
+              {/* Menu Name Input */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
                   Menu Name
@@ -284,7 +287,7 @@ const Dashboard = () => {
                 />
               </div>
 
-              {/* Menu Price */}
+              {/* Menu Price Input */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
                   Menu Price
@@ -300,7 +303,23 @@ const Dashboard = () => {
                 />
               </div>
 
-              {/* Description */}
+              {/* Menu Discount Price Input */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Menu Discount Price
+                </label>
+                <input
+                  type="text"
+                  name="dprice"
+                  value={menuData.dprice}
+                  onChange={handleChange}
+                  placeholder="Enter menu price"
+                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                  required
+                />
+              </div>
+
+              {/* Description Input */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
                   Description
