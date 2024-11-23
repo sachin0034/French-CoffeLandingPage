@@ -345,13 +345,75 @@ const validateToken = (req, res) => {
   });
 };
 
+
+
+const getProfile = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).send({ message: "Unauthorized", success: false });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await userModel.findById(decoded.userId).select("-password");
+
+    if (!user) {
+      return res.status(404).send({ message: "User not found", success: false });
+    }
+
+    res.status(200).send(user);
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    res.status(500).send({ message: "Server Error", success: false });
+  }
+};
+
+
+const updateProfile = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized", success: false });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+
+    const { field,value } = req.body;
+
+    let user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(400).json({ message: "User not found", success: false });
+    }
+
+    if (field === "name") user.name = value;
+    if (field === "password") {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(value, salt);
+    }
+    if (field === "phone") user.phone = value;
+    await user.save();
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      user,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error", success: false });
+  }
+};
+
 module.exports = {
   login,
   signup,
   resetPassword,
   forgotPassword,
   resetPasswordInLoginTime,
-  validateToken,
   deleteUser,
   getUser,
+  validateToken,
+  getProfile,
+  updateProfile,
 };

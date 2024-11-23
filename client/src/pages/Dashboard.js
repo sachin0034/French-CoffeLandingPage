@@ -185,8 +185,8 @@ const Dashboard = () => {
 
       {isAddMenuModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-7xl sm:max-w-8xl md:max-w-9xl lg:max-w-10xl xl:max-w-screen-xl p-10">
-            <h2 className="text-xl font-bold mb-4">Add Daily Menu</h2>
+        <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl sm:max-w-4xl md:max-w-3xl lg:max-w-3xl xl:max-w-4xl p-10">
+        <h2 className="text-xl font-bold mb-4">Add Daily Menu</h2>
             <form onSubmit={handleSubmit}>
               {/* Date Input */}
               <div className="mb-4">
@@ -198,7 +198,7 @@ const Dashboard = () => {
                   name="date"
                   value={menuData.date}
                   onChange={handleChange}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 />
               </div>
@@ -211,7 +211,7 @@ const Dashboard = () => {
                   name="menuType"
                   value={menuData.menuType}
                   onChange={handleChange}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 >
                   <option value="" disabled>
@@ -234,7 +234,7 @@ const Dashboard = () => {
                   value={menuData.name}
                   onChange={handleChange}
                   placeholder="Enter menu name"
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 />
               </div>
@@ -250,7 +250,7 @@ const Dashboard = () => {
                   value={menuData.price}
                   onChange={handleChange}
                   placeholder="Enter menu price"
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 />
               </div>
@@ -265,7 +265,7 @@ const Dashboard = () => {
                   value={menuData.description}
                   onChange={handleChange}
                   placeholder="Enter description"
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
+                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 ></textarea>
               </div>

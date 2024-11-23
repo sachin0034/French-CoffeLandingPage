@@ -18,7 +18,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("admin");
-    navigate("/");
+    navigate("/login");
   };
 
   useEffect(() => {
@@ -84,6 +84,14 @@ const Navbar = () => {
                   id="dropdown-user"
                 >
                   <ul className="py-1">
+                  <li>
+                      <button
+                        onClick={()=>navigate("/profile")}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
+                        Profile
+                      </button>
+                    </li>
                     <li>
                       <button
                         onClick={handleLogout}

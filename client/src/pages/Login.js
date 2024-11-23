@@ -76,6 +76,11 @@ const Login = () => {
 
   return (
     <>
+    {loading && (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <Loader />
+      </div>
+    )}
       <div className="flex flex-col md:flex-row h-screen bg-white">
         <div className="w-full flex justify-center mt-8 md:hidden">
           <img
@@ -93,7 +98,7 @@ const Login = () => {
             <p className="text-gray-600 mb-6 lg:w-4/5 lg:ml-8">
               Sign in to start managing your projects.
             </p>
-            {loading && <Loader />}
+           
             <form onSubmit={login} className="lg:w-4/5 lg:ml-8">
               <div className="mb-4">
                 <label htmlFor="email" className="block text-sm text-gray-600 mb-1">
@@ -123,7 +128,7 @@ const Login = () => {
                   required
                 />
               </div>
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex justify-end items-end mb-4">
                 <button
                   type="button"
                   onClick={() => setShowModal(true)}
@@ -139,8 +144,12 @@ const Login = () => {
                 Log in
               </button>
             </form>
+            
           </div>
+       
         </div>
+
+      
 
         <div className="hidden md:flex md:w-1/2 items-center justify-center p-4 lg:mt-2 lg:mx-4 mr-0 max-w-7xl">
           <img
@@ -177,7 +186,7 @@ const Login = () => {
             </form>
             <button
               onClick={() => setShowModal(false)}
-              className="mt-4 text-red-500 text-sm"
+              className="mt-4 text-white text-sm"
             >
               Close
             </button>
@@ -189,4 +198,3 @@ const Login = () => {
 };
 
 export default Login;
-

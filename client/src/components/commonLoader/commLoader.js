@@ -1,6 +1,6 @@
 import React from "react";
 import "./commLoader.css"
-const commLoader = () => {
+const CommLoader = () => {
   return (
     <div>
       <div>
@@ -10,4 +10,4 @@ const commLoader = () => {
   );
 };
 
-export default commLoader;
+export default CommLoader;
