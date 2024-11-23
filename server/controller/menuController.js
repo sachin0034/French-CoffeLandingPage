@@ -1,5 +1,8 @@
 const Menu = require("../modal/menuModal");
-
+const XLSX = require("xlsx");
+const fs = require("fs");
+const dayjs = require("dayjs");
+const path = require("path");
 const addMenu = async (req, res) => {
   const { date, name, price, description, menuType } = req.body;
   try {
@@ -196,6 +199,57 @@ const addPrevMenu = async (req, res) => {
   }
 };
 
+const addWeekMenu = async (req, res) => {
+  try {
+    const filePath = req.file.path;
+    const workbook = XLSX.readFile(filePath);
+    const sheetName = workbook.SheetNames[0];
+    const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+    for (const row of sheetData) {
+      const { date, menuType, name, description, price } = row;
+      if (!date || !menuType || !name || !price) {
+        console.warn(`Skipping incomplete row: ${JSON.stringify(row)}`);
+        continue;
+      }
+      let parsedDate;
+      let originalFormattedDate;
+      if (typeof date === "string") {
+        parsedDate = dayjs(date, "DD-MM-YYYY").startOf("day").toDate();
+        originalFormattedDate = dayjs(parsedDate).format("YYYY-MM-DD");
+      } else if (typeof date === "number") {
+        parsedDate = dayjs("1900-01-01")
+          .add(date - 2, "days")
+          .startOf("day")
+          .toDate();
+        originalFormattedDate = dayjs(parsedDate).format("YYYY-MM-DD");
+      } else {
+        console.error(`Unexpected date format: ${date}`);
+        continue;
+      }
+      let menu = await Menu.findOne({ date: originalFormattedDate });
+      if (!menu) {
+        menu = new Menu({ date: originalFormattedDate, items: [] });
+      }
+      menu.items.push({
+        menuType,
+        name,
+        description: description || "",
+        price,
+      });
+      await menu.save();
+    }
+    fs.unlinkSync(filePath);
+
+    res.status(200).json({ message: "Menu uploaded and saved successfully!" });
+  } catch (error) {
+    console.error("Error processing Excel file or saving menu:", error);
+    res
+      .status(500)
+      .json({ error: "Failed to process the Excel file or save menu" });
+  }
+};
+
 module.exports = {
   addMenu,
   getMenu,
@@ -203,4 +257,5 @@ module.exports = {
   deleteMenu,
   editMenu,
   addPrevMenu,
+  addWeekMenu,
 };

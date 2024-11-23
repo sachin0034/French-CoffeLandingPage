@@ -3,6 +3,7 @@ import Navbar from "../components/Sidebar/Sidebar";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Modal from "react-modal";
 const Dashboard = () => {
   const [isAddMenuModalOpen, setAddMenuModalOpen] = useState(false);
   const [isWeeklyMenuModalOpen, setWeeklyMenuModalOpen] = useState(false);
@@ -80,51 +81,61 @@ const Dashboard = () => {
       toast.error("Failed to add menu. Please try again.");
     }
   };
-  const [weeklyMenu, setWeeklyMenu] = useState({
-    Monday: { date: "", name: "", description: "", price: "" },
-    Tuesday: { date: "", name: "", description: "", price: "" },
-    Wednesday: { date: "", name: "", description: "", price: "" },
-    Thursday: { date: "", name: "", description: "", price: "" },
-    Friday: { date: "", name: "", description: "", price: "" },
-    Saturday: { date: "", name: "", description: "", price: "" },
-    Sunday: { date: "", name: "", description: "", price: "" },
-  });
 
-  const handleInputChange = (day, field, value) => {
-    setWeeklyMenu((prev) => ({
-      ...prev,
-      [day]: {
-        ...prev[day],
-        [field]: value,
-      },
-    }));
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+  const handleSubmitWeekLy = async () => {
+    if (!selectedFile) {
+      toast.info("Please select a file before submitting.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/menu/week`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      toast.success("File uploaded successfully!");
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast.error("Failed to upload file.");
+    }
+
+    setModalOpen(false);
   };
 
-  const handleSubmitWeekLy = async (e) => {
-    e.preventDefault();
+  const downloadSampleFile = async () => {
     try {
-      console.log(weeklyMenu);
-      // const response = await axios.post(
-      //   `${process.env.REACT_APP_SERVER}/api/menu/weekly`,
-      //   weeklyMenu
-      // );
-      // alert("Weekly menu added successfully!");
-      // console.log(response.data);
-      // setWeeklyMenu({
-      //   Monday: { date: "", name: "", description: "", price: "" },
-      //   Tuesday: { date: "", name: "", description: "", price: "" },
-      //   Wednesday: { date: "", name: "", description: "", price: "" },
-      //   Thursday: { date: "", name: "", description: "", price: "" },
-      //   Friday: { date: "", name: "", description: "", price: "" },
-      //   Saturday: { date: "", name: "", description: "", price: "" },
-      //   Sunday: { date: "", name: "", description: "", price: "" },
-      // });
-      setWeeklyMenuModalOpen(false);
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER}/menu-download`,
+        { responseType: "blob" }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "sample-menu-weekly.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      toast.success("Download Successfully");
     } catch (error) {
-      console.error("Error adding weekly menu:", error);
-      alert("Failed to add weekly menu. Please try again.");
+      console.error("Error downloading the sample file:", error);
+      toast.error("Internal Server Error");
     }
   };
+
   return (
     <div>
       <Navbar />
@@ -148,20 +159,26 @@ const Dashboard = () => {
                   <h3 className="text-xl font-bold tracking-normal">
                     Add Menu
                   </h3>
-
                   <p className="text-sm opacity-90">
                     Click here to add a new menu item.
                   </p>
                 </div>
               </div>
             </div>
-            {/* <div
+            <div
               className="p-6 bg-green-600 text-white rounded-lg shadow-md cursor-pointer hover:bg-green-700"
-              onClick={() => setWeeklyMenuModalOpen(true)}
+              onClick={() => setModalOpen(true)}
             >
-              <h3 className="text-lg font-bold">Add weekly menu</h3>
+              <h3 className="text-lg font-bold">Add Weekly Menu</h3>
               <p className="text-sm">Click here to add the weekly menu.</p>
-            </div> */}
+            </div>
+            <div
+              className="p-6 bg-purple-600 text-white rounded-lg shadow-md cursor-pointer hover:bg-purple-700"
+              onClick={downloadSampleFile}
+            >
+              <h3 className="text-lg font-bold">Download Sample File</h3>
+              <p className="text-sm">Click here to download a sample file.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -274,93 +291,32 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* {isWeeklyMenuModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-7xl sm:max-w-lg md:max-w-xl lg:max-w-2xl p-6 overflow-hidden max-h-[80vh]">
-            <h2 className="text-xl font-bold mb-4">Add Weekly Menu</h2>
-            <form onSubmit={handleSubmitWeekLy}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 overflow-y-auto max-h-[60vh]">
-                {Object.keys(weeklyMenu).map((day) => (
-                  <div key={day} className="mb-6">
-                    <h3 className="text-lg font-semibold mb-2">{day}</h3>
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Enter date
-                      </label>
-                      <input
-                        type="date"
-                        name="date"
-                        value={weeklyMenu[day].date}
-                        onChange={(e) =>
-                          handleInputChange(day, "date", e.target.value)
-                        }
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
-                        required
-                      />
-                    </div>
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Menu Name
-                      </label>
-                      <input
-                        type="text"
-                        placeholder={`Enter menu name for ${day}`}
-                        value={weeklyMenu[day].name}
-                        onChange={(e) =>
-                          handleInputChange(day, "name", e.target.value)
-                        }
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
-                      />
-                    </div>
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Description
-                      </label>
-                      <textarea
-                        placeholder={`Enter description for ${day}`}
-                        value={weeklyMenu[day].description}
-                        onChange={(e) =>
-                          handleInputChange(day, "description", e.target.value)
-                        }
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
-                      ></textarea>
-                    </div>
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Menu Price
-                      </label>
-                      <input
-                        type="number"
-                        placeholder={`Enter price for ${day}`}
-                        value={weeklyMenu[day].price || ""}
-                        onChange={(e) =>
-                          handleInputChange(day, "price", e.target.value)
-                        }
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="flex justify-end mt-4">
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-red-600 text-white rounded-md mr-2 hover:bg-red-700"
-                  onClick={() => setWeeklyMenuModalOpen(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )} */}
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setModalOpen(false)}
+        className="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto mt-20"
+        overlayClassName="bg-black bg-opacity-50 fixed inset-0 flex justify-center items-center"
+      >
+        <h2 className="text-2xl font-bold mb-4">Upload Weekly Menu</h2>
+        <input
+          type="file"
+          accept=".xlsx, .xls"
+          onChange={handleFileChange}
+          className="mb-4"
+        />
+        <button
+          className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
+          onClick={handleSubmitWeekLy}
+        >
+          Submit
+        </button>
+        <button
+          className="ml-4 bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-700"
+          onClick={() => setModalOpen(false)}
+        >
+          Cancel
+        </button>
+      </Modal>
     </div>
   );
 };
