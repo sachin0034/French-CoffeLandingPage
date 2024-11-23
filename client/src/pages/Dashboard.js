@@ -176,7 +176,9 @@ const Dashboard = () => {
               className="p-6 bg-purple-600 text-white rounded-lg shadow-md cursor-pointer hover:bg-purple-700"
               onClick={downloadSampleFile}
             >
-              <h3 className="text-lg font-bold">Download Sample File</h3>
+              <h3 className="text-lg font-bold">
+                Download Sample File (Weekly Menu)
+              </h3>
               <p className="text-sm">Click here to download a sample file.</p>
             </div>
           </div>
@@ -185,8 +187,8 @@ const Dashboard = () => {
 
       {isAddMenuModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl sm:max-w-4xl md:max-w-3xl lg:max-w-3xl xl:max-w-4xl p-10">
-        <h2 className="text-xl font-bold mb-4">Add Daily Menu</h2>
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl sm:max-w-4xl md:max-w-3xl lg:max-w-3xl xl:max-w-4xl p-10">
+            <h2 className="text-xl font-bold mb-4">Add Daily Menu</h2>
             <form onSubmit={handleSubmit}>
               {/* Date Input */}
               <div className="mb-4">

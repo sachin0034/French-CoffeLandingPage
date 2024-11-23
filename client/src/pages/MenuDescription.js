@@ -72,7 +72,6 @@ const MenuDescription = () => {
       toast.success("Menu added successfully!");
       setAddMenuModalOpen(false);
       setMenuData({
-        date: "",
         name: "",
         price: "",
         description: "",
@@ -209,6 +208,18 @@ const MenuDescription = () => {
       toast.error("Something went wrong");
     }
   };
+  const [activeTab, setActiveTab] = useState("breakfast");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+  };
+  const paginate = (data) => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return data.slice(startIndex, startIndex + itemsPerPage);
+  };
   const renderTable = (type, data) => (
     <div className="mb-8">
       <h2 className="text-lg font-semibold mb-4 capitalize">{type} Menu</h2>
@@ -268,6 +279,23 @@ const MenuDescription = () => {
           </tbody>
         </table>
       </div>
+      <div className="flex justify-center mt-4">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((prev) => prev - 1)}
+          className="px-3 py-1 border rounded-l-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span className="px-4 py-1 border bg-gray-100">{currentPage}</span>
+        <button
+          disabled={currentPage * itemsPerPage >= data.length}
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+          className="px-3 py-1 border rounded-r-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 
@@ -276,34 +304,52 @@ const MenuDescription = () => {
       <Navbar />
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">Menu Description</h1>
-            <div className="flex space-x-2">
-              {" "}
-              {/* Reduced space between buttons */}
-              <button
-                onClick={() => setAddMenuModalOpen(true)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-              >
-                Add Menu
-              </button>
-              <button
-                onClick={() => setAddPreviousMenuModalOpen(true)}
-                className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
-              >
-                Add Previous Menu
-              </button>
-            </div>
+          <div className=" top-0 left-0 w-full bg-black shadow-lg flex justify-around items-center py-4 z-20">
+            <button
+              onClick={() => handleTabChange("breakfast")}
+              className={`px-6 py-2 font-medium text-lg transition-all duration-300 ${
+                activeTab === "breakfast"
+                  ? "bg-white text-black shadow-md transform scale-105"
+                  : "bg-gray-800 text-gray-300"
+              } rounded-full hover:bg-gray-600 hover:text-white`}
+            >
+              Breakfast
+            </button>
+            <button
+              onClick={() => handleTabChange("lunch")}
+              className={`px-6 py-2 font-medium text-lg transition-all duration-300 ${
+                activeTab === "lunch"
+                  ? "bg-white text-black shadow-md transform scale-105"
+                  : "bg-gray-800 text-gray-300"
+              } rounded-full hover:bg-gray-600 hover:text-white`}
+            >
+              Lunch
+            </button>
+            <button
+              onClick={() => handleTabChange("dinner")}
+              className={`px-6 py-2 font-medium text-lg transition-all duration-300 ${
+                activeTab === "dinner"
+                  ? "bg-white text-black shadow-md transform scale-105"
+                  : "bg-gray-800 text-gray-300"
+              } rounded-full hover:bg-gray-600 hover:text-white`}
+            >
+              Dinner
+            </button>
           </div>
-          {renderTable("breakfast", menus.breakfast)}
-          {renderTable("lunch", menus.lunch)}
-          {renderTable("dinner", menus.dinner)}
+
+          {/* Content based on Active Tab */}
+          <div className="mt-6">
+            {activeTab === "breakfast" &&
+              renderTable("breakfast", menus.breakfast)}
+            {activeTab === "lunch" && renderTable("lunch", menus.lunch)}
+            {activeTab === "dinner" && renderTable("dinner", menus.dinner)}
+          </div>
         </div>
       </div>
 
       {isAddMenuModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-7xl sm:max-w-8xl md:max-w-9xl lg:max-w-10xl xl:max-w-screen-xl p-10">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl sm:max-w-4xl md:max-w-3xl lg:max-w-3xl xl:max-w-4xl p-10">
             <h2 className="text-xl font-bold mb-4">Add Daily Menu</h2>
             <form onSubmit={handleSubmit}>
               {/* Date Input */}
@@ -315,7 +361,7 @@ const MenuDescription = () => {
                   type="date"
                   name="date"
                   value={menuData.date}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 />
               </div>
@@ -328,7 +374,7 @@ const MenuDescription = () => {
                   name="menuType"
                   value={menuData.menuType}
                   onChange={handleChange}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 >
                   <option value="" disabled>
@@ -351,7 +397,7 @@ const MenuDescription = () => {
                   value={menuData.name}
                   onChange={handleChange}
                   placeholder="Enter menu name"
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 />
               </div>
@@ -367,7 +413,7 @@ const MenuDescription = () => {
                   value={menuData.price}
                   onChange={handleChange}
                   placeholder="Enter menu price"
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 />
               </div>
@@ -382,7 +428,7 @@ const MenuDescription = () => {
                   value={menuData.description}
                   onChange={handleChange}
                   placeholder="Enter description"
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
+                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 ></textarea>
               </div>

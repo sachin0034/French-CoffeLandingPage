@@ -3,20 +3,25 @@ import Navbar from "../components/Sidebar/Sidebar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader/Loader";
 
 const Menudetails = () => {
   const [calendarData, setCalendarData] = useState({});
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(
         `${process.env.REACT_APP_SERVER}/api/menu/get-menu`
       );
+      setLoading(false);
       if (response.data.success) {
         setCalendarData(response.data.data);
       }
     } catch (error) {
+      setLoading(false);
+
       console.log("Errr" + error);
     }
   };
@@ -69,6 +74,11 @@ const Menudetails = () => {
   return (
     <div>
       <Navbar />
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <Loader />
+        </div>
+      )}
       <div className="p-4 sm:ml-64">
         <h1 className="text-2xl font-bold mb-4">Menu Details</h1>
         <div className="grid grid-cols-7 gap-4">

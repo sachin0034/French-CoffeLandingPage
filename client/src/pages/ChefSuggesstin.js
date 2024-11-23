@@ -111,6 +111,7 @@ const ChefSuggestion = () => {
   const [eidtformData, editsetFormData] = useState({
     name: "",
     category: "",
+    description:"",
     price: "",
     isAvailable: true,
   });
@@ -118,6 +119,7 @@ const ChefSuggestion = () => {
     setSelectedSuggestion(suggestion);
     editsetFormData({
       name: suggestion.name,
+      description:suggestion.description,
       category: suggestion.category,
       price: suggestion.price,
       isAvailable: suggestion.isAvailable,
@@ -326,6 +328,16 @@ const ChefSuggestion = () => {
                     />
                   </div>
                   <div className="mb-4">
+                    <label className="block text-gray-700">Description</label>
+                    <input
+                      type="text"
+                      name="description"
+                      value={eidtformData.description}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                  <div className="mb-4">
                     <label className="block text-gray-700">Price</label>
                     <input
                       type="text"
@@ -353,6 +365,13 @@ const ChefSuggestion = () => {
                     </label>
                   </div>
                   <div className="flex justify-end">
+                  <button
+                      type="button"
+                      onClick={() => setEditModalOpen(false)}
+                      className="mr-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                    >
+                      Cancel
+                    </button>
                     <button
                       type="submit"
                       className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700"
