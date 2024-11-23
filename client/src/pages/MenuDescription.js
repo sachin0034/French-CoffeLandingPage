@@ -231,84 +231,88 @@ const MenuDescription = () => {
     );
 
     return (
-    <div className="mb-8">
-      <h2 className="text-lg font-semibold mb-4 capitalize">{type} Menu</h2>
-      <div className="overflow-x-auto relative">
-        <table className="w-full text-sm text-left text-black-500 dark:text-black-400">
-          <thead className="text-xs text-black-700 uppercase bg-gray-50 dark:bg-gray-200 dark:text-black-400">
-            <tr>
-              <th scope="col" className="py-3 px-6">
-                Name
-              </th>
-              <th scope="col" className="py-3 px-6">
-                Price
-              </th>
-              <th scope="col" className="py-3 px-6">
-                Description
-              </th>
-              <th scope="col" className="py-3 px-6">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredMenu.length > 0 ? (
-              filteredMenu.map((item) => (
-                <tr
-                  key={item._id}
-                  className="bg-white border-b dark:bg-white-800 dark:border-white-700"
-                >
-                  <td className="py-4 px-6">{item.name}</td>
-                  <td className="py-4 px-6">{item.price}</td>
-                  <td className="py-4 px-6">{item.description}</td>
-                  <td className="py-4 px-6 flex gap-2">
-                    <FaEdit
-                      onClick={() => handleEdit(item)}
-                      className="text-blue-600 cursor-pointer hover:text-blue-800"
-                      title="Edit"
-                      size={20}
-                    />
-                    <FaTrash
-                      onClick={() => handleDelete(item)}
-                      className="text-red-600 cursor-pointer hover:text-red-800"
-                      title="Delete"
-                      size={20} // Icon size
-                    />
+      <div className="mb-8">
+        <h2 className="text-lg font-semibold mb-4 capitalize">{type} Menu</h2>
+        <div className="overflow-x-auto relative">
+          <table className="w-full text-sm text-left text-black-500 dark:text-black-400">
+            <thead className="text-xs text-black-700 uppercase bg-gray-50 dark:bg-gray-200 dark:text-black-400">
+              <tr>
+                <th scope="col" className="py-3 px-6">
+                  Name
+                </th>
+                <th scope="col" className="py-3 px-6">
+                  Price
+                </th>
+                <th scope="col" className="py-3 px-6">
+                  Category
+                </th>
+                <th scope="col" className="py-3 px-6">
+                  Description
+                </th>
+                <th scope="col" className="py-3 px-6">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredMenu.length > 0 ? (
+                filteredMenu.map((item) => (
+                  <tr
+                    key={item._id}
+                    className="bg-white border-b dark:bg-white-800 dark:border-white-700"
+                  >
+                    <td className="py-4 px-6">{item.name}</td>
+                    <td className="py-4 px-6">{item.price}</td>
+                    <td className="py-4 px-6">{item.category}</td>
+                    <td className="py-4 px-6">{item.description}</td>
+                    <td className="py-4 px-6 flex gap-2">
+                      <FaEdit
+                        onClick={() => handleEdit(item)}
+                        className="text-blue-600 cursor-pointer hover:text-blue-800"
+                        title="Edit"
+                        size={20}
+                      />
+                      <FaTrash
+                        onClick={() => handleDelete(item)}
+                        className="text-red-600 cursor-pointer hover:text-red-800"
+                        title="Delete"
+                        size={20} // Icon size
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-center py-4">
+                    <span className="text-gray-500 text-lg font-semibold italic">
+                      No data found
+                    </span>
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="4" className="text-center py-4">
-                  <span className="text-gray-500 text-lg font-semibold italic">
-                    No data found
-                  </span>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex justify-center mt-4">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+            className="px-3 py-1 border rounded-l-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="px-4 py-1 border bg-gray-100">{currentPage}</span>
+          <button
+            disabled={currentPage * itemsPerPage >= data.length}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            className="px-3 py-1 border rounded-r-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
       </div>
-      <div className="flex justify-center mt-4">
-        <button
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((prev) => prev - 1)}
-          className="px-3 py-1 border rounded-l-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
-        >
-          Previous
-        </button>
-        <span className="px-4 py-1 border bg-gray-100">{currentPage}</span>
-        <button
-          disabled={currentPage * itemsPerPage >= data.length}
-          onClick={() => setCurrentPage((prev) => prev + 1)}
-          className="px-3 py-1 border rounded-r-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
-    </div>
-  );
-  }
+    );
+  };
   return (
     <div>
       <Navbar />

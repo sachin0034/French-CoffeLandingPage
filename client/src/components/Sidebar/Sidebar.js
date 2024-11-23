@@ -272,6 +272,28 @@ const Navbar = () => {
                 <span className="ms-3">Contact List</span>
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="/category"
+                className={({ isActive }) =>
+                  `flex items-center p-2 rounded-lg ${
+                    isActive
+                      ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                      : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  }`
+                }
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  className="w-6 h-6 text-gray-500 transition-transform duration-300 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white group-hover:scale-110"
+                >
+                  <path d="M21 8V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v1a10.4 10.4 0 0 0 9 10 10.4 10.4 0 0 0 9-10ZM5 6h14a1 1 0 0 1 1 1v.3a9.2 9.2 0 0 1-7 8.4 9.2 9.2 0 0 1-7-8.4V7a1 1 0 0 1 1-1ZM7 10a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm6 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0Z" />
+                </svg>
+                <span className="ms-3">Add Category</span>
+              </NavLink>
+            </li>
           </ul>
         </div>
       </aside>
