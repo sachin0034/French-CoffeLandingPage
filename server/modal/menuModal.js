@@ -9,9 +9,9 @@ const menuSchema = new mongoose.Schema(
     },
     items: [
       {
-        menuType:{
-          type:String,
-          required:true
+        menuType: {
+          type: String,
+          required: true,
         },
         name: {
           type: String,
@@ -20,6 +20,9 @@ const menuSchema = new mongoose.Schema(
         description: {
           type: String,
           default: "",
+        },
+        category: {
+          type: String,
         },
         price: {
           type: Number,

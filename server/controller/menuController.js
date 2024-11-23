@@ -4,7 +4,7 @@ const fs = require("fs");
 const dayjs = require("dayjs");
 const path = require("path");
 const addMenu = async (req, res) => {
-  const { date, name, price, description, menuType } = req.body;
+  const { date, name, price, description, menuType,category } = req.body;
   try {
     let menu = await Menu.findOne({ date });
 
@@ -14,6 +14,7 @@ const addMenu = async (req, res) => {
         price,
         description,
         menuType,
+        category
       });
       await menu.save();
       return res
@@ -28,6 +29,7 @@ const addMenu = async (req, res) => {
             price,
             description,
             menuType,
+            category
           },
         ],
       });
@@ -207,7 +209,7 @@ const addWeekMenu = async (req, res) => {
     const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
     for (const row of sheetData) {
-      const { date, menuType, name, description, price } = row;
+      const { date, menuType, name, description, price,category } = row;
       if (!date || !menuType || !name || !price) {
         console.warn(`Skipping incomplete row: ${JSON.stringify(row)}`);
         continue;
@@ -235,6 +237,7 @@ const addWeekMenu = async (req, res) => {
         menuType,
         name,
         description: description || "",
+        category,     
         price,
       });
       await menu.save();
@@ -259,3 +262,4 @@ module.exports = {
   addPrevMenu,
   addWeekMenu,
 };
+  

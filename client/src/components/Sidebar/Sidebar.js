@@ -8,6 +8,7 @@ const Navbar = () => {
   const [admin, isAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [userName, setUserName] = useState(false);
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -23,6 +24,8 @@ const Navbar = () => {
 
   useEffect(() => {
     const adminStatus = localStorage.getItem("admin");
+    const name = localStorage.getItem("name");
+    setUserName(name);
     isAdmin(adminStatus === "true");
     setLoading(false);
   }, []);
@@ -70,11 +73,17 @@ const Navbar = () => {
                 aria-expanded="false"
               >
                 <span className="sr-only">Open user menu</span>
-                <img
-                  className="w-8 h-8 rounded-full"
-                  src={profileLogo}
-                  alt="user photo"
-                />
+                {userName ? (
+                  <div className="w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full">
+                    {userName.charAt(0).toUpperCase()}
+                  </div>
+                ) : (
+                  <img
+                    className="w-8 h-8 rounded-full"
+                    src={profileLogo}
+                    alt="Default profile"
+                  />
+                )}
               </button>
 
               {/* Dropdown Menu */}
@@ -84,9 +93,9 @@ const Navbar = () => {
                   id="dropdown-user"
                 >
                   <ul className="py-1">
-                  <li>
+                    <li>
                       <button
-                        onClick={()=>navigate("/profile")}
+                        onClick={() => navigate("/profile")}
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         Profile
@@ -238,6 +247,51 @@ const Navbar = () => {
                 </svg>
 
                 <span className="ms-3">Chef Suggestion</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/contact"
+                className={({ isActive }) =>
+                  `flex items-center p-2 rounded-lg ${
+                    isActive
+                      ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                      : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  }`
+                }
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                >
+                  <path d="M21 8V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v1a10.4 10.4 0 0 0 9 10 10.4 10.4 0 0 0 9-10ZM5 6h14a1 1 0 0 1 1 1v.3a9.2 9.2 0 0 1-7 8.4 9.2 9.2 0 0 1-7-8.4V7a1 1 0 0 1 1-1ZM7 10a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm6 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0Z" />
+                </svg>
+
+                <span className="ms-3">Contact List</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/category"
+                className={({ isActive }) =>
+                  `flex items-center p-2 rounded-lg ${
+                    isActive
+                      ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                      : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  }`
+                }
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  className="w-6 h-6 text-gray-500 transition-transform duration-300 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white group-hover:scale-110"
+                >
+                  <path d="M21 8V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v1a10.4 10.4 0 0 0 9 10 10.4 10.4 0 0 0 9-10ZM5 6h14a1 1 0 0 1 1 1v.3a9.2 9.2 0 0 1-7 8.4 9.2 9.2 0 0 1-7-8.4V7a1 1 0 0 1 1-1ZM7 10a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm6 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0Z" />
+                </svg>
+                <span className="ms-3">Add Category</span>
               </NavLink>
             </li>
           </ul>

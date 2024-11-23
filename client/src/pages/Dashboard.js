@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [admin, isAdmin] = useState(false);
   useEffect(() => {
     const admin = localStorage.getItem("admin");
+
     isAdmin(admin);
   }, []);
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ const Dashboard = () => {
     name: "",
     price: "",
     description: "",
+    category: "",
     menuType: "",
   });
   const handleChange = (e) => {
@@ -67,7 +69,6 @@ const Dashboard = () => {
         menuData
       );
       toast.success("Menu added successfully!");
-      console.log(response.data);
       setAddMenuModalOpen(false);
       setMenuData({
         date: "",
@@ -135,6 +136,22 @@ const Dashboard = () => {
       toast.error("Internal Server Error");
     }
   };
+  const [category, setCategory] = useState([]);
+
+  const fetchSuggestions = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER}/api/category/get-category`
+      );
+      setCategory(response.data.data);
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    } finally {
+    }
+  };
+  useEffect(() => {
+    fetchSuggestions();
+  });
 
   return (
     <div>
@@ -203,6 +220,32 @@ const Dashboard = () => {
                   className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="category"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Category
+                </label>
+                <select
+                  name="category"
+                  id="category"
+                  value={menuData.category}
+                  onChange={handleChange}
+                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                  required
+                >
+                  <option value="" disabled>
+                    Select category
+                  </option>
+                  {category.map((category, index) => (
+                    <option key={index} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="mb-4">
