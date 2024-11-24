@@ -147,7 +147,7 @@ const Main = () => {
         <div className="p-6 rounded-lg bg-white shadow-lg">
           <div className="flex items-center justify-between mb-5">
             <div>
-              <h1 className="text-xl text-[#2e4a66]">Report On this week</h1>
+              <h1 className="text-xl text-[#2e4a66]">Report for the Day</h1>
             </div>
             <i className="fa fa-usd"></i>
           </div>

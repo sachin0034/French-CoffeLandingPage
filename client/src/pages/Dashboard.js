@@ -7,6 +7,7 @@ import Modal from "react-modal";
 //import Chart from "../components/charts/Chart";
 
 import Main from "../components/main/Main";
+import { PieChart } from "react-minimal-pie-chart";
 
 const Dashboard = () => {
   const [isAddMenuModalOpen, setAddMenuModalOpen] = useState(false);
@@ -164,9 +165,27 @@ const Dashboard = () => {
   };
   useEffect(() => {
     fetchSuggestions();
-  });
+  }, []);
 
   const [userName, setUserName] = useState("");
+  const [remainingDays, setRemainingDays] = useState(0);
+  const pieChartData = [{ value: remainingDays, color: "black" }];
+
+  const calculateRemainingDays = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER}/menu-left`
+      );
+      setRemainingDays(response.data.daysLeft.length - 1);
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    calculateRemainingDays();
+  }, []);
 
   return (
     <div>
@@ -175,17 +194,44 @@ const Dashboard = () => {
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
           <main className="bg-gray-100 grid-area-main overflow-auto mt-0">
             <div className="px-8 py-5">
-              <div className="flex items-center mb-5">
-                <img
-                  src="https://anglophone-direct.com/ap_img/Coffee-scaled.jpg"
-                  alt="Coffee"
-                  className="max-h-24 object-contain mr-5"
-                />
-                <div className="text-[#2e4a66]">
-                  <h1 className="text-2xl">Hello,{userName || "User"}</h1>
-                  <p className="text-sm font-semibold text-[#a5aaad]">
-                    Welcome to our Cavallo Bianco
-                  </p>
+              <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start sm:px-8">
+                {/* Left Section */}
+                <div className="flex items-center mb-5 sm:mb-0">
+                  <img
+                    src="https://anglophone-direct.com/ap_img/Coffee-scaled.jpg"
+                    alt="Coffee"
+                    className="max-h-24 object-contain sm:mr-5 sm:max-h-32"
+                  />
+                  <div className="text-[#2e4a66] sm:pl-4">
+                    <h1 className="text-2xl sm:text-3xl font-semibold">
+                      Hello, {userName || "User"}
+                    </h1>
+                    <p className="text-sm font-semibold text-[#a5aaad]">
+                      Welcome to our Cavallo Bianco
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Section - PieChart */}
+                <div className="flex justify-center items-center mt-4 sm:mt-0">
+                  <h2>Menu Left </h2>
+                  <PieChart
+                    data={pieChartData}
+                    radius={40}
+                    lineWidth={15}
+                    style={{
+                      height: "100px",
+                      width: "100px",
+                      margin: "auto",
+                    }}
+                    label={({ dataEntry }) => `${dataEntry.value} days`}
+                    labelStyle={{
+                      fontSize: "10px",
+                      fontWeight: "bold",
+                      fill: "black",
+                    }}
+                    animate
+                  />
                 </div>
               </div>
 
@@ -225,20 +271,19 @@ const Dashboard = () => {
 
                 {/* Add Weekly Menu Card */}
                 <div
-                className="flex flex-col justify-between min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                onClick={() => setModalOpen(true)}
-              >
-                <div className="flex justify-center items-center mb-4">
-                  <i className="fa fa-calendar text-4xl sm:text-5xl lg:text-6xl text-black hover:text-red-500 transition-colors duration-300"></i>
+                  className="flex flex-col justify-between min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  onClick={() => setModalOpen(true)}
+                >
+                  <div className="flex justify-center items-center mb-4">
+                    <i className="fa fa-calendar text-4xl sm:text-5xl lg:text-6xl text-black hover:text-red-500 transition-colors duration-300"></i>
+                  </div>
+                  <div className="flex justify-between items-center mt-4">
+                    <p className="text-black text-lg">
+                      <span className="font-semibold">Add Weekly Menu </span>
+                      Click here to add the weekly menu.
+                    </p>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center mt-4">
-                  <p className="text-black text-lg">
-                    <span className="font-semibold">Add Weekly Menu </span>
-                    Click here to add the weekly menu.
-                  </p>
-                </div>
-              </div>
-              
 
                 {/* Download Sample File Card */}
                 <div
