@@ -6,10 +6,7 @@ import Navbar from "../Sidebar/Sidebar";
 import { toast } from "react-toastify";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
-
 const Main = () => {
- 
-
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
@@ -135,13 +132,14 @@ const Main = () => {
     } catch (error) {}
   };
 
-
   const today = getFormattedDate();
 
   const handleButtonClick = () => {
     navigate(`/menu-description/${today}`);
   };
-
+  const handleButtonClick1 = () => {
+    navigate("/user-list"); 
+  };
   useEffect(() => {
     fetchDataValid();
     fetchUsers();
@@ -172,7 +170,6 @@ const Main = () => {
 
           {/* Container for user list */}
           <div className="overflow-y-auto max-h-[400px]">
-            {" "}
             {/* max height set and overflow enabled */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 mt-6">
               {users.slice(0, 6).map((user) => (
@@ -187,86 +184,96 @@ const Main = () => {
               ))}
             </div>
           </div>
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={handleButtonClick1}
+              className="px-6 py-2 border-4 border-[#f277c1] text-[#f277c1] font-semibold rounded-md bg-transparent hover:border-[#f277c1] hover:bg-[#f277c1] hover:text-white transition duration-300 w-auto sm:w-32 lg:w-36 xl:w-40"
+            >
+              See All Userlist
+            </button>
+          </div>
         </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-8 mt-12">
+        <div className="p-6 rounded-lg bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl flex flex-col justify-between h-full">
+          <div className="relative">
+            <div className="absolute top-0 left-0 transform -translate-x-4 -translate-y-4 bg-white border-2 border-[#42f5bf] rounded-full w-14 h-20 flex items-center justify-center shadow-sm">
+              <div className="text-center">
+                <span className="text-2xl font-bold text-[#42f5bf]">
+                  {new Date().getDate()}
+                </span>
+                <br />
+                <span className="text-sm font-bold text-[#03fc94]">
+                  {new Date().toLocaleString("en-US", {
+                    weekday: "short",
+                  })}
+                </span>
+              </div>
+            </div>
 
-      <div className="p-6 rounded-lg bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl flex flex-col justify-between h-full">
-      <div className="relative">
-        <div className="absolute top-0 left-0 transform -translate-x-4 -translate-y-4 bg-white border-2 border-[#42f5bf] rounded-full w-14 h-20 flex items-center justify-center shadow-sm">
-          <div className="text-center">
-            <span className="text-2xl font-bold text-[#42f5bf]">
-              {new Date().getDate()}
-            </span>
-            <br />
-            <span className="text-sm font-bold text-[#03fc94]">
-              {new Date().toLocaleString("en-US", {
-                weekday: "short",
-              })}
-            </span>
+            <div className="ml-20 mt-0">
+              <h3 className="text-lg font-bold text-[#000] mb-3">Meal Today</h3>
+              <div className="space-y-4 text-gray-500 text-sm">
+                {mealToday.breakfast.length > 0 && (
+                  <div>
+                    <h4 className="text-md font-semibold text-[#000] mb-2">
+                      Breakfast
+                    </h4>
+                    {mealToday.breakfast.map((item, index) => (
+                      <p
+                        key={index}
+                        className="hover:text-[#000] text-gray-400 font-bold transition"
+                      >
+                        {item.name} - {item.description}
+                      </p>
+                    ))}
+                  </div>
+                )}
+                {mealToday.lunch.length > 0 && (
+                  <div>
+                    <h4 className="text-md font-semibold text-[#000] mb-2">
+                      Lunch
+                    </h4>
+                    {mealToday.lunch.map((item, index) => (
+                      <p
+                        key={index}
+                        className="hover:text-[#000] text-gray-400 font-bold transition duration-200"
+                      >
+                        {item.name} - {item.description}
+                      </p>
+                    ))}
+                  </div>
+                )}
+                {mealToday.dinner.length > 0 && (
+                  <div>
+                    <h4 className="text-md font-semibold text-[#000] mb-2">
+                      Dinner
+                    </h4>
+                    {mealToday.dinner.map((item, index) => (
+                      <p
+                        key={index}
+                        className="hover:text-[#000] text-gray-400 font-bold transition duration-200"
+                      >
+                        {item.name} - {item.description}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* "See All Menu" button */}
+          <div className="mt-6 flex justify-end">
+            <button
+              onClick={handleButtonClick}
+              className="px-6 py-2 border-2 border-black text-black font-semibold rounded-md bg-transparent hover:bg-black hover:text-white transition duration-300 w-auto sm:w-32 lg:w-36 xl:w-40"
+            >
+              See All Menu
+            </button>
           </div>
         </div>
-    
-        <div className="ml-20 mt-0">
-          <h3 className="text-lg font-bold text-[#000] mb-3">Meal Today</h3>
-          <div className="space-y-4 text-gray-500 text-sm">
-            {mealToday.breakfast.length > 0 && (
-              <div>
-                <h4 className="text-md font-semibold text-[#000] mb-2">Breakfast</h4>
-                {mealToday.breakfast.map((item, index) => (
-                  <p
-                    key={index}
-                    className="hover:text-[#000] text-gray-400 font-bold transition"
-                  >
-                    {item.name} - {item.description}
-                  </p>
-                ))}
-              </div>
-            )}
-            {mealToday.lunch.length > 0 && (
-              <div>
-                <h4 className="text-md font-semibold text-[#000] mb-2">Lunch</h4>
-                {mealToday.lunch.map((item, index) => (
-                  <p
-                    key={index}
-                    className="hover:text-[#000] text-gray-400 font-bold transition duration-200"
-                  >
-                    {item.name} - {item.description}
-                  </p>
-                ))}
-              </div>
-            )}
-            {mealToday.dinner.length > 0 && (
-              <div>
-                <h4 className="text-md font-semibold text-[#000] mb-2">Dinner</h4>
-                {mealToday.dinner.map((item, index) => (
-                  <p
-                    key={index}
-                    className="hover:text-[#000] text-gray-400 font-bold transition duration-200"
-                  >
-                    {item.name} - {item.description}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    
-      {/* "See All Menu" button */}
-      <div className="mt-6 flex justify-end">
-        <button
-          onClick={handleButtonClick}
-          className="px-6 py-2 border-2 border-black text-black font-semibold rounded-md bg-transparent hover:bg-black hover:text-white transition duration-300 w-auto sm:w-32 lg:w-36 xl:w-40"
-        >
-          See All Menu
-        </button>
-      </div>
-    </div>
-    
-    
-
 
         {/* Card 2 */}
         <div className="p-6 rounded-lg bg-gray-900 shadow-lg">

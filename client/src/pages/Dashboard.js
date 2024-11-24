@@ -206,19 +206,25 @@ const Dashboard = () => {
                   <h1 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
                     Elevate Your Culinary Experience with Eggify
                   </h1>
-                  <button onClick={handleButtonClick} className="px-6 py-3 border-2 border-white text-white bg-transparent rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white w-max">
+                  <button
+                    onClick={handleButtonClick}
+                    className="px-6 py-3 border-2 border-white text-white bg-transparent rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white w-max"
+                  >
                     Get Added User
                   </button>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-5">
-                {/* Add Menu Item Card */}
                 <div
-                  className="flex flex-col justify-between min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  className="flex flex-col justify-between min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300"
                   onClick={() => setAddMenuModalOpen(true)}
                 >
-                  <i className="fa fa-home text-2xl text-black hover:text-blue-500 transition-colors duration-300"></i>
+                  <div className="flex justify-center items-center mb-4">
+                    {/* Using a large icon size with 'scale' for dynamic scaling */}
+                    <i className="fa fa-home text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-black hover:text-blue-500 transition-colors duration-300 transform hover:scale-150"></i>
+                  </div>
+
                   <div className="flex justify-between items-center mt-4">
                     <p className="text-black text-lg">
                       <span className="font-semibold">Add Menu </span>Click here
@@ -227,22 +233,20 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                {/* Add Weekly Menu Card */}
                 <div
-                className="flex flex-col justify-between min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                onClick={() => setModalOpen(true)}
-              >
-                <div className="flex justify-center items-center mb-4">
-                  <i className="fa fa-calendar text-4xl sm:text-5xl lg:text-6xl text-black hover:text-red-500 transition-colors duration-300"></i>
+                  className="flex flex-col justify-between min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  onClick={() => setModalOpen(true)}
+                >
+                  <div className="flex justify-center items-center mb-4">
+                    <i className="fa fa-calendar text-4xl sm:text-5xl lg:text-6xl text-black hover:text-red-500 transition-colors duration-300"></i>
+                  </div>
+                  <div className="flex justify-between items-center mt-4">
+                    <p className="text-black text-lg">
+                      <span className="font-semibold">Add Weekly Menu </span>
+                      Click here to add the weekly menu.
+                    </p>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center mt-4">
-                  <p className="text-black text-lg">
-                    <span className="font-semibold">Add Weekly Menu </span>
-                    Click here to add the weekly menu.
-                  </p>
-                </div>
-              </div>
-              
 
                 {/* Download Sample File Card */}
                 <div
