@@ -287,9 +287,9 @@ const Navbar = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   viewBox="0 0 24 24"
-                  className="w-6 h-6 text-gray-500 transition-transform duration-300 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white group-hover:scale-110"
+                  className="w-6 h-6 text-green-500 transition-transform duration-300 dark:text-gray-400 group-hover:text-green-700"
                 >
-                  <path d="M21 8V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v1a10.4 10.4 0 0 0 9 10 10.4 10.4 0 0 0 9-10ZM5 6h14a1 1 0 0 1 1 1v.3a9.2 9.2 0 0 1-7 8.4 9.2 9.2 0 0 1-7-8.4V7a1 1 0 0 1 1-1ZM7 10a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm6 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0Z" />
+                  <path d="M12 2L2 7l2 3 8-5 8 5 2-3-10-5zm0 13l-8 5v-4l8-5 8 5v4l-8-5zm0-5L2 9l2-3 8 5 8-5 2 3-10 5z" />
                 </svg>
                 <span className="ms-3">Add Category</span>
               </NavLink>
