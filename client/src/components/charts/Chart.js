@@ -60,38 +60,108 @@ const Chart = () => {
     fetchTodayMenu();
   }, []);
 
+  const totalMenuItems = chartData.reduce((acc, entry) => acc + entry.value, 0);
+
   return (
     <div
       style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
         backgroundColor: "#fff",
         color: "#333",
-        padding: "10px",
+        padding: "20px",
         borderRadius: "10px",
         textAlign: "center",
         border: "1px solid #ddd",
+        width: "90%",
+        maxWidth: "800px",
+        margin: "auto",
       }}
     >
-      <h3 style={{ marginBottom: "20px" }}>Meal Distribution</h3>
-      {chartData.every((entry) => entry.value === 0) ? (
-        <p style={{ marginTop: "20px", color: "#999" }}>No data available for today.</p>
-      ) : (
-        <PieChart
-          data={chartData}
-          radius={40}
-          lineWidth={15}
+      <h3 style={{ marginBottom: "20px" }}>Today Meal Distribution</h3>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
+        <h1>Total Menu: {totalMenuItems}</h1>
+        <div
           style={{
-            height: "300px",
-            margin: "auto",
+            flex: 1,
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "20px",
           }}
-          label={({ dataEntry }) => `${dataEntry.title}: ${dataEntry.value}`}
-          labelStyle={{
-            fontSize: "5px",
-            fontWeight: "bold",
-            fill: "#333",
+        >
+          {chartData.every((entry) => entry.value === 0) ? (
+            <p style={{ marginTop: "20px", color: "#999" }}>
+              No data available for today.
+            </p>
+          ) : (
+            <PieChart
+              data={chartData}
+              radius={40}
+              lineWidth={15}
+              style={{
+                height: "200px",
+                width: "200px",
+                margin: "auto",
+              }}
+              //  label={() => `${totalMenuItems}`} // Show total menu count in the center
+              labelStyle={{
+                fontSize: "16px", // Adjust the font size for small screens
+                fontWeight: "bold",
+                fill: "#333",
+              }}
+              animate
+            />
+          )}
+        </div>
+
+        <div
+          style={{
+            flex: 1,
+            marginLeft: "20px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
-          animate
-        />
-      )}
+        >
+          <div>
+            {chartData.map((data, index) => (
+              <div
+                key={index}
+                style={{
+                  marginBottom: "15px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    backgroundColor: data.color,
+                    marginRight: "10px",
+                    borderRadius: "50%",
+                  }}
+                ></div>
+                <span style={{ fontSize: "16px", fontWeight: "bold" }}>
+                  {data.title}: {data.value}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

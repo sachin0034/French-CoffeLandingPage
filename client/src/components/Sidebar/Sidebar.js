@@ -294,6 +294,28 @@ const Navbar = () => {
                 <span className="ms-3">Add Category</span>
               </NavLink>
             </li>
+            <li onClick={handleLogout}>
+              <NavLink
+                // to="/category"
+                className={({ isActive }) =>
+                  `flex items-center p-2 rounded-lg ${
+                    isActive
+                      ? " text-gray-900 dark:text-white"
+                      : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  }`
+                }
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  className="w-6 h-6 text-green-500 transition-transform duration-300 dark:text-gray-400 group-hover:text-green-700"
+                >
+                  <path d="M12 2L2 7l2 3 8-5 8 5 2-3-10-5zm0 13l-8 5v-4l8-5 8 5v4l-8-5zm0-5L2 9l2-3 8 5 8-5 2 3-10 5z" />
+                </svg>
+                <span className="ms-3">Log Out</span>
+              </NavLink>
+            </li>
           </ul>
         </div>
       </aside>

@@ -5,12 +5,16 @@ import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+
 const AdminContact = () => {
   const [contacts, setContacts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1); // Track the current page
+  const [itemsPerPage] = useState(10); // Number of items per page
 
   const navigate = useNavigate();
+
   const fetchDataValid = async () => {
     const token = localStorage.getItem("token");
 
@@ -43,6 +47,7 @@ const AdminContact = () => {
   useEffect(() => {
     fetchDataValid();
   }, []);
+
   const fetchContacts = async () => {
     try {
       setLoading(true);
@@ -103,6 +108,17 @@ const AdminContact = () => {
       contact.phone.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Pagination logic
+  const indexOfLastContact = currentPage * itemsPerPage;
+  const indexOfFirstContact = indexOfLastContact - itemsPerPage;
+  const currentContacts = filteredContacts.slice(indexOfFirstContact, indexOfLastContact);
+
+  const pageCount = Math.ceil(filteredContacts.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div>
       <Navbar />
@@ -148,7 +164,7 @@ const AdminContact = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredContacts.map((contact) => (
+                  {currentContacts.map((contact) => (
                     <tr
                       key={contact._id}
                       className="bg-white border-b dark:bg-white-800 dark:border-gray-700"
@@ -160,7 +176,7 @@ const AdminContact = () => {
                       </td>
                       <td className="px-6 py-4 text-center">
                         <button onClick={() => deleteContact(contact._id)}>
-                          <FaTrash className="w-5 h-5" />{" "}
+                          <FaTrash className="w-5 h-5" />
                         </button>
                       </td>
                     </tr>
@@ -169,6 +185,25 @@ const AdminContact = () => {
               </table>
             </div>
           )}
+
+          {/* Pagination Controls */}
+          <div className="flex justify-center mt-4">
+            <button
+              className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              Previous
+            </button>
+            <span className="px-4 py-2">{`${currentPage} / ${pageCount}`}</span>
+            <button
+              className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+              disabled={currentPage === pageCount}
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>

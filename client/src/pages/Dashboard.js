@@ -201,11 +201,7 @@ const Dashboard = () => {
               <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start sm:px-8">
                 {/* Left Section */}
                 <div className="flex items-center mb-5 sm:mb-0">
-                  <img
-                    src="https://anglophone-direct.com/ap_img/Coffee-scaled.jpg"
-                    alt="Coffee"
-                    className="max-h-24 object-contain sm:mr-5 sm:max-h-32"
-                  />
+               
                   <div className="text-[#2e4a66] sm:pl-4">
                     <h1 className="text-2xl sm:text-3xl font-semibold">
                       Hello, {userName || "User"}
@@ -261,7 +257,9 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-5">
+              <Main />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-5 mt-5  ">
                 <div
                   className="flex flex-col justify-between items-center min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 "
                   onClick={() => setAddMenuModalOpen(true)}
@@ -291,14 +289,13 @@ const Dashboard = () => {
                   <div className="flex justify-center items-center mb-4">
                     {/* SVG Calendar Icon */}
                     <svg
-  xmlns="http://www.w3.org/2000/svg"
-  fill="currentColor"
-  viewBox="0 0 24 24"
-  className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 text-black hover:text-red-500 transition-colors duration-300"
->
-  <path d="M19 4h-1V2h-2v2H8V2H6v2H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zM5 6h1v2h2V6h8v2h2V6h1a1 1 0 0 1 1 1v2H4V7a1 1 0 0 1 1-1zm14 14H5a1 1 0 0 1-1-1V11h16v8a1 1 0 0 1-1 1z" />
-</svg>
-
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 text-black hover:text-red-500 transition-colors duration-300"
+                    >
+                      <path d="M19 4h-1V2h-2v2H8V2H6v2H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zM5 6h1v2h2V6h8v2h2V6h1a1 1 0 0 1 1 1v2H4V7a1 1 0 0 1 1-1zm14 14H5a1 1 0 0 1-1-1V11h16v8a1 1 0 0 1-1 1z" />
+                    </svg>
                   </div>
                   <div className="flex justify-between items-center mt-4">
                     <p className="text-black text-lg">
@@ -332,7 +329,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <Main />
+           
             </div>
           </main>
         </div>
