@@ -28,6 +28,10 @@ const menuSchema = new mongoose.Schema(
           type: Number,
           required: [true, "Price is required"],
         },
+        dprice:{
+          type:String,
+          required:true
+        }
       },
     ],
     isBackup: {

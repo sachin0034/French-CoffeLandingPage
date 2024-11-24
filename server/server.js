@@ -30,9 +30,7 @@ app.use("/api/category", categoryRoute);
 
 app.get("/menu-download", (req, res) => {
   try {
-    const filePath = path.join(__dirname, "./sample/sample-weekly-menu.xlsx");
-    console.log("File path:", filePath);
-
+    const filePath = path.join(__dirname, "./sample/sample-menu-weekly.xlsx");
     res.download(filePath, "sample-menu-weekly.xlsx", (err) => {
       if (err) {
         console.error("Error downloading file:", err);

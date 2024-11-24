@@ -4,7 +4,11 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      letterSpacing: {
+        'extra-wide': '0.2em',  // Add a custom letter spacing value
+      },
+    },
   },
   plugins: [],
 }

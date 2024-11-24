@@ -53,6 +53,7 @@ const MenuDescription = () => {
     price: "",
     description: "",
     menuType: "",
+    dprice: "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -76,6 +77,7 @@ const MenuDescription = () => {
         price: "",
         description: "",
         menuType: "",
+        dprice: "",
       });
     } catch (error) {
       console.error("Error adding menu:", error);
@@ -141,6 +143,7 @@ const MenuDescription = () => {
     price: "",
     description: "",
     menuType: "",
+    dprice: "",
   });
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -244,6 +247,9 @@ const MenuDescription = () => {
                   Price
                 </th>
                 <th scope="col" className="py-3 px-6">
+                  Discount Price
+                </th>
+                <th scope="col" className="py-3 px-6">
                   Category
                 </th>
                 <th scope="col" className="py-3 px-6">
@@ -263,6 +269,7 @@ const MenuDescription = () => {
                   >
                     <td className="py-4 px-6">{item.name}</td>
                     <td className="py-4 px-6">{item.price}</td>
+                    <td className="py-4 px-6">{item.dprice}</td>
                     <td className="py-4 px-6">{item.category}</td>
                     <td className="py-4 px-6">{item.description}</td>
                     <td className="py-4 px-6 flex gap-2">
@@ -356,7 +363,7 @@ const MenuDescription = () => {
               value={searchQuery}
               onChange={handleSearchChange}
               placeholder="Search menu..."
-              className="px-4 py-2 border rounded-lg shadow-md w-full max-w-md"
+              className="px-4 py-2 border-4 border-gray-600 rounded-lg shadow-md w-full max-w-md"
             />
           </div>
 
@@ -372,7 +379,7 @@ const MenuDescription = () => {
 
       {isAddMenuModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl sm:max-w-4xl md:max-w-3xl lg:max-w-3xl xl:max-w-4xl p-10">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-sm sm:max-w-md md:max-w-sm lg:max-w-md xl:max-w-lg p-10 overflow-y-auto max-h-[70vh]">
             <h2 className="text-xl font-bold mb-4">Add Daily Menu</h2>
             <form onSubmit={handleSubmit}>
               {/* Date Input */}
@@ -478,8 +485,8 @@ const MenuDescription = () => {
       )}
 
       {isEditMenuModalOpen && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-8 w-4/5 max-w-3xl rounded shadow-lg">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-sm sm:max-w-md md:max-w-sm lg:max-w-md xl:max-w-lg p-10 overflow-y-auto max-h-[90vh]">
             <h2 className="text-2xl font-bold mb-6 text-center">Edit Menu</h2>
             <form>
               <div className="mb-6">
@@ -500,6 +507,18 @@ const MenuDescription = () => {
                   type="number"
                   name="price"
                   value={editmenuData.price}
+                  onChange={handleEditChange}
+                  className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+              </div>
+              <div className="mb-6">
+                <label className="block text-gray-700 text-lg mb-2">
+                  Discount Price
+                </label>
+                <input
+                  type="number"
+                  name="dprice"
+                  value={editmenuData.dprice}
                   onChange={handleEditChange}
                   className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />

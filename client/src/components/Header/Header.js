@@ -10,14 +10,14 @@ import "swiper/css/autoplay";
 import { Autoplay, Pagination } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
 
-function Header() { 
+function Header() {
   const navigate = useNavigate();
   return (
     <header className="header">
       <div className="header-top" onClick={() => navigate("/menu")}>
-        <div onClick={() => navigate("/menu")}>
-          <FaBars className="menu-icon" onClick={() => navigate("/menu")}/>
-        </div>
+        <button onClick={() => navigate("/menu")}>
+          <FaBars className="menu-icon" onClick={() => navigate("/menu")} />
+        </button>
       </div>
       <div className="logo-container">
         <img
