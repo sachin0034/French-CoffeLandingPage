@@ -112,7 +112,7 @@ const AdminContact = () => {
             <input
               type="text"
               placeholder="Search by name or email"
-              className="border border-gray-300 rounded-lg p-2 w-1/3"
+              className="border border-gray-700 rounded-lg p-2 w-1/3"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />

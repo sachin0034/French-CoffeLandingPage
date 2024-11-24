@@ -10,6 +10,8 @@ const Categorypage = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modal, isModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const fetchDataValid = async () => {
     const token = localStorage.getItem("token");
 
@@ -135,13 +137,23 @@ const Categorypage = () => {
       console.error("Error updating suggestion:", error);
     }
   };
+  const filteredContacts = suggestions.filter((contact) =>
+    contact.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div>
       <Navbar />
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
-          <div className="flex justify-end mb-4">
+          <div className="flex justify-between items-center mb-4">
+            <input
+              type="text"
+              placeholder="Search by name"
+              className="border border-gray-700 rounded-lg p-2 w-1/3"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700"
               onClick={() => isModal(true)}
@@ -158,8 +170,8 @@ const Categorypage = () => {
                 </tr>
               </thead>
               <tbody>
-                {suggestions && suggestions.length > 0 ? (
-                  suggestions.map((suggestion) => (
+                {filteredContacts && filteredContacts.length > 0 ? (
+                  filteredContacts.map((suggestion) => (
                     <tr
                       key={suggestion._id}
                       className="border-b dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-200"
@@ -247,7 +259,7 @@ const Categorypage = () => {
                     />
                   </div>
                   <div className="flex justify-end">
-                  <button
+                    <button
                       type="button"
                       onClick={() => setEditModalOpen(false)}
                       className="mr-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
