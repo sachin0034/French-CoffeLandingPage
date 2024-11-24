@@ -54,9 +54,6 @@ const Login = () => {
         post,
         config
       );
-
-      console.log(response.data);
-
       setLoading(false);
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);

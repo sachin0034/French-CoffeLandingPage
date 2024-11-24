@@ -1,136 +1,97 @@
-// import React from "react";
-// import {
-//   XYPlot,
-//   LineSeries,
-//   XAxis,
-//   YAxis,
-//   VerticalGridLines,
-//   HorizontalGridLines,
-// } from "react-vis";
-// import "react-vis/dist/style.css";
-
-// const Chart = () => {
-
-//   const data = [
-//     { x: 0, y: 0 },
-//     { x: 1, y: 2 },
-//     { x: 2, y: 4 },
-//     { x: 3, y: 6 },
-//   ];
-
-//   return (
-//     <div>
-//       <h3>Simple Line Chart</h3>
-//       {/* First Chart */}
-//       <XYPlot height={300} width={300}>
-//         <LineSeries
-//           data={[
-//             { x: 0, y: 0 },
-//             { x: 1, y: 1 },
-//             { x: 2, y: 4 },
-//             { x: 3, y: 9 },
-//           ]}
-//         />
-//       </XYPlot>
-
-//       {/* Second Chart */}
-//       <div style={{ marginTop: "15px" }}>
-//         <h3>Chart with Grid Lines and Multiple Series</h3>
-//         <XYPlot height={300} width={300}>
-//           {/* Grid Lines */}
-//           <VerticalGridLines />
-//           <HorizontalGridLines />
-
-//           {/* Axes */}
-//           <XAxis />
-//           <YAxis />
-
-//           {/* Multiple Line Series */}
-//           <LineSeries data={data} color="red" />
-//           <LineSeries
-//             data={[
-//               { x: 0, y: 0 },
-//               { x: 1, y: 3 },
-//               { x: 2, y: 5 },
-//               { x: 3, y: 7 },
-//             ]}
-//             color="purple"
-//           />
-//           <LineSeries
-//             data={[
-//               { x: 0, y: 1 },
-//               { x: 1, y: 2 },
-//               { x: 2, y: 3 },
-//               { x: 3, y: 5 },
-//             ]}
-//             color="yellow"
-//           />
-//         </XYPlot>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Chart;
-
-
-import React from "react";
-import {
-  XYPlot,
-  XAxis,
-  YAxis,
-  VerticalGridLines,
-  HorizontalGridLines,
-  VerticalBarSeries,
-} from "react-vis";
-import "react-vis/dist/style.css";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { PieChart } from "react-minimal-pie-chart";
 
 const Chart = () => {
-  const data = [
-    { x: 1, y: 10 },
-    { x: 2, y: 15 },
-    { x: 3, y: 25 },
-    { x: 4, y: 30 },
-    { x: 5, y: 45 },
-  ];
+  const [menuItems, setMenuItems] = useState([]);
+  const [chartData, setChartData] = useState([
+    { title: "Breakfast", value: 0, color: "#FF6384" },
+    { title: "Lunch", value: 0, color: "#36A2EB" },
+    { title: "Dinner", value: 0, color: "#FFCE56" },
+  ]);
+
+  const getFormattedDate = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const fetchTodayMenu = async () => {
+    try {
+      const todayDate = getFormattedDate();
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER}/api/menu/${todayDate}`
+      );
+
+      setMenuItems(response.data.items);
+
+      if (response && response.data.items) {
+        let breakfastCount = 0;
+        let lunchCount = 0;
+        let dinnerCount = 0;
+
+        response.data.items.forEach((item) => {
+          if (item.menuType === "Breakfast") breakfastCount++;
+          else if (item.menuType === "Lunch") lunchCount++;
+          else if (item.menuType === "Dinner") dinnerCount++;
+        });
+
+        setChartData([
+          { title: "Breakfast", value: breakfastCount, color: "#FF6384" },
+          { title: "Lunch", value: lunchCount, color: "#36A2EB" },
+          { title: "Dinner", value: dinnerCount, color: "#FFCE56" },
+        ]);
+      } else {
+        console.warn("No meal data found for today.");
+        setChartData([
+          { title: "Breakfast", value: 0, color: "#FF6384" },
+          { title: "Lunch", value: 0, color: "#36A2EB" },
+          { title: "Dinner", value: 0, color: "#FFCE56" },
+        ]);
+      }
+    } catch (error) {
+      console.error("Error fetching menu:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTodayMenu();
+  }, []);
 
   return (
     <div
-    style={{
-      backgroundColor: "#f5f5f5", // Light blackish-white background
-      padding: "5px",
-      borderRadius: "10px",
-      border: "1px solid #bbb", // Border around the chart container
-      overflow: "hidden", // Prevents overflow of the chart area
-    }}
+      style={{
+        backgroundColor: "#fff",
+        color: "#333",
+        padding: "10px",
+        borderRadius: "10px",
+        textAlign: "center",
+        border: "1px solid #ddd",
+      }}
     >
-      <h3 style={{ color: "#333", textAlign: "center" }}>Bar Chart Example</h3>
-      <XYPlot height={300} width={300} style={{ backgroundColor: "#f5f5f5" }}>
-        <VerticalGridLines style={{ stroke: "#ddd" }} />
-        <HorizontalGridLines style={{ stroke: "#ddd" }} />
-        <XAxis
+      <h3 style={{ marginBottom: "20px" }}>Meal Distribution</h3>
+      {chartData.every((entry) => entry.value === 0) ? (
+        <p style={{ marginTop: "20px", color: "#999" }}>No data available for today.</p>
+      ) : (
+        <PieChart
+          data={chartData}
+          radius={40}
+          lineWidth={15}
           style={{
-            line: { stroke: "#555" }, // Blackish border for axis line
-            ticks: { stroke: "#555" },
-            text: { fill: "#333" }, // Dark text for labels
+            height: "300px",
+            margin: "auto",
           }}
-        />
-        <YAxis
-          style={{
-            line: { stroke: "#555" }, // Blackish border for axis line
-            ticks: { stroke: "#555" },
-            text: { fill: "#333" }, // Dark text for labels
+          label={({ dataEntry }) => `${dataEntry.title}: ${dataEntry.value}`}
+          labelStyle={{
+            fontSize: "5px",
+            fontWeight: "bold",
+            fill: "#333",
           }}
+          animate
         />
-        <VerticalBarSeries
-          data={data}
-          color="#fff" // White bars
-          style={{
-            stroke: "#555", // Blackish border around bars
-            strokeWidth: "4px",
-          }}
-        />
-      </XYPlot>
+      )}
     </div>
   );
 };
