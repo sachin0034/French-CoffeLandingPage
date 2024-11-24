@@ -7,7 +7,7 @@ const MenuPage = () => {
   return (
     <div
       style={{
-        backgroundColor: "#a87442", 
+        backgroundColor: "#a87442",
         minHeight: "100vh",
       }}
     >

@@ -153,7 +153,7 @@ const Main = () => {
         <div className="p-6 rounded-lg bg-white shadow-lg">
           <div className="flex items-center justify-between mb-5">
             <div>
-              <h1 className="text-xl text-[#2e4a66]">Report On this week</h1>
+              <h1 className="text-xl text-[#2e4a66]">Report for the Day</h1>
             </div>
             <i className="fa fa-usd"></i>
           </div>
@@ -282,15 +282,17 @@ const Main = () => {
             <div className="space-y-4">
               <div className="flex justify-between items-center border-b pb-3">
                 <h4 className="text-md font-semibold text-white">Name</h4>
-                <p className="text-sm text-gray-300">{chef.name}</p>
+                <p className="text-sm text-gray-300 font-bold">{chef.name}</p>
               </div>
               <div className="flex justify-between items-center border-b pb-3">
                 <h4 className="text-md font-semibold text-white">Category</h4>
-                <p className="text-sm text-gray-300">{chef.category}</p>
+                <p className="text-sm text-gray-300 font-bold">
+                  {chef.category}
+                </p>
               </div>
               <div className="flex justify-between items-center border-b pb-3">
                 <h4 className="text-md font-semibold text-white">Price</h4>
-                <p className="text-sm text-gray-300">${chef.price}</p>
+                <p className="text-sm text-gray-300 font-bold">${chef.price}</p>
               </div>
               <div className="flex justify-between items-center border-b pb-3">
                 <h4 className="text-md font-semibold text-white">
@@ -304,7 +306,9 @@ const Main = () => {
                 <h4 className="text-md font-semibold text-white">
                   Description
                 </h4>
-                <p className="text-sm text-gray-300">{chef.description}</p>
+                <p className="text-sm text-gray-300 font-bold">
+                  {chef.description}
+                </p>
               </div>
             </div>
           ) : (

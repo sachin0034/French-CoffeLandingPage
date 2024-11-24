@@ -7,6 +7,7 @@ import Modal from "react-modal";
 //import Chart from "../components/charts/Chart";
 
 import Main from "../components/main/Main";
+import { PieChart } from "react-minimal-pie-chart";
 
 const Dashboard = () => {
   const [isAddMenuModalOpen, setAddMenuModalOpen] = useState(false);
@@ -164,9 +165,27 @@ const Dashboard = () => {
   };
   useEffect(() => {
     fetchSuggestions();
-  });
+  }, []);
 
   const [userName, setUserName] = useState("");
+  const [remainingDays, setRemainingDays] = useState(0);
+  const pieChartData = [{ value: remainingDays, color: "black" }];
+
+  const calculateRemainingDays = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER}/menu-left`
+      );
+      setRemainingDays(response.data.daysLeft.length - 1);
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    calculateRemainingDays();
+  }, []);
 
   const handleButtonClick = () => {
     navigate(`/add-user`);
@@ -179,17 +198,44 @@ const Dashboard = () => {
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
           <main className="bg-gray-100 grid-area-main overflow-auto mt-0">
             <div className="px-8 py-5">
-              <div className="flex items-center mb-5">
-                <img
-                  src="https://anglophone-direct.com/ap_img/Coffee-scaled.jpg"
-                  alt="Coffee"
-                  className="max-h-24 object-contain mr-5"
-                />
-                <div className="text-[#2e4a66]">
-                  <h1 className="text-2xl">Hello,{userName || "User"}</h1>
-                  <p className="text-sm font-semibold text-[#a5aaad]">
-                    Welcome to our Cavallo Bianco
-                  </p>
+              <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start sm:px-8">
+                {/* Left Section */}
+                <div className="flex items-center mb-5 sm:mb-0">
+                  <img
+                    src="https://anglophone-direct.com/ap_img/Coffee-scaled.jpg"
+                    alt="Coffee"
+                    className="max-h-24 object-contain sm:mr-5 sm:max-h-32"
+                  />
+                  <div className="text-[#2e4a66] sm:pl-4">
+                    <h1 className="text-2xl sm:text-3xl font-semibold">
+                      Hello, {userName || "User"}
+                    </h1>
+                    <p className="text-sm font-semibold text-[#a5aaad]">
+                      Welcome to our Cavallo Bianco
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Section - PieChart */}
+                <div className="flex justify-center items-center mt-4 sm:mt-0">
+                  <h2>Menu Left </h2>
+                  <PieChart
+                    data={pieChartData}
+                    radius={40}
+                    lineWidth={15}
+                    style={{
+                      height: "100px",
+                      width: "100px",
+                      margin: "auto",
+                    }}
+                    label={({ dataEntry }) => `${dataEntry.value} days`}
+                    labelStyle={{
+                      fontSize: "10px",
+                      fontWeight: "bold",
+                      fill: "black",
+                    }}
+                    animate
+                  />
                 </div>
               </div>
 
@@ -206,11 +252,8 @@ const Dashboard = () => {
                   <h1 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
                     Elevate Your Culinary Experience with Eggify
                   </h1>
-                  <button
-                    onClick={handleButtonClick}
-                    className="px-6 py-3 border-2 border-white text-white bg-transparent rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white w-max"
-                  >
-                    Get Added User
+                  <button onClick={() => setAddMenuModalOpen(true)} className="px-6 py-3 border-2 border-white text-white bg-transparent rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white w-max">
+                    Add Menu
                   </button>
                 </div>
               </div>
