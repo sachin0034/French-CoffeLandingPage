@@ -281,7 +281,6 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                {/* Add Weekly Menu Card */}
                 <div
                   className="flex flex-col justify-between items-center min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
                   onClick={() => setModalOpen(true)}
