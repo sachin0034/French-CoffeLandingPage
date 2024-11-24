@@ -201,11 +201,7 @@ const Dashboard = () => {
               <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start sm:px-8">
                 {/* Left Section */}
                 <div className="flex items-center mb-5 sm:mb-0">
-                  <img
-                    src="https://anglophone-direct.com/ap_img/Coffee-scaled.jpg"
-                    alt="Coffee"
-                    className="max-h-24 object-contain sm:mr-5 sm:max-h-32"
-                  />
+               
                   <div className="text-[#2e4a66] sm:pl-4">
                     <h1 className="text-2xl sm:text-3xl font-semibold">
                       Hello, {userName || "User"}
@@ -262,7 +258,9 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-5">
+              <Main />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-5 mt-5  ">
                 <div
                   className="flex flex-col justify-between items-center min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 cursor-pointer"
                   onClick={() => setAddMenuModalOpen(true)}
@@ -333,7 +331,7 @@ const Dashboard = () => {
 
               </div>
 
-              <Main />
+           
             </div>
           </main>
         </div>

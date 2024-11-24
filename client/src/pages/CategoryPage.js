@@ -141,6 +141,14 @@ const Categorypage = () => {
     contact.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(2);
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+  const currentSuggestions = filteredContacts.slice(indexOfFirst, indexOfLast);
+
+  // Change page handler
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div>
       <Navbar />
@@ -170,8 +178,8 @@ const Categorypage = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredContacts && filteredContacts.length > 0 ? (
-                  filteredContacts.map((suggestion) => (
+                {currentSuggestions && currentSuggestions.length > 0 ? (
+                  currentSuggestions.map((suggestion) => (
                     <tr
                       key={suggestion._id}
                       className="border-b dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-200"
@@ -203,6 +211,30 @@ const Categorypage = () => {
                 )}
               </tbody>
             </table>
+          </div>
+
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-300"
+            >
+              Previous
+            </button>
+            <span className="mx-4">
+              Page {currentPage} of{" "}
+              {Math.ceil(filteredContacts.length / itemsPerPage)}
+            </span>
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              disabled={
+                currentPage ===
+                Math.ceil(filteredContacts.length / itemsPerPage)
+              }
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-300"
+            >
+              Next
+            </button>
           </div>
 
           {modal && (

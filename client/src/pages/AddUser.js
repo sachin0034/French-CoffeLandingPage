@@ -58,8 +58,7 @@ const AddUser = () => {
         `${process.env.REACT_APP_SERVER}/api/auth/register`,
         formData
       );
-
-      toast.success("User added successfully!");
+      toast.success(response.data.message);
       setFormData({ name: "", email: "", password: "", phone: "" });
     } catch (error) {
       toast.error("Failed to add user. Please try again.");
