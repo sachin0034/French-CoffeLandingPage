@@ -20,6 +20,9 @@ import ProfilePage from "./pages/Profile";
 import AdminContact from "./pages/AdminContact";
 import Categorypage from "./pages/CategoryPage";
 import MenuPage from "./pages/MenuPage";
+import NotFoundPage from "./pages/NotFound";
+
+
 
 function App() {
   return (
@@ -44,6 +47,7 @@ function App() {
           <Route path="/contact" element={<AdminContact />} />
           <Route path="/category" element={<Categorypage />} />
           <Route path="/menu" element={<MenuPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
     </>

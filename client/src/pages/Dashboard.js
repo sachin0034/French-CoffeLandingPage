@@ -241,11 +241,12 @@ const Dashboard = () => {
 
               <div className="w-full h-[550px] sm:h-[300px] bg-gradient-to-r from-[#42f5bf] to-[#00bfae] text-white flex flex-col sm:flex-row items-center justify-between px-8 mb-8 rounded-lg shadow-lg">
                 <div className="w-full sm:w-1/3 sm:order-1 sm:mt-4">
-                  <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTPxVddzXEj0D_2VLPdLu0WaQpTVMZdLjprQ&s" // Replace with your image URL
-                    alt="Eggify"
-                    className="w-full h-[300px] sm:h-full object-cover rounded-lg shadow-md sm:object-top sm:mt-4"
-                  />
+                <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTPxVddzXEj0D_2VLPdLu0WaQpTVMZdLjprQ&s" // Replace with your image URL
+                alt="Eggify"
+                className="w-full h-[300px] sm:h-full object-cover rounded-lg shadow-md bg-transparent"
+              />
+              
                 </div>
 
                 <div className="flex flex-col justify-center space-y-4 w-full sm:w-2/3 sm:pl-8 sm:order-2">
@@ -263,7 +264,7 @@ const Dashboard = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-5">
                 <div
-                  className="flex flex-col justify-between items-center min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 "
+                  className="flex flex-col justify-between items-center min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 cursor-pointer"
                   onClick={() => setAddMenuModalOpen(true)}
                 >
                   <svg
@@ -284,20 +285,19 @@ const Dashboard = () => {
                 </div>
 
                 <div
-                  className="flex flex-col justify-between items-center min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  className="flex flex-col justify-between items-center min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 cursor-pointer"
                   onClick={() => setModalOpen(true)}
                 >
                   <div className="flex justify-center items-center mb-4">
                     {/* SVG Calendar Icon */}
                     <svg
-  xmlns="http://www.w3.org/2000/svg"
-  fill="currentColor"
-  viewBox="0 0 24 24"
-  className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 text-black hover:text-red-500 transition-colors duration-300"
->
-  <path d="M19 4h-1V2h-2v2H8V2H6v2H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zM5 6h1v2h2V6h8v2h2V6h1a1 1 0 0 1 1 1v2H4V7a1 1 0 0 1 1-1zm14 14H5a1 1 0 0 1-1-1V11h16v8a1 1 0 0 1-1 1z" />
-</svg>
-
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 text-black hover:text-red-500 transition-colors duration-300"
+                    >
+                      <path d="M19 4h-1V2h-2v2H8V2H6v2H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zM5 6h1v2h2V6h8v2h2V6h1a1 1 0 0 1 1 1v2H4V7a1 1 0 0 1 1-1zm14 14H5a1 1 0 0 1-1-1V11h16v8a1 1 0 0 1-1 1z" />
+                    </svg>
                   </div>
                   <div className="flex justify-between items-center mt-4">
                     <p className="text-black text-lg">
@@ -309,7 +309,7 @@ const Dashboard = () => {
 
                 {/* Download Sample File Card */}
                 <div
-                  className="flex flex-col justify-between items-center min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  className="flex flex-col justify-between items-center min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 cursor-pointer"
                   onClick={downloadSampleFile}
                 >
                   <svg
@@ -329,6 +329,8 @@ const Dashboard = () => {
                     </p>
                   </div>
                 </div>
+
+
               </div>
 
               <Main />
@@ -340,7 +342,16 @@ const Dashboard = () => {
       {isAddMenuModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-sm sm:max-w-md md:max-w-sm lg:max-w-md xl:max-w-lg p-10 overflow-y-auto max-h-[70vh]">
-            <h2 className="text-xl font-bold mb-4">Add Daily Menu</h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold mb-4">Add Daily Menu</h2>
+              {/* Close Icon */}
+              <button
+                onClick={() => setAddMenuModalOpen(false)}
+                className="text-gray-500 hover:text-gray-800 transition-colors duration-200 focus:outline-none"
+              >
+                <i className="fa fa-times text-xl" style={{color:"red", fontSize:"30px"}}></i>
+              </button>
+            </div>
             <form onSubmit={handleSubmit}>
               {/* Date Input */}
               <div className="mb-4">
