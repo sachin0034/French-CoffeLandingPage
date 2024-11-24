@@ -217,7 +217,7 @@ const Dashboard = () => {
                 </div>
 
                 {/* Right Section - PieChart */}
-                <div className="flex justify-center items-center mt-4 sm:mt-0">
+                <div className="flex justify-center items-center  sm:mt-0">
                   <h2>Menu Left </h2>
                   <PieChart
                     data={pieChartData}
@@ -252,7 +252,10 @@ const Dashboard = () => {
                   <h1 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
                     Elevate Your Culinary Experience with Eggify
                   </h1>
-                  <button onClick={() => setAddMenuModalOpen(true)} className="px-6 py-3 border-2 border-white text-white bg-transparent rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white w-max">
+                  <button
+                    onClick={() => setAddMenuModalOpen(true)}
+                    className="px-6 py-3 border-2 border-white text-white bg-transparent rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white w-max"
+                  >
                     Add Menu
                   </button>
                 </div>
@@ -260,13 +263,17 @@ const Dashboard = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-5">
                 <div
-                  className="flex flex-col justify-between min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300"
+                  className="flex flex-col justify-between items-center min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 "
                   onClick={() => setAddMenuModalOpen(true)}
                 >
-                  <div className="flex justify-center items-center mb-4">
-                    {/* Using a large icon size with 'scale' for dynamic scaling */}
-                    <i className="fa fa-home text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-black hover:text-blue-500 transition-colors duration-300 transform hover:scale-150"></i>
-                  </div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    className="w-16 h-16 text-black hover:text-blue-500 transition-colors duration-300"
+                  >
+                    <path d="M12 3l7 6V20a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-5H9v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9l7-6a1 1 0 0 1 1.32 0zM12 1.75L4.2 8.38a2 2 0 0 0-.7 1.52V20a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3v-5h2v5a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V9.9a2 2 0 0 0-.7-1.52L12 1.75z" />
+                  </svg>
 
                   <div className="flex justify-between items-center mt-4">
                     <p className="text-black text-lg">
@@ -277,11 +284,20 @@ const Dashboard = () => {
                 </div>
 
                 <div
-                  className="flex flex-col justify-between min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  className="flex flex-col justify-between items-center min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
                   onClick={() => setModalOpen(true)}
                 >
                   <div className="flex justify-center items-center mb-4">
-                    <i className="fa fa-calendar text-4xl sm:text-5xl lg:text-6xl text-black hover:text-red-500 transition-colors duration-300"></i>
+                    {/* SVG Calendar Icon */}
+                    <svg
+  xmlns="http://www.w3.org/2000/svg"
+  fill="currentColor"
+  viewBox="0 0 24 24"
+  className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 text-black hover:text-red-500 transition-colors duration-300"
+>
+  <path d="M19 4h-1V2h-2v2H8V2H6v2H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zM5 6h1v2h2V6h8v2h2V6h1a1 1 0 0 1 1 1v2H4V7a1 1 0 0 1 1-1zm14 14H5a1 1 0 0 1-1-1V11h16v8a1 1 0 0 1-1 1z" />
+</svg>
+
                   </div>
                   <div className="flex justify-between items-center mt-4">
                     <p className="text-black text-lg">
@@ -293,10 +309,17 @@ const Dashboard = () => {
 
                 {/* Download Sample File Card */}
                 <div
-                  className="flex flex-col justify-between min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  className="flex flex-col justify-between items-center min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
                   onClick={downloadSampleFile}
                 >
-                  <i className="fa fa-download text-2xl text-black hover:text-green-500 transition-colors duration-300"></i>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    className="w-16 h-16 text-black hover:text-green-500 transition-colors duration-300"
+                  >
+                    <path d="M19 9h-4V3h-6v6H5l7 7 7-7zM5 14h14v2H5z" />
+                  </svg>
                   <div className="flex justify-between items-center mt-4">
                     <p className="text-black text-lg">
                       <span className="font-semibold">
