@@ -4,6 +4,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
+//import Chart from "../components/charts/Chart";
+
+import Main from "../components/main/Main";
+
 const Dashboard = () => {
   const [isAddMenuModalOpen, setAddMenuModalOpen] = useState(false);
   const [isWeeklyMenuModalOpen, setWeeklyMenuModalOpen] = useState(false);
@@ -155,7 +159,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Navbar />
+    <Main></Main>
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -199,8 +203,11 @@ const Dashboard = () => {
               <p className="text-sm">Click here to download a sample file.</p>
             </div>
           </div>
+        
         </div>
       </div>
+     
+    
 
       {isAddMenuModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

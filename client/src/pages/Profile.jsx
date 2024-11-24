@@ -94,7 +94,6 @@ const ProfilePage = () => {
         toast.success(
           `${fieldToEdit.charAt(0).toUpperCase() + fieldToEdit.slice(1)} updated successfully.`
         );
-        
       })
       .catch((error) => {
         console.error("Error updating profile:", error);
@@ -151,9 +150,11 @@ const ProfilePage = () => {
 
             {/* Modal */}
             {showModal && (
-              <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-                <div className="bg-white w-96 p-6 rounded-lg shadow-lg">
-                  <h4 className="text-lg font-medium mb-4">Edit {fieldToEdit}</h4>
+              <div className="fixed inset-0 z-40 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                <div className="bg-white w-full max-w-lg p-6 rounded-lg shadow-lg mt-[4rem]">
+                  <h4 className="text-lg font-medium mb-4">
+                    Edit {fieldToEdit}
+                  </h4>
                   <input
                     type={fieldToEdit === "password" ? "password" : "text"}
                     value={editValue}
