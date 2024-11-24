@@ -187,6 +187,10 @@ const Dashboard = () => {
     calculateRemainingDays();
   }, []);
 
+  const handleButtonClick = () => {
+    navigate(`/add-user`);
+  };
+
   return (
     <div>
       <Navbar />
@@ -248,8 +252,8 @@ const Dashboard = () => {
                   <h1 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
                     Elevate Your Culinary Experience with Eggify
                   </h1>
-                  <button className="px-6 py-3 border-2 border-white text-white bg-transparent rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white w-max">
-                    Get Started
+                  <button onClick={handleButtonClick} className="px-6 py-3 border-2 border-white text-white bg-transparent rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white w-max">
+                    Get Added User
                   </button>
                 </div>
               </div>
