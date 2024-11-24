@@ -37,7 +37,15 @@ const Dashboard = () => {
         }
       );
       if (response.data.isValid) {
-        return;
+        const userResponse = await axios.get(
+          `${process.env.REACT_APP_SERVER}/api/auth/profile`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setUserName(userResponse.data.name);
       } else {
         navigate("/login");
       }
@@ -158,57 +166,102 @@ const Dashboard = () => {
     fetchSuggestions();
   });
 
+  const [userName, setUserName] = useState("");
+
   return (
     <div>
-    <Main></Main>
+      <Navbar />
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div
-              className="p-6 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-300"
-              onClick={() => setAddMenuModalOpen(true)}
-            >
-              <div className="flex items-center space-x-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  className="w-8 h-8 text-white"
-                >
-                  <path d="M12 4a8 8 0 1 1-8 8 8.01 8.01 0 0 1 8-8Zm1 5h3a1 1 0 0 1 0 2h-3v3a1 1 0 0 1-2 0v-3H8a1 1 0 0 1 0-2h3V6a1 1 0 0 1 2 0v3Z" />
-                </svg>
-                <div>
-                  <h3 className="text-xl font-bold tracking-normal">
-                    Add Menu
-                  </h3>
-                  <p className="text-sm opacity-90">
-                    Click here to add a new menu item.
+          <main className="bg-gray-100 grid-area-main overflow-auto mt-0">
+            <div className="px-8 py-5">
+              <div className="flex items-center mb-5">
+                <img
+                  src="https://anglophone-direct.com/ap_img/Coffee-scaled.jpg"
+                  alt="Coffee"
+                  className="max-h-24 object-contain mr-5"
+                />
+                <div className="text-[#2e4a66]">
+                  <h1 className="text-2xl">Hello,{userName || "User"}</h1>
+                  <p className="text-sm font-semibold text-[#a5aaad]">
+                    Welcome to our Cavallo Bianco
                   </p>
                 </div>
               </div>
+
+              <div className="w-full h-[550px] sm:h-[300px] bg-gradient-to-r from-[#42f5bf] to-[#00bfae] text-white flex flex-col sm:flex-row items-center justify-between px-8 mb-8 rounded-lg shadow-lg">
+                <div className="w-full sm:w-1/3 sm:order-1 sm:mt-4">
+                  <img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTPxVddzXEj0D_2VLPdLu0WaQpTVMZdLjprQ&s" // Replace with your image URL
+                    alt="Eggify"
+                    className="w-full h-[300px] sm:h-full object-cover rounded-lg shadow-md sm:object-top sm:mt-4"
+                  />
+                </div>
+
+                <div className="flex flex-col justify-center space-y-4 w-full sm:w-2/3 sm:pl-8 sm:order-2">
+                  <h1 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+                    Elevate Your Culinary Experience with Eggify
+                  </h1>
+                  <button className="px-6 py-3 border-2 border-white text-white bg-transparent rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white w-max">
+                    Get Started
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-5">
+                {/* Add Menu Item Card */}
+                <div
+                  className="flex flex-col justify-between min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  onClick={() => setAddMenuModalOpen(true)}
+                >
+                  <i className="fa fa-home text-2xl text-black hover:text-blue-500 transition-colors duration-300"></i>
+                  <div className="flex justify-between items-center mt-4">
+                    <p className="text-black text-lg">
+                      <span className="font-semibold">Add Menu </span>Click here
+                      to add a new menu item.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Add Weekly Menu Card */}
+                <div
+                className="flex flex-col justify-between min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                onClick={() => setModalOpen(true)}
+              >
+                <div className="flex justify-center items-center mb-4">
+                  <i className="fa fa-calendar text-4xl sm:text-5xl lg:text-6xl text-black hover:text-red-500 transition-colors duration-300"></i>
+                </div>
+                <div className="flex justify-between items-center mt-4">
+                  <p className="text-black text-lg">
+                    <span className="font-semibold">Add Weekly Menu </span>
+                    Click here to add the weekly menu.
+                  </p>
+                </div>
+              </div>
+              
+
+                {/* Download Sample File Card */}
+                <div
+                  className="flex flex-col justify-between min-h-[200px] sm:min-h-[250px] p-6 rounded-lg bg-white text-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  onClick={downloadSampleFile}
+                >
+                  <i className="fa fa-download text-2xl text-black hover:text-green-500 transition-colors duration-300"></i>
+                  <div className="flex justify-between items-center mt-4">
+                    <p className="text-black text-lg">
+                      <span className="font-semibold">
+                        Download Sample File (Weekly Menu)
+                      </span>{" "}
+                      Download a sample file here.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <Main />
             </div>
-            <div
-              className="p-6 bg-green-600 text-white rounded-lg shadow-md cursor-pointer hover:bg-green-700"
-              onClick={() => setModalOpen(true)}
-            >
-              <h3 className="text-lg font-bold">Add Weekly Menu</h3>
-              <p className="text-sm">Click here to add the weekly menu.</p>
-            </div>
-            <div
-              className="p-6 bg-purple-600 text-white rounded-lg shadow-md cursor-pointer hover:bg-purple-700"
-              onClick={downloadSampleFile}
-            >
-              <h3 className="text-lg font-bold">
-                Download Sample File (Weekly Menu)
-              </h3>
-              <p className="text-sm">Click here to download a sample file.</p>
-            </div>
-          </div>
-        
+          </main>
         </div>
       </div>
-     
-    
 
       {isAddMenuModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

@@ -28,7 +28,15 @@ const chefSuggestionSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  expiresAt: {
+    type: Date,
+    default: function () {
+      // Set expiration time to 30 seconds from creation
+      return new Date(Date.now() + 30 * 1000);
+    },
+  },
 });
+chefSuggestionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const ChefSuggestion = mongoose.model("ChefSuggestion", chefSuggestionSchema);
 

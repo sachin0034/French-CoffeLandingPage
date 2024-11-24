@@ -56,7 +56,7 @@ const ProfilePage = () => {
       })
       .then((response) => {
         setUser(response.data);
-        toast.success("Profile fetched successfully.");
+      
       })
       .catch((error) => {
         console.error("Error fetching profile:", error);

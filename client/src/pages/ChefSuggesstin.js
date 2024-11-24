@@ -44,7 +44,7 @@ const ChefSuggestion = () => {
   }, []);
   const fetchSuggestions = async () => {
     try {
-      const response = await axios.get(
+      const response = await axios.get( 
         `${process.env.REACT_APP_SERVER}/api/chef/get-chef`
       );
       setSuggestions(response.data.data);

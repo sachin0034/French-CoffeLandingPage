@@ -96,12 +96,13 @@ const Chart = () => {
 
   return (
     <div
-      style={{
-        backgroundColor: "#f5f5f5", // Light blackish-white background
-        padding: "5px",
-        borderRadius: "10px",
-        border: "1px solid #bbb", // Border around the chart container
-      }}
+    style={{
+      backgroundColor: "#f5f5f5", // Light blackish-white background
+      padding: "5px",
+      borderRadius: "10px",
+      border: "1px solid #bbb", // Border around the chart container
+      overflow: "hidden", // Prevents overflow of the chart area
+    }}
     >
       <h3 style={{ color: "#333", textAlign: "center" }}>Bar Chart Example</h3>
       <XYPlot height={300} width={300} style={{ backgroundColor: "#f5f5f5" }}>

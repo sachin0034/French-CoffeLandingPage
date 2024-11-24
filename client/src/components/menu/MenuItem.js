@@ -69,6 +69,7 @@ const MenuItem = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_SERVER}/api/menu/${todayDate}`
       );
+      console.log(response.data.items);
       setMenuItems(response.data.items);
       handleCategoryChange("Breakfast");
     } catch (error) {
