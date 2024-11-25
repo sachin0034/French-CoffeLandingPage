@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader/Loader";
-
+import login from "../assets/login.jpg"
 const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -86,7 +86,7 @@ const Login = () => {
       <div className="flex flex-col md:flex-row h-screen bg-white">
         <div className="w-full flex justify-center mt-8 md:hidden">
           <img
-            src="https://media.cnn.com/api/v1/images/stellar/prod/190411154654-07-bouillon-restaurants-paris.jpg?q=w_3101,h_1744,x_0,y_0,c_fill"
+            src={login}
             alt="Flowers"
             className="w-5/6 sm:w-3/4 md:w-3/4 h-auto rounded-2xl object-cover"
           />

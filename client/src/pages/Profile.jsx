@@ -56,7 +56,6 @@ const ProfilePage = () => {
       })
       .then((response) => {
         setUser(response.data);
-      
       })
       .catch((error) => {
         console.error("Error fetching profile:", error);
@@ -92,7 +91,9 @@ const ProfilePage = () => {
         setUser((prevUser) => ({ ...prevUser, [fieldToEdit]: editValue }));
         setShowModal(false);
         toast.success(
-          `${fieldToEdit.charAt(0).toUpperCase() + fieldToEdit.slice(1)} updated successfully.`
+          `${
+            fieldToEdit.charAt(0).toUpperCase() + fieldToEdit.slice(1)
+          } updated successfully.`
         );
       })
       .catch((error) => {
@@ -104,7 +105,6 @@ const ProfilePage = () => {
 
   const goToDashboard = () => {
     navigate("/dashboard");
-    toast.info("Navigating to dashboard.");
   };
 
   return (
@@ -163,17 +163,13 @@ const ProfilePage = () => {
                   />
                   <div className="mt-6 flex justify-end space-x-3">
                     <button
-                      className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
+                      className="px-4 py-2 bg-black text-white rounded-md mr-2"
                       onClick={() => setShowModal(false)}
                     >
                       Cancel
                     </button>
                     <button
-                      className={`px-4 py-2 text-white rounded-md ${
-                        loading
-                          ? "bg-blue-300 cursor-not-allowed"
-                          : "bg-blue-500 hover:bg-blue-600"
-                      }`}
+                      className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
                       onClick={handleSave}
                       disabled={loading}
                     >
@@ -188,7 +184,7 @@ const ProfilePage = () => {
             <div className="mt-6 flex justify-end">
               <button
                 onClick={goToDashboard}
-                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
               >
                 Go to Dashboard
               </button>

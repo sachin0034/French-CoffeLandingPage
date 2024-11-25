@@ -130,36 +130,36 @@ const Chart = () => {
             flex: 1,
             marginLeft: "20px",
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
+            flexWrap: "wrap", // Ensures items wrap if content overflows
             alignItems: "center",
+            justifyContent: "flex-start", // Aligns items to the left
+            gap: "10px", // Adds spacing between items
           }}
         >
-          <div>
-            {chartData.map((data, index) => (
+          {chartData.map((data, index) => (
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "5px",
+              }}
+            >
               <div
-                key={index}
                 style={{
-                  marginBottom: "15px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  width: "20px",
+                  height: "20px",
+                  backgroundColor: data.color,
+                  marginRight: "10px",
+                  borderRadius: "50%",
                 }}
-              >
-                <div
-                  style={{
-                    width: "20px",
-                    height: "20px",
-                    backgroundColor: data.color,
-                    marginRight: "10px",
-                    borderRadius: "50%",
-                  }}
-                ></div>
-                <span style={{ fontSize: "16px", fontWeight: "bold" }}>
-                  {data.title}: {data.value}
-                </span>
-              </div>
-            ))}
-          </div>
+              ></div>
+              <span style={{ fontSize: "14px", fontWeight: "bold" }}>
+                {data.title}: {data.value}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

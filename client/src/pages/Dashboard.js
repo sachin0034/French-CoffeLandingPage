@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 //import Chart from "../components/charts/Chart";
+import dashboard from "../assets/dashboard.jpg";
 
 import Main from "../components/main/Main";
 import { PieChart } from "react-minimal-pie-chart";
@@ -201,13 +202,12 @@ const Dashboard = () => {
               <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start sm:px-8">
                 {/* Left Section */}
                 <div className="flex items-center mb-5 sm:mb-0">
-               
                   <div className="text-[#2e4a66] sm:pl-4">
                     <h1 className="text-2xl sm:text-3xl font-semibold">
                       Hello, {userName || "User"}
                     </h1>
                     <p className="text-sm font-semibold text-[#a5aaad]">
-                      Welcome to our Cavallo Bianco
+                      Welcome to Cavallo Bianco
                     </p>
                   </div>
                 </div>
@@ -223,6 +223,7 @@ const Dashboard = () => {
                       height: "100px",
                       width: "100px",
                       margin: "auto",
+                      transition: "all 0.3s ease-in-out",
                     }}
                     label={({ dataEntry }) => `${dataEntry.value} days`}
                     labelStyle={{
@@ -235,23 +236,28 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="w-full h-[550px] sm:h-[300px] bg-gradient-to-r from-[#42f5bf] to-[#00bfae] text-white flex flex-col sm:flex-row items-center justify-between px-8 mb-8 rounded-lg shadow-lg">
-                <div className="w-full sm:w-1/3 sm:order-1 sm:mt-4">
-                <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTPxVddzXEj0D_2VLPdLu0WaQpTVMZdLjprQ&s" // Replace with your image URL
-                alt="Eggify"
-                className="w-full h-[300px] sm:h-full object-cover rounded-lg shadow-md bg-transparent"
-              />
-              
+              <div className="w-full h-auto bg-gradient-to-r from-[#42f5bf] to-[#00bfae] text-white flex flex-col sm:flex-row items-center justify-between px-4 sm:px-8 mb-8 rounded-lg shadow-lg">
+                {/* Image Section */}
+                <div className="w-full sm:w-1/3 sm:order-1 sm:mt-4 lg:mb-4">
+                  <div className="relative w-full h-0 pb-[75%] rounded-lg shadow-md overflow-hidden">
+                    {/* 4:3 aspect ratio */}
+                    <img
+                      src={dashboard}
+                      alt="Eggify"
+                      className="absolute top-0 left-0 w-full h-full object-cover rounded-lg bg-transparent"
+                    />
+                  </div>
                 </div>
 
-                <div className="flex flex-col justify-center space-y-4 w-full sm:w-2/3 sm:pl-8 sm:order-2">
-                  <h1 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
-                    Elevate Your Culinary Experience with Eggify
+                {/* Text and Button Section */}
+                <div className="flex flex-col justify-center space-y-4 w-full sm:w-2/3 sm:pl-8 sm:order-2 mt-6 sm:mt-0 sm:mb-5">
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white text-center sm:text-left ">
+                    Welcome to the Cavallo Bianco Admin Dashboard <br />
+                    Manage Menus, Orders, and More Effortlessly!
                   </h1>
                   <button
                     onClick={() => setAddMenuModalOpen(true)}
-                    className="px-6 py-3 border-2 border-white text-white bg-transparent rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white w-max"
+                    className="px-6 py-3 border-2 border-white text-white bg-transparent rounded-full transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white w-max mx-auto sm:mx-0 animate-pulse shadow-md hover:shadow-lg hover:shadow-white "
                   >
                     Add Menu
                   </button>
@@ -327,11 +333,7 @@ const Dashboard = () => {
                     </p>
                   </div>
                 </div>
-
-
               </div>
-
-           
             </div>
           </main>
         </div>
@@ -347,7 +349,10 @@ const Dashboard = () => {
                 onClick={() => setAddMenuModalOpen(false)}
                 className="text-gray-500 hover:text-gray-800 transition-colors duration-200 focus:outline-none"
               >
-                <i className="fa fa-times text-xl" style={{color:"red", fontSize:"30px"}}></i>
+                <i
+                  className="fa fa-times text-xl"
+                  style={{ color: "red", fontSize: "30px" }}
+                ></i>
               </button>
             </div>
             <form onSubmit={handleSubmit}>
@@ -512,7 +517,7 @@ const Dashboard = () => {
           className="mb-4"
         />
         <button
-         className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
+          className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
           onClick={handleSubmitWeekLy}
         >
           Submit

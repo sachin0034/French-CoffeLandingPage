@@ -156,8 +156,8 @@ const ChefSuggestion = () => {
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
           <div className="flex justify-end mb-4">
             <button
-         className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
-         onClick={() => isModal(true)}
+              className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
+              onClick={() => isModal(true)}
             >
               Add Chef Suggestion
             </button>

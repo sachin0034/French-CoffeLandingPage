@@ -149,16 +149,15 @@ const Main = () => {
 
   return (
     <div>
-         <div className="grid md:grid-cols-2 gap-8 mt-12">
+      <div className="grid md:grid-cols-2 gap-8 mt-12">
         <div className="p-6 rounded-lg bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl flex flex-col justify-between h-full">
           <div className="relative">
-            <div className="absolute top-0 left-0 transform -translate-x-4 -translate-y-4 bg-white border-2 border-[#42f5bf] rounded-full w-14 h-20 flex items-center justify-center shadow-sm">
-              <div className="text-center">
-                <span className="text-2xl font-bold text-[#42f5bf]">
+            <div className="absolute top-0 left-0 transform -translate-x-4 -translate-y-4 bg-white border-4 border-gray-200 rounded-full w-20 h-20 flex items-center justify-center shadow-lg">
+              <div className="text-center p-2">
+                <span className="text-2xl font-bold text-black mb-1 block">
                   {new Date().getDate()}
                 </span>
-                <br />
-                <span className="text-sm font-bold text-[#03fc94]">
+                <span className="text-sm font-bold text-gray-500">
                   {new Date().toLocaleString("en-US", {
                     weekday: "short",
                   })}
@@ -272,9 +271,6 @@ const Main = () => {
       </div>
       <div className="grid md:grid-cols-2 gap-8 mt-12">
         <div className="p-6 rounded-lg bg-white shadow-lg">
-
-
-
           <div className="flex items-center justify-between mb-5">
             <div>
               <h1 className="text-xl text-[#2e4a66]">Report for the Day</h1>
@@ -318,8 +314,6 @@ const Main = () => {
           </div>
         </div>
       </div>
-
-   
     </div>
   );
 };
