@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import profileLogo from "../../assets/images.png";
-import dashboard from "../../assets/icons/layout.png";
+import dashboard from "../../assets/icons/Dashboard.png";
 import menu from "../../assets/icons/menu.png";
 import user from "../../assets/icons/user.png";
 import addUser from "../../assets/icons/add-user.png";
-import category from "../../assets/icons/dish.png";
+import category from "../../assets/icons/category.png";
 import logout from "../../assets/icons/logout.png";
-import chef from "../../assets/icons/chef.png";
+import chef from "../../assets/icons/chef-suggestion.png";
 import contact from "../../assets/icons/contact-list.png";
 
 const Navbar = () => {
@@ -45,7 +45,7 @@ const Navbar = () => {
   return (
     <div>
       {/* Navbar */}
-      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-900">
         <div className="px-3 py-3 lg:px-5 lg:pl-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start">
@@ -84,13 +84,13 @@ const Navbar = () => {
                 <span className="sr-only">Open user menu</span>
                 {userName ? (
                   <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full">
-                    {userName.charAt(0).toUpperCase()}
+                    <div className="w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full">
+                      {userName.charAt(0).toUpperCase()}
+                    </div>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {userName}
+                    </p>
                   </div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {userName}
-                  </p>
-                </div>
                 ) : (
                   <img
                     className="w-8 h-8 rounded-full"
@@ -134,12 +134,12 @@ const Navbar = () => {
       {/* Sidebar */}
       <aside
         id="logo-sidebar"
-        className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 ${
+        className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform bg-white border-r border-gray-200 dark:bg-black dark:border-gray-700 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } sm:translate-x-0`}
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+        <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-black">
           <ul className="space-y-2 font-medium">
             <li>
               <NavLink
@@ -147,12 +147,12 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `flex items-center p-2 rounded-lg ${
                     isActive
-                      ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                      ? "bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] text-gray-900 dark:text-black"
                       : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`
                 }
               >
-                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
                   <img
                     src={dashboard} // Replace with the actual image path
                     alt="Profile"
@@ -170,18 +170,18 @@ const Navbar = () => {
                   className={({ isActive }) =>
                     `flex items-center p-2 rounded-lg ${
                       isActive
-                        ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                        ? "bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] text-gray-900 dark:text-black"
                         : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                     }`
                   }
                 >
-                   <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
-                  <img
-                    src={addUser} // Replace with the actual image path
-                    alt="Profile"
-                    className="w-6 h-6 rounded-full" // Ensures the image itself is circular
-                  />
-                </div>
+                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                    <img
+                      src={addUser} // Replace with the actual image path
+                      alt="Profile"
+                      className="w-6 h-6 rounded-full" // Ensures the image itself is circular
+                    />
+                  </div>
                   <span className="ms-3">Add User </span>
                 </NavLink>
               </li>
@@ -193,18 +193,18 @@ const Navbar = () => {
                   className={({ isActive }) =>
                     `flex items-center p-2 rounded-lg ${
                       isActive
-                        ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                        ? "bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] text-gray-900 dark:text-black"
                         : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                     }`
                   }
                 >
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
-                  <img
-                    src={user} // Replace with the actual image path
-                    alt="Profile"
-                    className="w-6 h-6 rounded-full" // Ensures the image itself is circular
-                  />
-                </div>
+                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                    <img
+                      src={user} // Replace with the actual image path
+                      alt="Profile"
+                      className="w-6 h-6 rounded-full" // Ensures the image itself is circular
+                    />
+                  </div>
                   <span className="ms-3">User List</span>
                 </NavLink>
               </li>
@@ -216,12 +216,12 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `flex items-center p-2 rounded-lg ${
                     isActive
-                      ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                      ? "bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] text-gray-900 dark:text-black"
                       : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`
                 }
               >
-                 <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
                   <img
                     src={menu} // Replace with the actual image path
                     alt="Profile"
@@ -238,12 +238,12 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `flex items-center p-2 rounded-lg ${
                     isActive
-                      ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                      ? "bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] text-gray-900 dark:text-black"
                       : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`
                 }
               >
-                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
                   <img
                     src={chef} // Replace with the actual image path
                     alt="Profile"
@@ -260,12 +260,12 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `flex items-center p-2 rounded-lg ${
                     isActive
-                      ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                      ? "bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] text-gray-900 dark:text-black"
                       : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`
                 }
               >
-                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
                   <img
                     src={contact} // Replace with the actual image path
                     alt="Profile"
@@ -273,7 +273,7 @@ const Navbar = () => {
                   />
                 </div>
 
-                <span className="ms-3">Contact List</span>
+                <span className="ms-3">Feedback List</span>
               </NavLink>
             </li>
             <li>
@@ -282,12 +282,12 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `flex items-center p-2 rounded-lg ${
                     isActive
-                      ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                      ? "bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] text-gray-900 dark:text-black"
                       : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`
                 }
               >
-                 <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
                   <img
                     src={category} // Replace with the actual image path
                     alt="Profile"
@@ -308,7 +308,7 @@ const Navbar = () => {
                   }`
                 }
               >
-                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
                   <img
                     src={logout} // Replace with the actual image path
                     alt="Profile"

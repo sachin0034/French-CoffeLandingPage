@@ -481,14 +481,14 @@ const Dashboard = () => {
               <div className="flex justify-end">
                 <button
                   type="button"
-                  className="px-4 py-2 bg-red-600 text-white rounded-md mr-2 hover:bg-red-700"
+                  className="px-4 py-2 bg-black text-white rounded-md mr-2"
                   onClick={() => setAddMenuModalOpen(false)}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
                 >
                   Save
                 </button>
@@ -512,13 +512,13 @@ const Dashboard = () => {
           className="mb-4"
         />
         <button
-          className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
+         className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
           onClick={handleSubmitWeekLy}
         >
           Submit
         </button>
         <button
-          className="ml-4 bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-700"
+          className="px-4 py-2 bg-black text-white rounded-md mr-2"
           onClick={() => setModalOpen(false)}
         >
           Cancel

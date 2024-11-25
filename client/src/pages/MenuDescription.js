@@ -553,14 +553,14 @@ const MenuDescription = () => {
                 <button
                   type="button"
                   onClick={() => setEditMenuModalOpen(false)}
-                  className="bg-gray-500 text-white px-6 py-3 rounded hover:bg-gray-600 transition mr-4"
+                  className="px-4 py-2 bg-black text-white rounded-md mr-2"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleEditSubmit}
-                  className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition"
+                  className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
                 >
                   Save Changes
                 </button>

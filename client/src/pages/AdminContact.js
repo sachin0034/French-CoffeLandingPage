@@ -111,7 +111,10 @@ const AdminContact = () => {
   // Pagination logic
   const indexOfLastContact = currentPage * itemsPerPage;
   const indexOfFirstContact = indexOfLastContact - itemsPerPage;
-  const currentContacts = filteredContacts.slice(indexOfFirstContact, indexOfLastContact);
+  const currentContacts = filteredContacts.slice(
+    indexOfFirstContact,
+    indexOfLastContact
+  );
 
   const pageCount = Math.ceil(filteredContacts.length / itemsPerPage);
 
@@ -134,13 +137,13 @@ const AdminContact = () => {
             />
             <div className="space-x-2">
               <button
-                className="bg-red-500 text-white px-4 py-2 rounded-lg"
+                className="px-4 py-2 bg-black text-white rounded-md mr-2"
                 onClick={deleteAllContacts}
               >
                 Delete All
               </button>
               <button
-                className="bg-green-500 text-white px-4 py-2 rounded-lg"
+                className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
                 onClick={exportToExcel}
               >
                 Download Excel

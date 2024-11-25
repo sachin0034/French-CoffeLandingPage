@@ -7,6 +7,8 @@ const MenuItem = () => {
   const [activeType, setActiveType] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const handleCategoryChange = (category) => {
     setActiveCategory(category);
     filterMenuItems(category, activeType, searchTerm);
@@ -32,6 +34,7 @@ const MenuItem = () => {
     }
 
     setFilteredItems(filtered);
+    setCurrentPage(1);
   };
   const menuItems1 = [
     { name: "All" },
@@ -81,6 +84,10 @@ const MenuItem = () => {
   useEffect(() => {
     fetchTodayMenu();
   }, []);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
   return (
     <div className="flex flex-col sm:flex-row min-h-screen p-1">
       <aside
@@ -174,37 +181,61 @@ const MenuItem = () => {
             </select>
           </div>
         </div>
-        <div>
-          {filteredItems.length > 0 ? (
-            filteredItems.map((item) => (
-              <div
-                key={item._id}
-                className="flex flex-col sm:flex-row items-center sm:items-start justify-between border-b border-gray-300 py-4"
-              >
-                <div className="w-full sm:w-1/3 text-left">
-                  <h2 className="font-bold text-2xl sm:text-3xl text-white">
-                    {item.name}
-                  </h2>
-                  <p className="text-md sm:text-lg text-black mt-4">
-                    {item.description}
-                  </p>
+        <main className="flex-1 p-4 mt-24 overflow-y-auto max-h-[70vh] ">
+          <div>
+            {currentItems.length > 0 ? (
+              currentItems.map((item) => (
+                <div
+                  key={item._id}
+                  className="flex flex-col sm:flex-row items-center sm:items-start justify-between border-b border-gray-300 py-4"
+                >
+                  <div className="w-full sm:w-1/3 text-left">
+                    <h2 className="font-bold text-2xl sm:text-3xl text-white">
+                      {item.name}
+                    </h2>
+                    <p className="text-md sm:text-lg text-black mt-4">
+                      {item.description}
+                    </p>
+                  </div>
+                  <div className="w-full sm:w-1/3 sm:mt-0 text-right">
+                    <p className="text-black font-bold text-3xl">
+                      ₹{item.dprice}
+                    </p>
+                    <p className="text-md sm:text-lg text-yellow line-through mt-2">
+                      ₹{item.price}
+                    </p>
+                  </div>
                 </div>
-                <div className="w-full sm:w-1/3  sm:mt-0 text-right">
-                  <p className="text-black font-bold text-3xl">
-                    ₹{item.dprice}
-                  </p>
-                  <p className="text-md sm:text-lg text-yellow line-through mt-2">
-                    ₹{item.price}
-                  </p>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className="text-white text-lg font-medium mt-4">
-              No menu available for the selected filters.
-            </p>
+              ))
+            ) : (
+              <p className="text-white text-lg font-medium mt-4">
+                No menu available for the selected filters.
+              </p>
+            )}
+          </div>
+
+          {/* Pagination */}
+          {filteredItems.length > itemsPerPage && (
+            <div className="flex justify-center mt-4 space-x-2">
+              {Array.from(
+                { length: Math.ceil(filteredItems.length / itemsPerPage) },
+                (_, index) => (
+                  <button
+                    key={index}
+                    className={`px-3 py-1 rounded ${
+                      currentPage === index + 1
+                        ? "bg-[#d19b73] text-white"
+                        : "bg-[#e7c6a5] text-[#723d12]"
+                    } hover:bg-[#d19b73] hover:text-white`}
+                    onClick={() => setCurrentPage(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                )
+              )}
+            </div>
           )}
-        </div>
+        </main>
       </main>
     </div>
   );

@@ -138,7 +138,7 @@ const Main = () => {
     navigate(`/menu-description/${today}`);
   };
   const handleButtonClick1 = () => {
-    navigate("/user-list"); 
+    navigate("/user-list");
   };
   useEffect(() => {
     fetchDataValid();
@@ -149,54 +149,7 @@ const Main = () => {
 
   return (
     <div>
-      <div className="grid md:grid-cols-2 gap-8 mt-12">
-        <div className="p-6 rounded-lg bg-white shadow-lg">
-          <div className="flex items-center justify-between mb-5">
-            <div>
-              <h1 className="text-xl text-[#2e4a66]">Report for the Day</h1>
-            </div>
-            <i className="fa fa-usd"></i>
-          </div>
-          <Chart />
-        </div>
-
-        <div className="p-6 rounded-lg bg-white shadow-lg">
-          <div className="flex items-center justify-between mb-5">
-            <div>
-              <h1 className="text-xl text-[#2e4a66]">First 6 Userlist</h1>
-            </div>
-            <i className="fa fa-user"></i>
-          </div>
-
-          {/* Container for user list */}
-          <div className="overflow-y-auto max-h-[400px]">
-            {/* max height set and overflow enabled */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 mt-6">
-              {users.slice(0, 6).map((user) => (
-                <div
-                  key={user._id}
-                  className="bg-[#d1ecf1] text-[#35a4ba] text-center p-6 rounded-lg text-sm min-w-[180px]"
-                >
-                  <h1 className="text-base sm:text-lg lg:text-xl">
-                    {user.name}
-                  </h1>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="mt-6 flex justify-center">
-          <button
-            onClick={handleButtonClick1}
-            className="px-6 py-2 border-4 border-black text-black font-semibold rounded-md bg-transparent hover:border-black hover:bg-black hover:text-white transition duration-300 w-auto sm:w-32 lg:w-36 xl:w-40"
-          >
-            See All Userlist
-          </button>
-        </div>
-        
-        </div>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-8 mt-12">
+         <div className="grid md:grid-cols-2 gap-8 mt-12">
         <div className="p-6 rounded-lg bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl flex flex-col justify-between h-full">
           <div className="relative">
             <div className="absolute top-0 left-0 transform -translate-x-4 -translate-y-4 bg-white border-2 border-[#42f5bf] rounded-full w-14 h-20 flex items-center justify-center shadow-sm">
@@ -317,6 +270,56 @@ const Main = () => {
           )}
         </div>
       </div>
+      <div className="grid md:grid-cols-2 gap-8 mt-12">
+        <div className="p-6 rounded-lg bg-white shadow-lg">
+
+
+
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <h1 className="text-xl text-[#2e4a66]">Report for the Day</h1>
+            </div>
+            <i className="fa fa-usd"></i>
+          </div>
+          <Chart />
+        </div>
+
+        <div className="p-6 rounded-lg bg-white shadow-lg">
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <h1 className="text-xl text-[#2e4a66]">First 6 Userlist</h1>
+            </div>
+            <i className="fa fa-user"></i>
+          </div>
+
+          {/* Container for user list */}
+          <div className="overflow-y-auto max-h-[400px]">
+            {/* max height set and overflow enabled */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 mt-6">
+              {users.slice(0, 6).map((user) => (
+                <div
+                  key={user._id}
+                  className="bg-[#d1ecf1] text-[#35a4ba] text-center p-6 rounded-lg text-sm min-w-[180px]"
+                >
+                  <h1 className="text-base sm:text-lg lg:text-xl">
+                    {user.name}
+                  </h1>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={handleButtonClick1}
+              className="px-6 py-2 border-2 border-black text-black font-semibold rounded-md bg-transparent hover:border-black hover:bg-black hover:text-white transition duration-300 w-full max-w-sm sm:w-64 md:w-72 lg:w-80"
+            >
+              See All Userlist
+            </button>
+          </div>
+        </div>
+      </div>
+
+   
     </div>
   );
 };

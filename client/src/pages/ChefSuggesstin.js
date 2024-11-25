@@ -44,7 +44,7 @@ const ChefSuggestion = () => {
   }, []);
   const fetchSuggestions = async () => {
     try {
-      const response = await axios.get( 
+      const response = await axios.get(
         `${process.env.REACT_APP_SERVER}/api/chef/get-chef`
       );
       setSuggestions(response.data.data);
@@ -111,7 +111,7 @@ const ChefSuggestion = () => {
   const [eidtformData, editsetFormData] = useState({
     name: "",
     category: "",
-    description:"",
+    description: "",
     price: "",
     isAvailable: true,
   });
@@ -119,7 +119,7 @@ const ChefSuggestion = () => {
     setSelectedSuggestion(suggestion);
     editsetFormData({
       name: suggestion.name,
-      description:suggestion.description,
+      description: suggestion.description,
       category: suggestion.category,
       price: suggestion.price,
       isAvailable: suggestion.isAvailable,
@@ -156,8 +156,8 @@ const ChefSuggestion = () => {
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
           <div className="flex justify-end mb-4">
             <button
-              className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700"
-              onClick={() => isModal(true)}
+         className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
+         onClick={() => isModal(true)}
             >
               Add Chef Suggestion
             </button>
@@ -286,13 +286,13 @@ const ChefSuggestion = () => {
                     <button
                       type="button"
                       onClick={() => isModal(false)}
-                      className="mr-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                      className="px-4 py-2 bg-black text-white rounded-md mr-2"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                      className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
                     >
                       Save
                     </button>
@@ -365,16 +365,16 @@ const ChefSuggestion = () => {
                     </label>
                   </div>
                   <div className="flex justify-end">
-                  <button
+                    <button
                       type="button"
                       onClick={() => setEditModalOpen(false)}
-                      className="mr-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                      className="px-4 py-2 bg-black text-white rounded-md mr-2"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700"
+                      className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
                     >
                       Save Changes
                     </button>
