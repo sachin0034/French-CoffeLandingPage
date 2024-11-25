@@ -245,7 +245,7 @@ const Main = () => {
               </div>
               <div className="flex justify-between items-center border-b pb-3">
                 <h4 className="text-md font-semibold text-white">Price</h4>
-                <p className="text-sm text-gray-300 font-bold">${chef.price}</p>
+                <p className="text-sm text-gray-300 font-bold">{chef.price}</p>
               </div>
               <div className="flex justify-between items-center border-b pb-3">
                 <h4 className="text-md font-semibold text-white">

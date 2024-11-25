@@ -2,7 +2,10 @@ const ChefSuggestion = require("../modal/chefModal");
 exports.addMenu = async (req, res) => {
   try {
     const { name, description, category, price, isAvailable } = req.body;
-
+    const existingSuggestion = await ChefSuggestion.findOne();
+    if (existingSuggestion) {
+      await ChefSuggestion.deleteMany();
+    }
     const newChefSuggestion = new ChefSuggestion({
       name,
       description,
@@ -10,23 +13,18 @@ exports.addMenu = async (req, res) => {
       price,
       isAvailable,
     });
-
     const savedSuggestion = await newChefSuggestion.save();
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "Chef Suggestion added successfully",
-        data: savedSuggestion,
-      });
+    res.status(201).json({
+      success: true,
+      message: "Chef Suggestion added successfully",
+      data: savedSuggestion,
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error adding Chef Suggestion",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error adding Chef Suggestion",
+      error: error.message,
+    });
   }
 };
 
@@ -35,13 +33,11 @@ exports.getMenu = async (req, res) => {
     const suggestions = await ChefSuggestion.find();
     res.status(200).json({ success: true, data: suggestions });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error fetching Chef Suggestions",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error fetching Chef Suggestions",
+      error: error.message,
+    });
   }
 };
 
@@ -61,21 +57,17 @@ exports.getMenuByDate = async (req, res) => {
         .json({ success: false, message: "Chef Suggestion not found" });
     }
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Chef Suggestion updated",
-        data: updatedSuggestion,
-      });
+    res.status(200).json({
+      success: true,
+      message: "Chef Suggestion updated",
+      data: updatedSuggestion,
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error updating Chef Suggestion",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error updating Chef Suggestion",
+      error: error.message,
+    });
   }
 };
 
@@ -95,12 +87,10 @@ exports.deleteMenu = async (req, res) => {
       .status(200)
       .json({ success: true, message: "Chef Suggestion deleted successfully" });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error deleting Chef Suggestion",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error deleting Chef Suggestion",
+      error: error.message,
+    });
   }
 };
