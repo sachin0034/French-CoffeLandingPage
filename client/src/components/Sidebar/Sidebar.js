@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import profileLogo from "../../assets/images.png";
+import dashboard from "../../assets/icons/layout.png";
+import menu from "../../assets/icons/menu.png";
+import user from "../../assets/icons/user.png";
+import addUser from "../../assets/icons/add-user.png";
+import category from "../../assets/icons/dish.png";
+import logout from "../../assets/icons/logout.png";
+import chef from "../../assets/icons/chef.png";
+import contact from "../../assets/icons/contact-list.png";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -19,6 +27,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("admin");
+    localStorage.removeItem("name");
     navigate("/login");
   };
 
@@ -74,9 +83,14 @@ const Navbar = () => {
               >
                 <span className="sr-only">Open user menu</span>
                 {userName ? (
+                  <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full">
                     {userName.charAt(0).toUpperCase()}
                   </div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {userName}
+                  </p>
+                </div>
                 ) : (
                   <img
                     className="w-8 h-8 rounded-full"
@@ -138,16 +152,13 @@ const Navbar = () => {
                   }`
                 }
               >
-                <svg
-                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 22 21"
-                >
-                  <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-                  <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
-                </svg>
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                  <img
+                    src={dashboard} // Replace with the actual image path
+                    alt="Profile"
+                    className="w-6 h-6 rounded-full" // Ensures the image itself is circular
+                  />
+                </div>
                 <span className="ms-3">Dashboard </span>
               </NavLink>
             </li>
@@ -164,15 +175,13 @@ const Navbar = () => {
                     }`
                   }
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  >
-                    <path d="M15 14c2.67 0 8 1.34 8 4v2H7v-2c0-2.66 5.33-4 8-4Zm0-2a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM3 12v2h4v-2H3ZM5 8H1v2h4V8Zm0 8H1v2h4v-2Z" />
-                  </svg>
-
+                   <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                  <img
+                    src={addUser} // Replace with the actual image path
+                    alt="Profile"
+                    className="w-6 h-6 rounded-full" // Ensures the image itself is circular
+                  />
+                </div>
                   <span className="ms-3">Add User </span>
                 </NavLink>
               </li>
@@ -189,15 +198,13 @@ const Navbar = () => {
                     }`
                   }
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  >
-                    <path d="M16 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-7-4a3 3 0 1 0-3 3 3 3 0 0 0 3-3Zm7 6c-3.33 0-10 1.67-10 5v2h20v-2c0-3.33-6.67-5-10-5ZM6 15a6.29 6.29 0 0 0-6 3v2h6Z" />
-                  </svg>
-
+                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                  <img
+                    src={user} // Replace with the actual image path
+                    alt="Profile"
+                    className="w-6 h-6 rounded-full" // Ensures the image itself is circular
+                  />
+                </div>
                   <span className="ms-3">User List</span>
                 </NavLink>
               </li>
@@ -214,14 +221,13 @@ const Navbar = () => {
                   }`
                 }
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                >
-                  <path d="M3 6h18a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2Zm0 5h18a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2Zm0 5h18a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2Z" />
-                </svg>
+                 <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                  <img
+                    src={menu} // Replace with the actual image path
+                    alt="Profile"
+                    className="w-6 h-6 rounded-full" // Ensures the image itself is circular
+                  />
+                </div>
 
                 <span className="ms-3">Menu Details</span>
               </NavLink>
@@ -237,14 +243,13 @@ const Navbar = () => {
                   }`
                 }
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                >
-                  <path d="M12 2c2.21 0 4 1.79 4 4 0 .36-.05.7-.13 1.03A5.98 5.98 0 0 1 20 12c0 3.31-2.69 6-6 6H10c-3.31 0-6-2.69-6-6 0-2.58 1.64-4.79 4-5.64C8.05 6.7 8 6.36 8 6c0-2.21 1.79-4 4-4zm-3 13h6c1.66 0 3-1.34 3-3a3.003 3.003 0 0 0-5.77-1.06A5.99 5.99 0 0 1 12 8a5.99 5.99 0 0 1-2.23.94A3.003 3.003 0 0 0 7 12c0 1.66 1.34 3 3 3zm1.5 3h3c.83 0 1.5.67 1.5 1.5S15.33 21 14.5 21h-5c-.83 0-1.5-.67-1.5-1.5S9.67 18 10.5 18h3z" />
-                </svg>
+                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                  <img
+                    src={chef} // Replace with the actual image path
+                    alt="Profile"
+                    className="w-6 h-6 rounded-full" // Ensures the image itself is circular
+                  />
+                </div>
 
                 <span className="ms-3">Chef Suggestion</span>
               </NavLink>
@@ -260,14 +265,13 @@ const Navbar = () => {
                   }`
                 }
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                >
-                  <path d="M21 8V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v1a10.4 10.4 0 0 0 9 10 10.4 10.4 0 0 0 9-10ZM5 6h14a1 1 0 0 1 1 1v.3a9.2 9.2 0 0 1-7 8.4 9.2 9.2 0 0 1-7-8.4V7a1 1 0 0 1 1-1ZM7 10a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm6 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0Z" />
-                </svg>
+                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                  <img
+                    src={contact} // Replace with the actual image path
+                    alt="Profile"
+                    className="w-6 h-6 rounded-full" // Ensures the image itself is circular
+                  />
+                </div>
 
                 <span className="ms-3">Contact List</span>
               </NavLink>
@@ -283,14 +287,13 @@ const Navbar = () => {
                   }`
                 }
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  className="w-6 h-6 text-green-500 transition-transform duration-300 dark:text-gray-400 group-hover:text-green-700"
-                >
-                  <path d="M12 2L2 7l2 3 8-5 8 5 2-3-10-5zm0 13l-8 5v-4l8-5 8 5v4l-8-5zm0-5L2 9l2-3 8 5 8-5 2 3-10 5z" />
-                </svg>
+                 <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                  <img
+                    src={category} // Replace with the actual image path
+                    alt="Profile"
+                    className="w-6 h-6 rounded-full" // Ensures the image itself is circular
+                  />
+                </div>
                 <span className="ms-3">Add Category</span>
               </NavLink>
             </li>
@@ -305,14 +308,13 @@ const Navbar = () => {
                   }`
                 }
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  className="w-6 h-6 text-green-500 transition-transform duration-300 dark:text-gray-400 group-hover:text-green-700"
-                >
-                  <path d="M12 2L2 7l2 3 8-5 8 5 2-3-10-5zm0 13l-8 5v-4l8-5 8 5v4l-8-5zm0-5L2 9l2-3 8 5 8-5 2 3-10 5z" />
-                </svg>
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
+                  <img
+                    src={logout} // Replace with the actual image path
+                    alt="Profile"
+                    className="w-6 h-6 rounded-full" // Ensures the image itself is circular
+                  />
+                </div>
                 <span className="ms-3">Log Out</span>
               </NavLink>
             </li>
