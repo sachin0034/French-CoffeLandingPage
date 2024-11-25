@@ -83,12 +83,26 @@ const UserList = () => {
   const totalPages = Math.ceil(users.length / itemsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredData = users.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <div>
       <Navbar />
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
+        <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search by name or email..."
+          className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          value={searchQuery}
+          style={{border:"2px solid black"}}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm text-left text-black-500 dark:text-black-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-300 dark:text-black-400">
@@ -116,7 +130,7 @@ const UserList = () => {
                     </td>
                   </tr>
                 ) : (
-                  currentUsers.map((user) => (
+                  filteredData.map((user) => (
                     <tr
                       key={user._id}
                       className="bg-white border-b dark:bg-white-800 dark:border-gray-700"

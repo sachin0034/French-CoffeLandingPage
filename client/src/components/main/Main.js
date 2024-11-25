@@ -185,13 +185,14 @@ const Main = () => {
             </div>
           </div>
           <div className="mt-6 flex justify-center">
-            <button
-              onClick={handleButtonClick1}
-              className="px-6 py-2 border-4 border-[#f277c1] text-[#f277c1] font-semibold rounded-md bg-transparent hover:border-[#f277c1] hover:bg-[#f277c1] hover:text-white transition duration-300 w-auto sm:w-32 lg:w-36 xl:w-40"
-            >
-              See All Userlist
-            </button>
-          </div>
+          <button
+            onClick={handleButtonClick1}
+            className="px-6 py-2 border-4 border-black text-black font-semibold rounded-md bg-transparent hover:border-black hover:bg-black hover:text-white transition duration-300 w-auto sm:w-32 lg:w-36 xl:w-40"
+          >
+            See All Userlist
+          </button>
+        </div>
+        
         </div>
       </div>
 
