@@ -3,36 +3,31 @@ const XLSX = require("xlsx");
 const path = require("path");
 const dayjs = require("dayjs");
 const fs = require("fs");
+
 exports.createDish = async (req, res) => {
   try {
-    const { date, name, price, description, discountPrice, category } =
-      req.body;
-
-    const newItem = {
-      name,
-      price,
-      description,
-      discountPrice,
-      category,
-    };
-    let existingDish = await Dish.findOne({
-      date: new Date(date).toISOString(),
-    });
+    const { date, items } = req.body;
+    if (!date || !items || !Array.isArray(items)) {
+      return res.status(400).json({ error: "Invalid data format." });
+    }
+    const formattedDate = new Date(date).toISOString();
+    let existingDish = await Dish.findOne({ date: formattedDate });
 
     if (existingDish) {
-      existingDish.items.push(newItem);
+      existingDish.items.push(...items);
       const updatedDish = await existingDish.save();
       return res.status(200).json(updatedDish);
     } else {
       const newDish = new Dish({
-        date,
-        items: [newItem],
+        date: formattedDate,
+        items,
       });
       const savedDish = await newDish.save();
       return res.status(201).json(savedDish);
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error("Error saving dish:", error.message);
+    res.status(500).json({ error: "Internal server error." });
   }
 };
 
@@ -76,7 +71,7 @@ exports.searchMenuByDate = async (req, res) => {
     }
     const dishes = await Dish.find({ date: searchDate });
     if (dishes.length === 0) {
-      return res.status(404).json({ message: "No menu found for this date" });
+      return res.status(200).json({ message: "No menu found for this date" });
     }
     res.status(200).json(dishes);
   } catch (error) {
@@ -90,7 +85,7 @@ exports.searchMenuByDate = async (req, res) => {
 exports.updateDish = async (req, res) => {
   try {
     const { date, id } = req.params;
-    const { name, price, description, discountPrice, category } = req.body;
+    const { name, price, description } = req.body;
     const dish = await Dish.findOne({ date: new Date(date) });
     if (!dish) {
       return res
@@ -108,8 +103,6 @@ exports.updateDish = async (req, res) => {
       name,
       price,
       description,
-      discountPrice,
-      category,
     };
     const updatedDish = await dish.save();
     res.status(200).json(updatedDish);
@@ -148,8 +141,8 @@ exports.uploadMenu = async (req, res) => {
     const sheetName = workbook.SheetNames[0];
     const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
     for (const row of sheetData) {
-      const { date, category, name, description, price, discountPrice } = row;
-      if (!date || !category || !name || !price) {
+      const { date, name, description, price } = row;
+      if (!date || !name || !price) {
         console.warn(`Skipping incomplete row: ${JSON.stringify(row)}`);
         continue;
       }
@@ -176,9 +169,8 @@ exports.uploadMenu = async (req, res) => {
       existingDish.items.push({
         name,
         description: description || "",
-        category,
+
         price,
-        discountPrice,
       });
       await existingDish.save();
       console.log(`Created new dish for date: ${originalFormattedDate}`);

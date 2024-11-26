@@ -45,42 +45,92 @@ const DishDescription = () => {
   const [isAddMenuModalOpen, setAddMenuModalOpen] = useState(false);
   const [menuData, setMenuData] = useState({
     date: "",
-    name: "",
-    price: "",
-    description: "",
-    category: "",
-    discountPrice: "",
+    dishes: [{ name: "", price: "", description: "" }],
+    desserts: [{ name: "", price: "", description: "" }],
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setMenuData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleDishChange = (index, field, value, type) => {
+    setMenuData((prev) => {
+      const updatedItems = [...prev[type]];
+      updatedItems[index][field] = value;
+      return { ...prev, [type]: updatedItems };
+    });
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/dish/create`,
-        menuData
-      );
-      //  fetchMenus();
-      toast.success("Menu added successfully!");
-      setAddMenuModalOpen(false);
+
+  const addNewRow = (type) => {
+    if (type === "dishes" && menuData.dishes.length < 3) {
       setMenuData({
-        name: "",
-        price: "",
-        description: "",
-        category: "",
-        discountPrice: "",
+        ...menuData,
+        dishes: [...menuData.dishes, { name: "", price: "", description: "" }],
       });
-    } catch (error) {
-      console.error("Error adding menu:", error);
-      toast.error("Failed to add menu. Please try again.");
+    } else if (type === "desserts" && menuData.desserts.length === 0) {
+      setMenuData({
+        ...menuData,
+        desserts: [{ name: "", price: "", description: "" }],
+      });
+    } else {
+      if (type === "dishes" && menuData.dishes.length >= 3) {
+        toast.error("You can only add up to 3 dishes.");
+      } else if (type === "desserts" && menuData.desserts.length > 0) {
+        toast.error("You can only add 1 dessert.");
+      }
     }
   };
+
+  const removeRow = (index, type) => {
+    if (type === "dishes") {
+      const updatedDishes = menuData.dishes.filter((_, i) => i !== index);
+      setMenuData({ ...menuData, dishes: updatedDishes });
+    } else if (type === "desserts") {
+      setMenuData({ ...menuData, desserts: [] });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error("You must log in to perform this action.");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const payload = {
+        date: new Date(menuData.date).toISOString(),
+        items: [...menuData.dishes, ...menuData.desserts],
+      };
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/dish/create`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 201 || response.status === 200) {
+        toast.success("Menu saved successfully!");
+        setAddMenuModalOpen(false);
+        setMenuData({
+          date: "",
+          dishes: [{ name: "", price: "", description: "" }],
+          desserts: [{ name: "", price: "", description: "" }],
+        });
+        fetchMenus();
+      } else {
+        toast.error("Failed to save the menu.");
+      }
+    } catch (error) {
+      console.error("Error saving menu:", error);
+      toast.error("An error occurred while saving the menu.");
+    }
+  };
+
   const fetchMenus = async () => {
     try {
       const response = await axios.get(
@@ -280,6 +330,7 @@ const DishDescription = () => {
         }
       );
       toast.success("Menu uploaded successfully!");
+      fetchMenus();
       setUploadModalOpen(false);
     } catch (error) {
       toast.error("Error uploading the menu!");
@@ -297,7 +348,7 @@ const DishDescription = () => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "sample-menu-weekly.xlsx");
+      link.setAttribute("download", "sample-dish.xlsx");
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -330,7 +381,7 @@ const DishDescription = () => {
               Upload Dish as Excel
             </button>
             <button
-              onClick={downloadSampleFile} // Function to trigger download
+              onClick={downloadSampleFile} 
               className="px-6 pl-5 ml-2 py-2 font-medium text-lg text-white bg-green-600 rounded-full hover:bg-green-500 hover:text-white transition-all duration-300"
             >
               Download Sample File
@@ -348,121 +399,166 @@ const DishDescription = () => {
           </div>
           {menus && renderTable(menus)}
         </div>
+        
       </div>
+
       {isAddMenuModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-sm sm:max-w-md md:max-w-sm lg:max-w-md xl:max-w-lg p-10 overflow-y-auto max-h-[70vh]">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-10 overflow-y-auto max-h-[80vh] relative">
+            {/* Close Button */}
+            <button
+              onClick={() => setAddMenuModalOpen(false)}
+              className="absolute top-4 right-4 text-3xl font-bold text-gray-500 hover:text-gray-700"
+            >
+              &times;
+            </button>
+      
             <h2 className="text-xl font-bold mb-4">Add Daily Menu</h2>
             <form onSubmit={handleSubmit}>
-              {/* Date Input */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
                   Date
                 </label>
                 <input
-                  type="date"
+                  type="text"
                   name="date"
                   value={menuData.date}
-                  onChange={handleChange}
-                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
-                  required
+                  readOnly
+                  className="mt-1 block w-full border border-black rounded-md shadow-sm p-3 bg-gray-100"
                 />
               </div>
-
-              {/* Category */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Category
-                </label>
-                <select
-                  name="category"
-                  value={menuData.category}
-                  onChange={handleChange}
-                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
-                  required
-                >
-                  <option value="" disabled>
-                    Select category
-                  </option>
-                  <option value="dish">Dish</option>
-                  <option value="dessert">Dessert</option>
-                </select>
-              </div>
-
-              {/* Menu Name */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={menuData.name}
-                  onChange={handleChange}
-                  placeholder="Enter menu name"
-                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
-                  required
-                />
-              </div>
-
-              {/* Menu Price */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Price
-                </label>
-                <input
-                  type="number"
-                  name="price"
-                  value={menuData.price}
-                  onChange={handleChange}
-                  placeholder="Enter menu price"
-                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
-                  required
-                />
-              </div>
-
-              {/* Discount Price */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Discount Price (Optional)
-                </label>
-                <input
-                  type="number"
-                  name="discountPrice"
-                  value={menuData.discountPrice}
-                  onChange={handleChange}
-                  placeholder="Enter discount price"
-                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
-                />
-              </div>
-
-              {/* Description */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Description
-                </label>
-                <textarea
-                  name="description"
-                  value={menuData.description}
-                  onChange={handleChange}
-                  placeholder="Enter description"
-                  className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
-                  required
-                ></textarea>
-              </div>
-
-              {/* Buttons */}
-              <div className="flex justify-end">
+      
+              {/* Dish Section */}
+              <h3 className="text-lg font-semibold mb-2">Dishes</h3>
+              {menuData.dishes.map((dish, index) => (
+                <div key={index} className="grid grid-cols-1 gap-4 mb-2">
+                  <label className="font-bold">{`Dish-${index + 1}`}</label>
+                  <input
+                    type="text"
+                    placeholder={`Dish-${index + 1} Name`}
+                    value={dish.name}
+                    onChange={(e) =>
+                      handleDishChange(index, "name", e.target.value, "dishes")
+                    }
+                    className="border rounded-md p-2 w-full"
+                    required
+                  />
+                  <input
+                    type="number"
+                    placeholder={`Dish-${index + 1} Price`}
+                    value={dish.price}
+                    onChange={(e) =>
+                      handleDishChange(index, "price", e.target.value, "dishes")
+                    }
+                    className="border rounded-md p-2 w-full"
+                    required
+                  />
+                  
+                  <input
+                    type="text"
+                    placeholder={`Dish-${index + 1} Description`}
+                    value={dish.description}
+                    onChange={(e) =>
+                      handleDishChange(
+                        index,
+                        "description",
+                        e.target.value,
+                        "dishes"
+                      )
+                    }
+                    className="border rounded-md p-2 w-full"
+                    required
+                  />
+                  {index > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => removeRow(index, "dishes")}
+                      className="text-red-500 mt-2"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => addNewRow("dishes")}
+                className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0]"
+                disabled={menuData.dishes.length >= 3}
+              >
+                Add Another Dish
+              </button>
+      
+              {/* Dessert Section */}
+              <h3 className="text-lg font-semibold mb-2">Dessert</h3>
+              {menuData.desserts.length === 1 && (
+                <div className="grid grid-cols-1 gap-4 mb-2">
+                  <input
+                    type="text"
+                    placeholder="Dessert Name"
+                    value={menuData.desserts[0].name}
+                    onChange={(e) =>
+                      handleDishChange(0, "name", e.target.value, "desserts")
+                    }
+                    className="border rounded-md p-2 w-full"
+                    required
+                  />
+                  <input
+                    type="number"
+                    placeholder="Dessert Price"
+                    value={menuData.desserts[0].price}
+                    onChange={(e) =>
+                      handleDishChange(0, "price", e.target.value, "desserts")
+                    }
+                    className="border rounded-md p-2 w-full"
+                    required
+                  />
+                  <input
+                    type="text"
+                    placeholder="Dessert Description"
+                    value={menuData.desserts[0].description}
+                    onChange={(e) =>
+                      handleDishChange(
+                        0,
+                        "description",
+                        e.target.value,
+                        "desserts"
+                      )
+                    }
+                    className="border rounded-md p-2 w-full"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeRow(0, "desserts")}
+                    className="text-red-500 mt-2"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
+              {menuData.desserts.length === 0 && (
                 <button
                   type="button"
-                  className="px-4 py-2 bg-red-600 text-white rounded-md mr-2 hover:bg-red-700"
+                  onClick={() => addNewRow("desserts")}
+                  className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0]"
+                >
+                  Add Dessert
+                </button>
+              )}
+      
+              {/* Submit */}
+              <div className="flex justify-end mt-4">
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-black text-white rounded-md mr-2"
                   onClick={() => setAddMenuModalOpen(false)}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0]"
                 >
                   Save
                 </button>
@@ -471,7 +567,7 @@ const DishDescription = () => {
           </div>
         </div>
       )}
-
+      
       {isEditMenuModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-sm sm:max-w-md md:max-w-sm lg:max-w-md xl:max-w-lg p-10 overflow-y-auto max-h-[90vh]">

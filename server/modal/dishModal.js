@@ -7,8 +7,6 @@ const DishSchema = new mongoose.Schema({
       name: { type: String, required: true },
       price: { type: Number, required: true },
       description: { type: String, required: true },
-      discountPrice: { type: Number },
-      category: { type: String, enum: ["dish", "dessert"], required: true },
     },
   ],
 });
