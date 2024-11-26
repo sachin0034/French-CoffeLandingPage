@@ -21,8 +21,8 @@ import AdminContact from "./pages/AdminContact";
 import Categorypage from "./pages/CategoryPage";
 import MenuPage from "./pages/MenuPage";
 import NotFoundPage from "./pages/NotFound";
-
-
+import DishPage from "./pages/DishPae";
+import DishDescription from "./pages/DishDescription";
 
 function App() {
   return (
@@ -42,11 +42,13 @@ function App() {
           />
           <Route path="/menu-details" element={<Menudetails />} />
           <Route path="/menu-description/:date" element={<MenuDescription />} />
+          <Route path="/dish-description/:date" element={<DishDescription />} />
           <Route path="/chef" element={<ChefSuggestion />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/contact" element={<AdminContact />} />
           <Route path="/category" element={<Categorypage />} />
           <Route path="/menu" element={<MenuPage />} />
+          <Route path="/dish" element={<DishPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>

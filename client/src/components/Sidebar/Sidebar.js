@@ -234,6 +234,28 @@ const Navbar = () => {
             </li>
             <li>
               <NavLink
+                to="/dish"
+                className={({ isActive }) =>
+                  `flex items-center p-2 rounded-lg ${
+                    isActive
+                      ? "bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] text-gray-900 dark:text-black"
+                      : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  }`
+                }
+              >
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                  <img
+                    src={menu} // Replace with the actual image path
+                    alt="Profile"
+                    className="w-6 h-6 rounded-full" // Ensures the image itself is circular
+                  />
+                </div>
+
+                <span className="ms-3">Daily Dish</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
                 to="/chef"
                 className={({ isActive }) =>
                   `flex items-center p-2 rounded-lg ${

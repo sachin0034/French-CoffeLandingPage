@@ -21,6 +21,7 @@ const menuRoute = require("./routes/menuRoute");
 const chefRoute = require("./routes/chefRoute");
 const contactRoute = require("./routes/contactRoute");
 const categoryRoute = require("./routes/categoryRoute");
+const dishRoute = require("./routes/dishRoute");
 const Menu = require("./modal/menuModal");
 
 app.use("/api/auth", userRoute);
@@ -28,6 +29,7 @@ app.use("/api/menu", menuRoute);
 app.use("/api/chef", chefRoute);
 app.use("/api/contact", contactRoute);
 app.use("/api/category", categoryRoute);
+app.use("/api/dish", dishRoute);
 
 // sample file download
 
