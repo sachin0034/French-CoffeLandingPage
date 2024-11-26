@@ -1,95 +1,113 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-const MenuItem = () => {
-  const [menuItems, setMenuItems] = useState([]);
-  const [filteredItems, setFilteredItems] = useState([]);
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [activeType, setActiveType] = useState("All");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const handleCategoryChange = (category) => {
-    setActiveCategory(category);
-    filterMenuItems(category, activeType, searchTerm);
-  };
-  const handleFilterChange = (value) => {
-    setActiveType(value);
-    filterMenuItems(activeCategory, value, searchTerm);
-  };
-  const filterMenuItems = (category, type, searchTerm) => {
-    let filtered =
-      category === "All"
-        ? menuItems
-        : menuItems.filter((item) => item.menuType === category);
-    if (type && type !== "All") {
-      filtered = filtered.filter(
-        (item) => item.category.toLowerCase() === type.toLowerCase()
-      );
-    }
-    if (searchTerm) {
-      filtered = filtered.filter((item) =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
 
-    setFilteredItems(filtered);
-    setCurrentPage(1);
-  };
+
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+const MenuItem = () => {
+  const [categories, setCategories] = useState([]);
+  const [todayMenu, setTodayMenu] = useState([]);
+  const [otherMenu, setOtherMenu] = useState([]);
+  const [chefSuggestions, setChefSuggestions] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [filteredMenus, setFilteredMenus] = useState({
+    todayMenu: [],
+    otherMenu: [],
+  });
+
   const menuItems1 = [
     { name: "All" },
     { name: "Breakfast" },
     { name: "Lunch" },
     { name: "Dinner" },
-    { name: "Chef Suggestion" },
   ];
-  const fetchSuggestions = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_SERVER}/api/category/get-category`
-      );
-      setSuggestions(response.data.data);
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
-    } finally {
-    }
-  };
+
   useEffect(() => {
-    fetchSuggestions();
+    const fetchMenuData = async () => {
+      try {
+        const categoryResponse = await axios.get(
+          `${process.env.REACT_APP_SERVER}/api/category/get-category`
+        );
+        const todayMenuResponse = await axios.get(
+          `${process.env.REACT_APP_SERVER}/api/menu/${getFormattedDate()}`
+        );
+        const chefSuggestion = await axios.get(
+          `${process.env.REACT_APP_SERVER}/api/chef/get-chef`
+        );
+        const otherMenu = await axios.get(
+          `${
+            process.env.REACT_APP_SERVER
+          }/api/dish/get-dish-date/${getFormattedDate()}`
+        );
+        setCategories(categoryResponse.data.data);
+        setChefSuggestions(chefSuggestion.data.data);
+        setTodayMenu(todayMenuResponse.data.items);
+        setOtherMenu(otherMenu.data[0].items);
+
+        // Initial data for filtered menus
+        setFilteredMenus({
+          todayMenu: todayMenuResponse.data.items,
+          otherMenu: otherMenu.data[0].items,
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchMenuData();
   }, []);
+
   const getFormattedDate = () => {
     const date = new Date();
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");
-
     return `${year}-${month}-${day}`;
   };
-  const fetchTodayMenu = async () => {
-    try {
-      const todayDate = getFormattedDate();
-      const response = await axios.get(
-        `${process.env.REACT_APP_SERVER}/api/menu/${todayDate}`
-      );
-      console.log(response.data.items);
-      setMenuItems(response.data.items);
-      handleCategoryChange("All");
-    } catch (error) {
-      console.error("Error fetching menu:", error);
-    }
-  };
-  useEffect(() => {
-    filterMenuItems("All", "All", "");
-  }, [menuItems]);
-  useEffect(() => {
-    fetchTodayMenu();
-  }, []);
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    applyFilters(selectedCategory, e.target.value);
+  };
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    applyFilters(category, selectedMenuType, searchTerm);
+  };
+  const [selectedMenuType, setSelectedMenuType] = useState("All");
+
+  const handleMenuTypeChange = (menuType) => {
+    setSelectedMenuType(menuType);
+    applyFilters(selectedCategory, menuType, searchTerm);
+  };
+
+  const applyFilters = (category, menuType, search) => {
+    const filterByCategory = (menu) => {
+      if (category === "All") return menu;
+      return menu.filter((item) => item.category === category);
+    };
+
+    const filterByMenuType = (menu) => {
+      if (menuType === "All") return menu;
+      return menu.filter((item) => item.menuType === menuType);
+    };
+
+    const filterBySearch = (menu) => {
+      if (!search) return menu;
+      return menu.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      );
+    };
+
+    // Apply filters only on today's menu
+    setFilteredMenus({
+      todayMenu: filterBySearch(filterByMenuType(filterByCategory(todayMenu))),
+      otherMenu, // Keep the original otherMenu unchanged
+    });
+  };
+
   return (
-    <div className="flex flex-col sm:flex-row min-h-screen p-1">
+    <div className="flex flex-col lg:flex-row p-4 bg-gray-50">
+      {/* Sidebar for Large Screens */}
       <aside
         id="sidebar-multi-level-sidebar"
         className={`hidden sm:block top-0 left-0 z-40 sm:w-64 sm:h-screen transition-transform sm:translate-x-0 p-2 br-10 fixed sm:relative`}
@@ -107,12 +125,8 @@ const MenuItem = () => {
             {menuItems1.map((item) => (
               <li key={item.name}>
                 <button
-                  className={`flex items-center p-2 rounded-lg transition-colors duration-300 w-full ${
-                    activeCategory === item.name
-                      ? "bg-[#5a2d0c] text-white"
-                      : "text-white hover:bg-[#5a2d0c]"
-                  }`}
-                  onClick={() => handleCategoryChange(item.name)}
+                  className="flex items-center p-2 rounded-lg transition-colors duration-300 w-full"
+                  onClick={() => handleMenuTypeChange(item.name)}
                 >
                   <span className="ms-3 tracking-extra-wide">{item.name}</span>
                 </button>
@@ -122,18 +136,15 @@ const MenuItem = () => {
         </div>
       </aside>
 
-      <nav className="sm:hidden fixed bottom-0 left-0 w-full bg-[#723d12] z-50 p-2 overflow-x-auto">
+      {/* Mobile and Tablet Navbar */}
+      <nav className="lg:hidden fixed bottom-0 left-0 w-full bg-[#723d12] z-50 p-2 overflow-x-auto">
         <div className="flex justify-start whitespace-nowrap">
           <ul className="flex space-x-4 font-medium">
             {menuItems1.map((item) => (
               <li key={item.name}>
                 <button
-                  className={`flex flex-col items-center p-4 rounded-lg transition-colors duration-300 text-lg sm:text-xl ${
-                    activeCategory === item.name
-                      ? "bg-[#5a2d0c] text-white"
-                      : "text-white hover:bg-[#5a2d0c]"
-                  }`}
-                  onClick={() => handleCategoryChange(item.name)}
+                  className="flex flex-col items-center p-4 rounded-lg transition-colors duration-300 text-lg sm:text-xl"
+                  onClick={() => handleMenuTypeChange(item.name)}
                 >
                   <span className="tracking-extra-wide">{item.name}</span>
                 </button>
@@ -143,100 +154,86 @@ const MenuItem = () => {
         </div>
       </nav>
 
-      <main className="flex-1 p-4 rounded-lg mt-3 sm:mt-0 mt-2">
-        <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-evenly space-y-4 sm:space-y-0">
-          <div className="w-full sm:w-1/2">
+      {/* Main Content */}
+      <div className="lg:ml-2 flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Search and Filter Section */}
+        <div className="lg:col-span-2 space-y-4">
+          <div className="flex flex-wrap items-center gap-4 bg-white shadow-md p-4 rounded-md">
             <input
               type="text"
-              placeholder="Search for items..."
-              className="w-full px-4 py-2 border border-[#a87442] bg-[#e7c6a5] text-[#723d12] placeholder-[#9a6c48] rounded focus:outline-none focus:ring focus:ring-[#d19b73] focus:border-[#d19b73]"
               value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                filterMenuItems(activeCategory, activeType, e.target.value);
-              }}
+              onChange={handleSearch}
+              placeholder="Search..."
+              className="flex-1 border border-gray-300 p-2 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
             />
-          </div>
-          <div className="flex items-center space-x-4">
-            <label className="text-white font-medium tracking-extra-wide">
-              Filter By:
-            </label>
             <select
-              className="px-3 py-2 border border-[#a87442] bg-[#e7c6a5] text-[#723d12] rounded focus:outline-none focus:ring focus:ring-[#d19b73] hover:bg-[#d19b73] hover:text-[#ffffff]"
-              onChange={(e) => handleFilterChange(e.target.value)}
-              defaultValue=""
+              value={selectedCategory}
+              onChange={(e) => handleCategoryChange(e.target.value)}
+              className="border border-gray-300 p-2 rounded-md"
             >
-              <option value="All" className="text-[#723d12]">
-                All
-              </option>
-              {suggestions.map((suggestion, index) => (
-                <option
-                  key={index}
-                  value={suggestion.value}
-                  className="hover:bg-[#f3d1b0] hover:text-[#723d12] transition-colors duration-200"
-                >
-                  {suggestion.name}
+              <option value="All">All</option>
+              {categories.map((category, index) => (
+                <option key={index} value={category.name}>
+                  {category.name}
                 </option>
               ))}
             </select>
           </div>
-        </div>
-        <main className="flex-1 p-4 mt-24 overflow-y-auto max-h-[70vh] ">
-          <div>
-            {currentItems.length > 0 ? (
-              currentItems.map((item) => (
+
+          {/* Today's Menu */}
+          <div className="bg-white shadow-md p-4 rounded-md">
+            <h2 className="text-lg font-semibold mb-4">Today's Menu</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {filteredMenus.otherMenu.map((item, index) => (
                 <div
-                  key={item._id}
-                  className="flex flex-col sm:flex-row items-center sm:items-start justify-between border-b border-gray-300 py-4"
+                  key={index}
+                  className="border p-4 rounded-md hover:shadow-lg transition"
                 >
-                  <div className="w-full sm:w-1/3 text-left">
-                    <h2 className="font-bold text-2xl sm:text-3xl text-white">
-                      {item.name}
-                    </h2>
-                    <p className="text-md sm:text-lg text-black mt-4">
-                      {item.description}
-                    </p>
-                  </div>
-                  <div className="w-full sm:w-1/3 sm:mt-0 text-right">
-                    <p className="text-black font-bold text-3xl">
-                      ₹{item.dprice}
-                    </p>
-                    <p className="text-md sm:text-lg text-yellow line-through mt-2">
-                      ₹{item.price}
-                    </p>
-                  </div>
+                  <h3 className="text-md font-semibold">{item.name}</h3>
+                  <p className="text-gray-600">{item.description}</p>
+                  <p className="text-blue-600 font-semibold">{item.price}</p>
                 </div>
-              ))
-            ) : (
-              <p className="text-white text-lg font-medium mt-4">
-                No menu available for the selected filters.
-              </p>
-            )}
+              ))}
+            </div>
           </div>
 
-          {/* Pagination */}
-          {filteredItems.length > itemsPerPage && (
-            <div className="flex justify-center mt-4 space-x-2">
-              {Array.from(
-                { length: Math.ceil(filteredItems.length / itemsPerPage) },
-                (_, index) => (
-                  <button
-                    key={index}
-                    className={`px-3 py-1 rounded ${
-                      currentPage === index + 1
-                        ? "bg-[#d19b73] text-white"
-                        : "bg-[#e7c6a5] text-[#723d12]"
-                    } hover:bg-[#d19b73] hover:text-white`}
-                    onClick={() => setCurrentPage(index + 1)}
-                  >
-                    {index + 1}
-                  </button>
-                )
-              )}
-            </div>
-          )}
-        </main>
-      </main>
+          {/* Other Menus */}
+          <div className="bg-white shadow-md p-4 rounded-md overflow-y-scroll h-64">
+            <h2 className="text-lg font-semibold mb-4">Other Menus</h2>
+            <ul>
+              {filteredMenus.todayMenu.map((item, index) => (
+                <li
+                  key={index}
+                  className="border-b p-4 hover:bg-gray-50 flex justify-between"
+                >
+                  <div>
+                    <h3 className="text-md font-semibold">{item.name}</h3>
+                    <p className="text-gray-600">{item.description}</p>
+                  </div>
+                  <p className="text-blue-600 font-semibold">{item.price}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Chef Suggestions */}
+        <div className="bg-white shadow-md p-4 rounded-md">
+          <h2 className="text-lg font-semibold mb-4">Chef Suggestions</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+            {chefSuggestions.map((item, index) => (
+              <div
+                key={index}
+                className="border p-4 rounded-md hover:shadow-lg transition"
+              >
+                <h3 className="text-md font-semibold">{item.name}</h3>
+                <p className="text-gray-600">{item.description}</p>
+                <p className="text-blue-600 font-semibold">{item.price}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -45,6 +45,7 @@ const DishDescription = () => {
   const [isAddMenuModalOpen, setAddMenuModalOpen] = useState(false);
   const [menuData, setMenuData] = useState({
     date: "",
+    items: [],
     name: "",
     price: "",
     description: "",
