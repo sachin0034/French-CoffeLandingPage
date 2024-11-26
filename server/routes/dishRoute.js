@@ -4,6 +4,7 @@ const {
   getDishes,
   updateDish,
   deleteDishByDate,
+  deleteAllDishesByDate,
   searchMenuByDate,
   uploadMenu,
 } = require("../controller/dishController");
@@ -28,6 +29,7 @@ router.get("/get-dish", getDishes);
 router.get("/get-dish-date/:date", searchMenuByDate);
 router.put("/edit/:date/:id", updateDish);
 router.delete("/delete/:id/:date", deleteDishByDate);
+router.delete('/delete-all/:date', deleteAllDishesByDate);
 router.post("/menu-file-upload", upload.single("file"), uploadMenu);
 
 module.exports = router;

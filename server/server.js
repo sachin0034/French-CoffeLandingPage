@@ -67,50 +67,28 @@ app.get("/menu-left", async (req, res) => {
     const today = moment().startOf("day");
     const menuDates = await Menu.find({
       date: { $gte: today.toDate() },
+      "items.0": { $exists: true },
     }).sort({ date: 1 });
     if (menuDates.length === 0) {
-      return res.status(200).json({ data: [], daysLeft: [] });
+      return res.status(200).json({ count: 0 });
     }
-    const daysLeft = [];
-    const data = [];
-    let currentDate = moment(today);
+    let count = 0;
+    let maxCount = 0;
     for (let i = 0; i < menuDates.length; i++) {
-      const menuDate = moment(menuDates[i].date).startOf("day");
-      while (currentDate.isBefore(menuDate)) {
-        const menuItems = [];
-        if (menuItems.length > 0) {
-          daysLeft.push(currentDate.format("YYYY-MM-DD"));
-          data.push({
-            date: currentDate.format("YYYY-MM-DD"),
-            items: menuItems,
-          });
-        }
-        currentDate.add(1, "days");
+      if (
+        i === 0 ||
+        moment(menuDates[i].date).diff(
+          moment(menuDates[i - 1].date),
+          "days"
+        ) === 1
+      ) {
+        count++;
+        maxCount = Math.max(maxCount, count); 
+      } else {
+        count = 1; 
       }
-      if (menuDates[i].items.length > 0) {
-        daysLeft.push(menuDate.format("YYYY-MM-DD"));
-        data.push({
-          date: menuDate.format("YYYY-MM-DD"),
-          items: menuDates[i].items,
-        });
-      }
-      currentDate = menuDate.add(1, "days");
     }
-    const sequentialDaysLeft = [];
-    const sequentialData = [];
-    let expectedDate = moment(today);
-    for (let i = 0; i < daysLeft.length; i++) {
-      const currentDay = moment(daysLeft[i], "YYYY-MM-DD");
-      if (!currentDay.isSame(expectedDate)) {
-        break;
-      }
-      sequentialDaysLeft.push(daysLeft[i]);
-      sequentialData.push(data[i]);
-      expectedDate.add(1, "days");
-    }
-    res
-      .status(200)
-      .json({ daysLeft: sequentialDaysLeft, data: sequentialData });
+    res.status(200).json({ count: maxCount });
   } catch (error) {
     console.error("Error fetching menu dates:", error);
     res.status(500).json({ message: "Server error" });

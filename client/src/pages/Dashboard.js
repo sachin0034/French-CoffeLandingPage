@@ -177,6 +177,7 @@ const Dashboard = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_SERVER}/menu-left`
       );
+      console.log(response.data);
       setRemainingDays(response.data.daysLeft.length - 1);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
@@ -185,6 +186,23 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    const calculateRemainingDays = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER}/menu-left`
+        );
+    
+        const daysLeft = response.data.count || 0;
+        if (daysLeft.length === 0) {
+          setRemainingDays(0); 
+          return;
+        }
+        setRemainingDays(daysLeft);
+      } catch (error) {
+        console.error("Error fetching remaining days:", error);
+        toast.error("Failed to calculate remaining days!");
+      }
+    };
     calculateRemainingDays();
   }, []);
 

@@ -134,6 +134,20 @@ exports.deleteDishByDate = async (req, res) => {
   }
 };
 
+
+exports. deleteAllDishesByDate = async (req, res) => {
+  const { date } = req.params;
+  try {
+    await Dish.deleteMany({ date });
+    res.status(200).json({ message: "All menu items deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting all menu items:", error);
+    res.status(500).json({ message: "Failed to delete all menu items." });
+  }
+};
+
+
+
 exports.uploadMenu = async (req, res) => {
   try {
     const file = req.file.path;

@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 const DishDescription = () => {
   const { date } = useParams();
   const [menus, setMenus] = useState([]);
+  const [allDeleted, setAllDeleted] = useState(false);
 
   const navigate = useNavigate();
   const fetchDataValid = async () => {
@@ -36,6 +37,70 @@ const DishDescription = () => {
     } catch (error) {
       console.error("Error during token validation:", error);
       navigate("/login");
+    }
+  };
+
+  // const handleDeleteAll = async () => {
+  //   const token = localStorage.getItem("token");
+
+  //   if (!token) {
+  //     toast.error("You must log in to perform this action.");
+  //     navigate("/login");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.delete(
+  //       `${process.env.REACT_APP_SERVER}/api/dish/delete-all/${date}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       toast.success("All menu items have been deleted successfully.");
+  //       setMenus([]);  // Clear the UI data
+  //       setAllDeleted(true); // Set allDeleted state to true
+  //     } else {
+  //       toast.error("Failed to delete all menu items.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting all menus:", error);
+  //     toast.error("An error occurred while deleting all menus.");
+  //   }
+  // };
+
+  const handleDeleteAll = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error("You must log in to perform this action.");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const response = await axios.delete(
+        `${process.env.REACT_APP_SERVER}/api/dish/delete-all/${date}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("All menu items have been deleted successfully.");
+        setMenus([]); // Clear the UI data
+        setAllDeleted(true); // Set allDeleted state to true
+      } else {
+        toast.error("Failed to delete all menu items.");
+      }
+    } catch (error) {
+      console.error("Error deleting all menus:", error);
+      toast.error("An error occurred while deleting all menus.");
     }
   };
 
@@ -131,16 +196,31 @@ const DishDescription = () => {
     }
   };
 
+  // const fetchMenus = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_SERVER}/api/dish/get-dish-date/${date}`
+  //     );
+  //     setMenus(response.data[0].items);
+  //     setAllDeleted(response.data[0].items.length === 0);
+  //   } catch (err) {
+  //     console.error("Failed to fetch menu data:", err);
+  //   }
+  // };
+
   const fetchMenus = async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_SERVER}/api/dish/get-dish-date/${date}`
       );
-      setMenus(response.data[0].items);
+      const menus = response.data[0]?.items || [];
+      setMenus(menus);
+      setAllDeleted(menus.length === 0);
     } catch (err) {
       console.error("Failed to fetch menu data:", err);
     }
   };
+
   useEffect(() => {
     setMenuData((prev) => ({
       ...prev,
@@ -150,13 +230,26 @@ const DishDescription = () => {
     fetchMenus();
   }, [date]);
 
+  // const handleDelete = async (data) => {
+  //   try {
+  //     await axios.delete(
+  //       `${process.env.REACT_APP_SERVER}/api/dish/delete/${data._id}/${date}`
+  //     );
+  //     toast.success(`${data.name} has been deleted successfully.`);
+  //     fetchMenus();
+  //   } catch (error) {
+  //     console.error("Error deleting menu:", error);
+  //     toast.error("Failed to delete the menu.");
+  //   }
+  // };
+
   const handleDelete = async (data) => {
     try {
       await axios.delete(
         `${process.env.REACT_APP_SERVER}/api/dish/delete/${data._id}/${date}`
       );
       toast.success(`${data.name} has been deleted successfully.`);
-      fetchMenus();
+      fetchMenus(); // Fetch updated menu
     } catch (error) {
       console.error("Error deleting menu:", error);
       toast.error("Failed to delete the menu.");
@@ -229,12 +322,6 @@ const DishDescription = () => {
                   Price
                 </th>
                 <th scope="col" className="py-3 px-6">
-                  Discount Price
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  Category
-                </th>
-                <th scope="col" className="py-3 px-6">
                   Description
                 </th>
                 <th scope="col" className="py-3 px-6">
@@ -251,8 +338,6 @@ const DishDescription = () => {
                   >
                     <td className="py-4 px-6">{item.name}</td>
                     <td className="py-4 px-6">{item.price}</td>
-                    <td className="py-4 px-6">{item.discountPrice}</td>
-                    <td className="py-4 px-6">{item.category}</td>
                     <td className="py-4 px-6">{item.description}</td>
                     <td className="py-4 px-6 flex gap-2">
                       <FaEdit
@@ -262,17 +347,20 @@ const DishDescription = () => {
                         size={20}
                       />
                       <FaTrash
-                        onClick={() => handleDelete(item)}
-                        className="text-red-600 cursor-pointer hover:text-red-800"
+                        onClick={() => !allDeleted && handleDelete(item)} // Prevent action if allDeleted is true
+                        className={`text-red-600 cursor-pointer hover:text-gray-800 ${
+                          allDeleted ? "text-gray-500 cursor-not-allowed" : ""
+                        }`} // Gray color and no hover when disabled
                         title="Delete"
                         size={20}
+                        disabled={allDeleted}
                       />
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="text-center py-4">
+                  <td colSpan="4" className="text-center py-4">
                     <span className="text-gray-500 text-lg font-semibold italic">
                       No data found
                     </span>
@@ -286,7 +374,7 @@ const DishDescription = () => {
         {/* Pagination controls */}
         <div className="flex justify-center mt-4">
           <button
-            disabled={currentPage === 1}
+            disabled={currentPage === 1 || paginatedMenu.length === 0} // Prevent going back if already on first page
             onClick={() => setCurrentPage((prev) => prev - 1)}
             className="px-3 py-1 border rounded-l-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
           >
@@ -294,7 +382,10 @@ const DishDescription = () => {
           </button>
           <span className="px-4 py-1 border bg-gray-100">{currentPage}</span>
           <button
-            disabled={currentPage * itemsPerPage >= filteredMenu.length}
+            disabled={
+              currentPage * itemsPerPage >= filteredMenu.length ||
+              paginatedMenu.length === 0
+            } // Prevent going forward if no more items
             onClick={() => setCurrentPage((prev) => prev + 1)}
             className="px-3 py-1 border rounded-r-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
           >
@@ -365,41 +456,62 @@ const DishDescription = () => {
       <Navbar />
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
-          <div className="top-0 left-0 w-full flex justify-between items-center py-4 z-20 rounded-b-lg">
-            {/* Button on the right side */}
-            <button
-              onClick={() => setAddMenuModalOpen(true)} // Open modal on click
-              className={`px-6 py-2 font-medium text-lg text-gray-300 
-              bg-gray-800 rounded-full hover:bg-gray-600 hover:text-white transition-all duration-300 ml-auto`}
-            >
-              Add Menu
-            </button>
-            <button
-              onClick={() => setUploadModalOpen(true)}
-              className="px-6 py-2 font-medium text-lg text-gray-300 bg-blue-600 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300 ml-4"
-            >
-              Upload Dish as Excel
-            </button>
-            <button
-              onClick={downloadSampleFile} 
-              className="px-6 pl-5 ml-2 py-2 font-medium text-lg text-white bg-green-600 rounded-full hover:bg-green-500 hover:text-white transition-all duration-300"
-            >
-              Download Sample File
-            </button>
+          <div className="w-full flex flex-wrap justify-between items-center py-4 z-20 rounded-b-lg gap-6 space-y-4 sm:space-y-0 sm:flex-nowrap">
+            {/* Button Group */}
+            <div className="w-full sm:w-auto sm:flex gap-6 flex-wrap justify-between">
+              {/* Add Menu Button */}
+              <button
+                onClick={() => setAddMenuModalOpen(true)}
+                className="px-6 py-2 font-medium text-lg text-white bg-gray-800 dark:bg-gray-700 rounded-full hover:bg-gray-600 hover:text-white transition-all duration-300 w-full sm:w-auto"
+              >
+                Add Menu
+              </button>
+
+              {/* Upload Dish as Excel Button */}
+              <button
+                onClick={() => setUploadModalOpen(true)}
+                className="px-6 py-2 font-medium text-lg text-white bg-blue-600 dark:bg-light-blue-700 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300 w-full sm:w-auto"
+              >
+                Upload Dish as Excel
+              </button>
+
+              {/* Download Sample File Button */}
+              <button
+                onClick={downloadSampleFile}
+                className="px-6 pl-5 ml-2 py-2 font-medium text-lg text-white bg-sky-600 dark:bg-sky-500 rounded-full hover:bg-sky-500 hover:text-white transition-all duration-300 w-full sm:w-auto"
+              >
+                Download Sample File
+              </button>
+
+              {/* Delete All Items Button */}
+              <button
+                onClick={handleDeleteAll}
+                className={`px-6 py-2 font-medium text-lg text-white ${
+                  allDeleted
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-gray-600 hover:bg-red-500"
+                } dark:bg-gray-700 dark:hover:bg-gray-500 rounded-full transition-all duration-300 w-full sm:w-auto`}
+                disabled={allDeleted}
+              >
+                {allDeleted ? "All items deleted" : "Delete All Items"}
+              </button>
+            </div>
           </div>
 
+          {/* Search Input */}
           <div className="mt-6 flex justify-center">
             <input
               type="text"
               value={searchQuery}
               onChange={handleSearchChange}
               placeholder="Search menu..."
-              className="px-4 py-2 border-4 border-gray-600 rounded-lg shadow-md w-full max-w-md"
+              className="px-4 py-2 border-4 border-gray-600 dark:border-gray-500 rounded-lg shadow-md w-full max-w-md"
             />
           </div>
+
+          {/* Render the Menu Table */}
           {menus && renderTable(menus)}
         </div>
-        
       </div>
 
       {isAddMenuModalOpen && (
@@ -412,7 +524,7 @@ const DishDescription = () => {
             >
               &times;
             </button>
-      
+
             <h2 className="text-xl font-bold mb-4">Add Daily Menu</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
@@ -427,7 +539,7 @@ const DishDescription = () => {
                   className="mt-1 block w-full border border-black rounded-md shadow-sm p-3 bg-gray-100"
                 />
               </div>
-      
+
               {/* Dish Section */}
               <h3 className="text-lg font-semibold mb-2">Dishes</h3>
               {menuData.dishes.map((dish, index) => (
@@ -453,7 +565,7 @@ const DishDescription = () => {
                     className="border rounded-md p-2 w-full"
                     required
                   />
-                  
+
                   <input
                     type="text"
                     placeholder={`Dish-${index + 1} Description`}
@@ -488,7 +600,7 @@ const DishDescription = () => {
               >
                 Add Another Dish
               </button>
-      
+
               {/* Dessert Section */}
               <h3 className="text-lg font-semibold mb-2">Dessert</h3>
               {menuData.desserts.length === 1 && (
@@ -546,7 +658,7 @@ const DishDescription = () => {
                   Add Dessert
                 </button>
               )}
-      
+
               {/* Submit */}
               <div className="flex justify-end mt-4">
                 <button
@@ -567,7 +679,7 @@ const DishDescription = () => {
           </div>
         </div>
       )}
-      
+
       {isEditMenuModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-sm sm:max-w-md md:max-w-sm lg:max-w-md xl:max-w-lg p-10 overflow-y-auto max-h-[90vh]">
@@ -660,8 +772,8 @@ const DishDescription = () => {
               </button>
               <button
                 onClick={handleFileUpload}
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-              >
+                className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
+                >
                 Upload
               </button>
             </div>
