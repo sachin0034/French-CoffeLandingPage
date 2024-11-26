@@ -147,7 +147,6 @@ const DishDescription = () => {
     }
   };
 
-
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [searchQuery, setSearchQuery] = useState("");
@@ -256,6 +255,60 @@ const DishDescription = () => {
     );
   };
 
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [file, setFile] = useState(null);
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+  const handleFileUpload = async () => {
+    if (!file) {
+      toast.error("Please select a file!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/dish/menu-file-upload`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      toast.success("Menu uploaded successfully!");
+      setUploadModalOpen(false);
+    } catch (error) {
+      toast.error("Error uploading the menu!");
+      console.error(error);
+    }
+  };
+
+  const downloadSampleFile = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER}/dish-download`,
+        { responseType: "blob" }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "sample-menu-weekly.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      toast.success("Download Successfully");
+    } catch (error) {
+      console.error("Error downloading the sample file:", error);
+      toast.error("Internal Server Error");
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -270,7 +323,20 @@ const DishDescription = () => {
             >
               Add Menu
             </button>
+            <button
+              onClick={() => setUploadModalOpen(true)}
+              className="px-6 py-2 font-medium text-lg text-gray-300 bg-blue-600 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300 ml-4"
+            >
+              Upload Dish as Excel
+            </button>
+            <button
+              onClick={downloadSampleFile} // Function to trigger download
+              className="px-6 pl-5 ml-2 py-2 font-medium text-lg text-white bg-green-600 rounded-full hover:bg-green-500 hover:text-white transition-all duration-300"
+            >
+              Download Sample File
+            </button>
           </div>
+
           <div className="mt-6 flex justify-center">
             <input
               type="text"
@@ -473,6 +539,36 @@ const DishDescription = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {uploadModalOpen && (
+        <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
+            <h3 className="text-xl font-medium mb-4">
+              Upload Menu as Excel File
+            </h3>
+            <input
+              type="file"
+              accept=".xlsx,.xls"
+              onChange={handleFileChange}
+              className="mb-4"
+            />
+            <div className="flex justify-between">
+              <button
+                onClick={() => setUploadModalOpen(false)}
+                className="bg-gray-500 text-white px-4 py-2 rounded"
+              >
+                Close
+              </button>
+              <button
+                onClick={handleFileUpload}
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Upload
+              </button>
+            </div>
           </div>
         </div>
       )}

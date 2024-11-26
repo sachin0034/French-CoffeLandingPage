@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const DishSchema = new mongoose.Schema({
-  date: { type: Date, default: Date.now, unique: true },
+  date: { type: Date,  unique: true },
   items: [
     {
       name: { type: String, required: true },

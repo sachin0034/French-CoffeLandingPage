@@ -1,4 +1,8 @@
 const Dish = require("../modal/dishModal");
+const XLSX = require("xlsx");
+const path = require("path");
+const dayjs = require("dayjs");
+const fs = require("fs");
 exports.createDish = async (req, res) => {
   try {
     const { date, name, price, description, discountPrice, category } =
@@ -66,7 +70,6 @@ exports.getDishes = async (req, res) => {
 exports.searchMenuByDate = async (req, res) => {
   try {
     const { date } = req.params;
-    console.log(date);
     const searchDate = new Date(date);
     if (isNaN(searchDate)) {
       return res.status(400).json({ error: "Invalid date format" });
@@ -135,5 +138,60 @@ exports.deleteDishByDate = async (req, res) => {
     res.status(200).json({ message: "Item deleted successfully", updatedDish });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+exports.uploadMenu = async (req, res) => {
+  try {
+    const file = req.file.path;
+    const workbook = XLSX.readFile(file);
+    const sheetName = workbook.SheetNames[0];
+    const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+    for (const row of sheetData) {
+      const { date, category, name, description, price, discountPrice } = row;
+      if (!date || !category || !name || !price) {
+        console.warn(`Skipping incomplete row: ${JSON.stringify(row)}`);
+        continue;
+      }
+
+      let parsedDate;
+      let originalFormattedDate;
+      if (typeof date === "string") {
+        parsedDate = dayjs(date, "DD-MM-YYYY").startOf("day").toDate();
+        originalFormattedDate = dayjs(parsedDate).format("YYYY-MM-DD");
+      } else if (typeof date === "number") {
+        parsedDate = dayjs("1900-01-01")
+          .add(date - 2, "days")
+          .startOf("day")
+          .toDate();
+        originalFormattedDate = dayjs(parsedDate).format("YYYY-MM-DD");
+      } else {
+        console.error(`Unexpected date format: ${date}`);
+        continue;
+      }
+      let existingDish = await Dish.findOne({ date: originalFormattedDate });
+      if (!existingDish) {
+        existingDish = new Dish({ date: originalFormattedDate, items: [] });
+      }
+      existingDish.items.push({
+        name,
+        description: description || "",
+        category,
+        price,
+        discountPrice,
+      });
+      await existingDish.save();
+      console.log(`Created new dish for date: ${originalFormattedDate}`);
+    }
+
+    fs.unlinkSync(file);
+
+    // Send success response
+    res.status(200).json({ message: "Menu items uploaded successfully!" });
+  } catch (error) {
+    console.error("Error processing Excel file or saving menu:", error);
+    res
+      .status(500)
+      .json({ error: "Failed to process the Excel file or save menu" });
   }
 };

@@ -47,6 +47,20 @@ app.get("/menu-download", (req, res) => {
     res.status(500).json({ message: "Server error." });
   }
 });
+app.get("/dish-download", (req, res) => {
+  try {
+    const filePath = path.join(__dirname, "./sample/sample-dish.xlsx");
+    res.download(filePath, "sample-dish.xlsx", (err) => {
+      if (err) {
+        console.error("Error downloading file:", err);
+        res.status(500).json({ message: "Server error." });
+      }
+    });
+  } catch (error) {
+    console.error("Unexpected server error:", error);
+    res.status(500).json({ message: "Server error." });
+  }
+});
 
 app.get("/menu-left", async (req, res) => {
   try {
