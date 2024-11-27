@@ -191,10 +191,10 @@ const Dashboard = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_SERVER}/menu-left`
         );
-    
+
         const daysLeft = response.data.count || 0;
         if (daysLeft.length === 0) {
-          setRemainingDays(0); 
+          setRemainingDays(0);
           return;
         }
         setRemainingDays(daysLeft);
@@ -209,6 +209,23 @@ const Dashboard = () => {
   const handleButtonClick = () => {
     navigate(`/add-user`);
   };
+
+  const [menuTime, setMenuTime] = useState([]);
+  const fetchMenuTime = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER}/api/menu-time/get-menu`
+      );
+      setMenuTime(response.data.data);
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    fetchMenuTime();
+  }, []);
 
   return (
     <div>
@@ -428,12 +445,11 @@ const Dashboard = () => {
                   className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 >
-                  <option value="" disabled>
-                    Select menu type
-                  </option>
-                  <option value="Breakfast">Breakfast</option>
-                  <option value="Lunch">Lunch</option>
-                  <option value="Dinner">Dinner</option>
+                  {menuTime.map((category, index) => (
+                    <option key={index} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
                 </select>
               </div>
 

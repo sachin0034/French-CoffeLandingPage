@@ -228,6 +228,23 @@ const MenuDescription = () => {
     setSearchQuery(e.target.value);
   };
 
+  const [menuTime, setMenuTime] = useState([]);
+  const fetchMenuTime = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER}/api/menu-time/get-menu`
+      );
+      setMenuTime(response.data.data);
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    fetchMenuTime();
+  }, []);
+
   const renderTable = (type, data) => {
     const filteredMenu = data.filter((item) =>
       item.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -544,9 +561,11 @@ const MenuDescription = () => {
                   onChange={handleEditChange}
                   className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
-                  <option value="breakfast">Breakfast</option>
-                  <option value="lunch">Lunch</option>
-                  <option value="dinner">Dinner</option>
+                 {menuTime.map((category, index) => (
+                    <option key={index} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="flex justify-end">
