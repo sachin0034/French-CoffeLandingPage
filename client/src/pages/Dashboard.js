@@ -172,19 +172,6 @@ const Dashboard = () => {
   const [remainingDays, setRemainingDays] = useState(0);
   const pieChartData = [{ value: remainingDays, color: "black" }];
 
-  const calculateRemainingDays = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_SERVER}/menu-left`
-      );
-      console.log(response.data);
-      setRemainingDays(response.data.daysLeft.length - 1);
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
-    } finally {
-    }
-  };
-
   useEffect(() => {
     const calculateRemainingDays = async () => {
       try {
@@ -445,11 +432,20 @@ const Dashboard = () => {
                   className="mt-1 block w-full border border-black rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   required
                 >
-                  {menuTime.map((category, index) => (
-                    <option key={index} value={category.name}>
-                      {category.name}
+                  <option value="" disabled>
+                    Select Menu Type
+                  </option>
+                  {menuTime && menuTime.length > 0 ? (
+                    menuTime.map((category, index) => (
+                      <option key={index} value={category.name}>
+                        {category.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      No menu types available
                     </option>
-                  ))}
+                  )}
                 </select>
               </div>
 

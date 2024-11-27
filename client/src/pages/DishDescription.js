@@ -40,38 +40,6 @@ const DishDescription = () => {
     }
   };
 
-  // const handleDeleteAll = async () => {
-  //   const token = localStorage.getItem("token");
-
-  //   if (!token) {
-  //     toast.error("You must log in to perform this action.");
-  //     navigate("/login");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.delete(
-  //       `${process.env.REACT_APP_SERVER}/api/dish/delete-all/${date}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     if (response.status === 200) {
-  //       toast.success("All menu items have been deleted successfully.");
-  //       setMenus([]);  // Clear the UI data
-  //       setAllDeleted(true); // Set allDeleted state to true
-  //     } else {
-  //       toast.error("Failed to delete all menu items.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error deleting all menus:", error);
-  //     toast.error("An error occurred while deleting all menus.");
-  //   }
-  // };
-
   const handleDeleteAll = async () => {
     const token = localStorage.getItem("token");
 
@@ -110,8 +78,8 @@ const DishDescription = () => {
   const [isAddMenuModalOpen, setAddMenuModalOpen] = useState(false);
   const [menuData, setMenuData] = useState({
     date: "",
-    dishes: [{ name: "", price: "", description: "" }],
-    desserts: [{ name: "", price: "", description: "" }],
+    dishes: [{ name: "", price: "", description: "", dprice: "" }],
+    desserts: [{ name: "", price: "", description: "", dprice: "" }],
   });
 
   const handleDishChange = (index, field, value, type) => {
@@ -196,18 +164,6 @@ const DishDescription = () => {
     }
   };
 
-  // const fetchMenus = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_SERVER}/api/dish/get-dish-date/${date}`
-  //     );
-  //     setMenus(response.data[0].items);
-  //     setAllDeleted(response.data[0].items.length === 0);
-  //   } catch (err) {
-  //     console.error("Failed to fetch menu data:", err);
-  //   }
-  // };
-
   const fetchMenus = async () => {
     try {
       const response = await axios.get(
@@ -230,19 +186,6 @@ const DishDescription = () => {
     fetchMenus();
   }, [date]);
 
-  // const handleDelete = async (data) => {
-  //   try {
-  //     await axios.delete(
-  //       `${process.env.REACT_APP_SERVER}/api/dish/delete/${data._id}/${date}`
-  //     );
-  //     toast.success(`${data.name} has been deleted successfully.`);
-  //     fetchMenus();
-  //   } catch (error) {
-  //     console.error("Error deleting menu:", error);
-  //     toast.error("Failed to delete the menu.");
-  //   }
-  // };
-
   const handleDelete = async (data) => {
     try {
       await axios.delete(
@@ -262,7 +205,7 @@ const DishDescription = () => {
     price: "",
     description: "",
     menuType: "",
-    discountPrice: "",
+    dprice: "",
   });
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -322,6 +265,9 @@ const DishDescription = () => {
                   Price
                 </th>
                 <th scope="col" className="py-3 px-6">
+                  Discount Price
+                </th>
+                <th scope="col" className="py-3 px-6">
                   Description
                 </th>
                 <th scope="col" className="py-3 px-6">
@@ -338,6 +284,7 @@ const DishDescription = () => {
                   >
                     <td className="py-4 px-6">{item.name}</td>
                     <td className="py-4 px-6">{item.price}</td>
+                    <td className="py-4 px-6">{item.dprice}</td>
                     <td className="py-4 px-6">{item.description}</td>
                     <td className="py-4 px-6 flex gap-2">
                       <FaEdit
@@ -541,9 +488,9 @@ const DishDescription = () => {
               </div>
 
               {/* Dish Section */}
-              <h3 className="text-lg font-semibold mb-2">Dishes</h3>
+              <h3 className="text-lg font-semibold">Dishes</h3>
               {menuData.dishes.map((dish, index) => (
-                <div key={index} className="grid grid-cols-1 gap-4 mb-2">
+                <div key={index} className="grid grid-cols-1 gap-4 mb-5">
                   <label className="font-bold">{`Dish-${index + 1}`}</label>
                   <input
                     type="text"
@@ -552,7 +499,7 @@ const DishDescription = () => {
                     onChange={(e) =>
                       handleDishChange(index, "name", e.target.value, "dishes")
                     }
-                    className="border rounded-md p-2 w-full"
+                    className="border rounded-md p-3 w-full border border-black"
                     required
                   />
                   <input
@@ -562,7 +509,22 @@ const DishDescription = () => {
                     onChange={(e) =>
                       handleDishChange(index, "price", e.target.value, "dishes")
                     }
-                    className="border rounded-md p-2 w-full"
+                    className="border rounded-md p-3 w-full border border-black"
+                    required
+                  />
+                  <input
+                    type="number"
+                    placeholder={`Dish-${index + 1} Discount Price`}
+                    value={dish.dprice}
+                    onChange={(e) =>
+                      handleDishChange(
+                        index,
+                        "dprice",
+                        e.target.value,
+                        "dishes"
+                      )
+                    }
+                    className="border rounded-md p-3 w-full border border-black"
                     required
                   />
 
@@ -578,7 +540,7 @@ const DishDescription = () => {
                         "dishes"
                       )
                     }
-                    className="border rounded-md p-2 w-full"
+                    className="border rounded-md p-3 w-full border border-black"
                     required
                   />
                   {index > 0 && (
@@ -595,7 +557,7 @@ const DishDescription = () => {
               <button
                 type="button"
                 onClick={() => addNewRow("dishes")}
-                className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0]"
+                className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] p-4 mb-5"
                 disabled={menuData.dishes.length >= 3}
               >
                 Add Another Dish
@@ -612,7 +574,7 @@ const DishDescription = () => {
                     onChange={(e) =>
                       handleDishChange(0, "name", e.target.value, "desserts")
                     }
-                    className="border rounded-md p-2 w-full"
+                    className="border rounded-md p-3 w-full border border-black"
                     required
                   />
                   <input
@@ -622,7 +584,17 @@ const DishDescription = () => {
                     onChange={(e) =>
                       handleDishChange(0, "price", e.target.value, "desserts")
                     }
-                    className="border rounded-md p-2 w-full"
+                    className="border rounded-md p-3 w-full border border-black"
+                    required
+                  />
+                  <input
+                    type="number"
+                    placeholder="Dessert Discount Price"
+                    value={menuData.desserts[0].dprice}
+                    onChange={(e) =>
+                      handleDishChange(0, "dprice", e.target.value, "desserts")
+                    }
+                    className="border rounded-md p-3 w-full border border-black"
                     required
                   />
                   <input
@@ -637,7 +609,7 @@ const DishDescription = () => {
                         "desserts"
                       )
                     }
-                    className="border rounded-md p-2 w-full"
+                    className="border rounded-md p-3 w-full border border-black"
                     required
                   />
                   <button
@@ -713,8 +685,8 @@ const DishDescription = () => {
                 </label>
                 <input
                   type="number"
-                  name="discountPrice"
-                  value={editmenuData.discountPrice}
+                  name="dprice"
+                  value={editmenuData.dprice}
                   onChange={handleEditChange}
                   className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
@@ -773,7 +745,7 @@ const DishDescription = () => {
               <button
                 onClick={handleFileUpload}
                 className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
-                >
+              >
                 Upload
               </button>
             </div>

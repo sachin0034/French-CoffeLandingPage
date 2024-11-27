@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -15,12 +13,22 @@ const MenuItem = () => {
     otherMenu: [],
   });
 
-  const menuItems1 = [
-    { name: "All" },
-    { name: "Breakfast" },
-    { name: "Lunch" },
-    { name: "Dinner" },
-  ];
+  const [menuItems1, setMenuTime] = useState([]);
+  const fetchMenuTime = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER}/api/menu-time/get-menu`
+      );
+      setMenuTime(response.data.data);
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    fetchMenuTime();
+  }, []);
 
   useEffect(() => {
     const fetchMenuData = async () => {

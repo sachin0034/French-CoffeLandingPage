@@ -2,10 +2,6 @@ const ChefSuggestion = require("../modal/chefModal");
 exports.addMenu = async (req, res) => {
   try {
     const { name, description, category, price, isAvailable } = req.body;
-    const existingSuggestion = await ChefSuggestion.findOne();
-    if (existingSuggestion) {
-      await ChefSuggestion.deleteMany();
-    }
     const newChefSuggestion = new ChefSuggestion({
       name,
       description,

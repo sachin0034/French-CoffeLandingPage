@@ -149,6 +149,22 @@ const ChefSuggestion = () => {
     }
   };
 
+  const [menuTime, setMenuTime] = useState([]);
+  const fetchMenuTime = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER}/api/menu-time/get-menu`
+      );
+      setMenuTime(response.data.data);
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    fetchMenuTime();
+  }, []);
   return (
     <div>
       <Navbar />
@@ -262,10 +278,20 @@ const ChefSuggestion = () => {
                       className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                       required
                     >
-                      <option value="">Select a category</option>
-                      <option value="breakfast">Breakfast</option>
-                      <option value="lunch">Lunch</option>
-                      <option value="lunch">Dinner</option>
+                      <option value="" disabled>
+                        Select Menu Type
+                      </option>
+                      {menuTime && menuTime.length > 0 ? (
+                        menuTime.map((category, index) => (
+                          <option key={index} value={category.name}>
+                            {category.name}
+                          </option>
+                        ))
+                      ) : (
+                        <option value="" disabled>
+                          No menu types available
+                        </option>
+                      )}
                     </select>
                   </div>
 
@@ -319,13 +345,28 @@ const ChefSuggestion = () => {
                   </div>
                   <div className="mb-4">
                     <label className="block text-gray-700">Category</label>
-                    <input
-                      type="text"
+                    <select
                       name="category"
                       value={eidtformData.category}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded"
-                    />
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                      required
+                    >
+                      <option value="" disabled>
+                        Select Menu Type
+                      </option>
+                      {menuTime && menuTime.length > 0 ? (
+                        menuTime.map((category, index) => (
+                          <option key={index} value={category.name}>
+                            {category.name}
+                          </option>
+                        ))
+                      ) : (
+                        <option value="" disabled>
+                          No menu types available
+                        </option>
+                      )}
+                    </select>
                   </div>
                   <div className="mb-4">
                     <label className="block text-gray-700">Description</label>
