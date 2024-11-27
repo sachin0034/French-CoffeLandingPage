@@ -88,3 +88,27 @@ exports.deleteMenu = async (req, res) => {
     });
   }
 };
+
+
+exports.deleteAllCategories = async (req, res) => {
+  try {
+    const result = await ChefSuggestion.deleteMany({});
+    if (result.deletedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No categories found to delete",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "All categories have been deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting all categories:", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while deleting all categories",
+      error: error.message,
+    });
+  }
+};
