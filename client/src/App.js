@@ -24,6 +24,7 @@ import NotFoundPage from "./pages/NotFound";
 import DishPage from "./pages/DishPae";
 import DishDescription from "./pages/DishDescription";
 import MenuTime from "./pages/MenuTime";
+import OverlapImageLayout from "./pages/Test";
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
           <Route path="/menu-time" element={<MenuTime />} />
           <Route path="/menu" element={<MenuPage />} />
           <Route path="/dish" element={<DishPage />} />
+          <Route path="/test" element={<OverlapImageLayout />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
