@@ -36,7 +36,6 @@ const chefSuggestionSchema = new mongoose.Schema({
     },
   },
 });
-chefSuggestionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const ChefSuggestion = mongoose.model("ChefSuggestion", chefSuggestionSchema);
 

@@ -85,7 +85,7 @@ exports.searchMenuByDate = async (req, res) => {
 exports.updateDish = async (req, res) => {
   try {
     const { date, id } = req.params;
-    const { name, price, description } = req.body;
+    const { name, price, description,dprice } = req.body;
     const dish = await Dish.findOne({ date: new Date(date) });
     if (!dish) {
       return res
@@ -103,6 +103,7 @@ exports.updateDish = async (req, res) => {
       name,
       price,
       description,
+      dprice
     };
     const updatedDish = await dish.save();
     res.status(200).json(updatedDish);
@@ -155,8 +156,9 @@ exports.uploadMenu = async (req, res) => {
     const sheetName = workbook.SheetNames[0];
     const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
     for (const row of sheetData) {
-      const { date, name, description, price } = row;
-      if (!date || !name || !price) {
+      const { date, name, description, price,dprice } = row;
+      console.log(row)
+      if (!date || !name || !price || !dprice) {
         console.warn(`Skipping incomplete row: ${JSON.stringify(row)}`);
         continue;
       }
@@ -183,7 +185,7 @@ exports.uploadMenu = async (req, res) => {
       existingDish.items.push({
         name,
         description: description || "",
-
+        dprice,
         price,
       });
       await existingDish.save();

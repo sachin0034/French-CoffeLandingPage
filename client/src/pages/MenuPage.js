@@ -8,11 +8,11 @@ const MenuPage = () => {
   return (
     <div
       style={{
-        backgroundColor: "#a87442",
+        backgroundColor: "#a1887f",
         minHeight: "100vh",
       }}
     >
-      <Header />
+      {/* <Header /> */}
       <Hero />
       <MenuItem />
       <Footer />

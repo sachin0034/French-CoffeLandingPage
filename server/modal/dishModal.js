@@ -7,6 +7,7 @@ const DishSchema = new mongoose.Schema({
       name: { type: String, required: true },
       price: { type: Number, required: true },
       description: { type: String, required: true },
+      dprice:{type:Number,required:true}
     },
   ],
 });

@@ -16,5 +16,6 @@ export const Images = {
     LINKEDIN_ICON:require('./images/icons/linkedin.png'),
 
     MAIN_LOGO:require('./images/logo/logo.png'),
-    BG_MAIN_LOGO:require('./images/logo/bg-logo.png')
+    BG_MAIN_LOGO:require('./images/logo/bg-logo.png'),
+    Carousal:require('./Carousel/carosual.webp')
 }
