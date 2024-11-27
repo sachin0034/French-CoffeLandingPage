@@ -11,6 +11,7 @@ const Categorypage = () => {
   const [loading, setLoading] = useState(true);
   const [modal, isModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [allDeleted, setAllDeleted] = useState(false);
 
   const fetchDataValid = async () => {
     const token = localStorage.getItem("token");
@@ -41,6 +42,37 @@ const Categorypage = () => {
     }
   };
 
+  const handleDeleteAll = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error("You must log in to perform this action.");
+      navigate("/login");
+      return;
+    }
+    try {
+      const response = await axios.delete(
+        `${process.env.REACT_APP_SERVER}/api/category/delete-all`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("All categories have been deleted successfully.");
+        setSuggestions([]);
+        setAllDeleted(true);
+      } else {
+        toast.error("Failed to delete all categories.");
+      }
+    } catch (error) {
+      console.error("Error deleting all categories:", error);
+      toast.error("An error occurred while deleting all categories.");
+    }
+  };
+
   useEffect(() => {
     fetchDataValid();
   }, []);
@@ -58,13 +90,24 @@ const Categorypage = () => {
   };
 
   const deleteSuggestion = async (id) => {
+    const suggestionToDelete = suggestions.find(
+      (suggestion) => suggestion._id === id
+    );
+    if (!suggestionToDelete) {
+      console.error("Suggestion not found");
+      return;
+    }
     try {
       await axios.delete(
         `${process.env.REACT_APP_SERVER}/api/category/delete/${id}`
       );
       setSuggestions(suggestions.filter((suggestion) => suggestion._id !== id));
+      toast.success(
+        `${suggestionToDelete.name} has been deleted successfully.`
+      );
     } catch (error) {
       console.error("Error deleting suggestion:", error);
+      toast.error(`Failed to delete ${suggestionToDelete.name}.`);
     }
   };
 
@@ -79,6 +122,18 @@ const Categorypage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if the category already exists
+    const isDuplicate = suggestions.some(
+      (suggestion) =>
+        suggestion.name.toLowerCase() === formData.name.toLowerCase()
+    );
+
+    if (isDuplicate) {
+      toast.error("You have already added this category!");
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await axios.post(
@@ -86,14 +141,17 @@ const Categorypage = () => {
         formData
       );
       toast.success("Category added successfully!");
-      fetchSuggestions();
+      fetchSuggestions(); // Fetch the updated suggestions
       isModal(false);
       setFormData({
         name: "",
       });
+
+      // Reset allDeleted state to false as we added new categories
+      setAllDeleted(false); // This will allow the button text to update in real-time
     } catch (error) {
-      toast.success("Something went wrong");
-      console.error("Error adding chef suggestion:", error);
+      toast.error("Something went wrong");
+      console.error("Error adding category:", error);
     } finally {
       setLoading(false);
     }
@@ -137,6 +195,7 @@ const Categorypage = () => {
       console.error("Error updating suggestion:", error);
     }
   };
+
   const filteredContacts = suggestions.filter((contact) =>
     contact.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -154,21 +213,40 @@ const Categorypage = () => {
       <Navbar />
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-gray-200 rounded-lg dark:border-gray-700 mt-14">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-4 space-y-4 sm:space-y-0 sm:space-x-4">
+            {/* Search Bar */}
             <input
               type="text"
               placeholder="Search by name"
-              className="border border-gray-700 rounded-lg p-2 w-1/3"
+              className="border border-gray-700 rounded-lg p-2 w-full sm:w-1/3"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
+
+            {/* Add Category Button */}
             <button
-              className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] "
+              className="px-4 py-2 text-black rounded-md bg-[#B1D4E0]-100 dark:bg-[#B1D4E0] w-full sm:w-auto"
               onClick={() => isModal(true)}
             >
               Add Category
             </button>
+
+            {/* Delete All Categories Button */}
+            <button
+              onClick={handleDeleteAll}
+              disabled={suggestions.length === 0 || allDeleted}
+              className={`${
+                allDeleted
+                  ? "bg-gray-700 cursor-not-allowed"
+                  : suggestions.length === 0
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#000] hover:bg-[#000] focus:ring-blue-500"
+              } text-white px-6 py-2 rounded-md focus:outline-none focus:ring-2 w-full sm:w-auto`}
+            >
+              {allDeleted ? "All Items Deleted" : "Delete All Categories"}
+            </button>
           </div>
+          {/* Table content */}
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm text-left text-black-500 dark:text-black-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-300 dark:text-black-400">
@@ -212,7 +290,7 @@ const Categorypage = () => {
               </tbody>
             </table>
           </div>
-
+          {/* Pagination */}
           <div className="flex justify-center mt-4">
             <button
               onClick={() => paginate(currentPage - 1)}
@@ -232,11 +310,12 @@ const Categorypage = () => {
                 Math.ceil(filteredContacts.length / itemsPerPage)
               }
               className="px-4 py-2 bg-black text-white rounded-md mr-2"
-              >
+            >
               Next
             </button>
           </div>
 
+          {/* Add Category Modal */}
           {modal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
               <div className="bg-white rounded-lg shadow-lg w-96 p-6">

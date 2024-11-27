@@ -192,7 +192,7 @@ const DishDescription = () => {
         `${process.env.REACT_APP_SERVER}/api/dish/delete/${data._id}/${date}`
       );
       toast.success(`${data.name} has been deleted successfully.`);
-      fetchMenus(); // Fetch updated menu
+      fetchMenus(); 
     } catch (error) {
       console.error("Error deleting menu:", error);
       toast.error("Failed to delete the menu.");

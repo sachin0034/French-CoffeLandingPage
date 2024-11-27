@@ -5,5 +5,6 @@ router.post("/add-category", chefController.addMenu);
 router.get("/get-category", chefController.getMenu);
 router.put("/update/:id", chefController.getMenuByDate);
 router.delete("/delete/:id", chefController.deleteMenu);
+router.delete("/delete-all", chefController.deleteAllCategories);
 
 module.exports = router;

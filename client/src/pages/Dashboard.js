@@ -14,6 +14,8 @@ const Dashboard = () => {
   const [isAddMenuModalOpen, setAddMenuModalOpen] = useState(false);
   const [isWeeklyMenuModalOpen, setWeeklyMenuModalOpen] = useState(false);
   const [admin, isAdmin] = useState(false);
+
+ 
   useEffect(() => {
     const admin = localStorage.getItem("admin");
 
@@ -60,6 +62,66 @@ const Dashboard = () => {
   useEffect(() => {
     fetchDataValid();
   }, []);
+
+
+  const [mealToday, setMealToday] = useState({
+    breakfast: [],
+    lunch: [],
+    dinner: [],
+  });
+  
+  const getFormattedDate = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
+  // Fetch today's menu data and update state
+
+  const fetchTodayMenu = async () => {
+    try {
+      const todayDate = getFormattedDate();
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER}/api/menu/${todayDate}`
+      );
+  
+      if (response && response.data.items) {
+        const newMealToday = {
+          breakfast: response.data.items.filter(
+            (item) => item.menuType === "Breakfast"
+          ),
+          lunch: response.data.items.filter(
+            (item) => item.menuType === "Lunch"
+          ),
+          dinner: response.data.items.filter(
+            (item) => item.menuType === "Dinner"
+          ),
+        };
+  
+      
+        setMealToday((prevMealToday) =>
+          JSON.stringify(prevMealToday) !== JSON.stringify(newMealToday)
+            ? newMealToday
+            : prevMealToday
+        );
+  
+        
+      } else {
+        setMealToday({
+          breakfast: [],
+          lunch: [],
+          dinner: [],
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching menu:", error);
+    }
+  };
+
+  
+
   const [menuData, setMenuData] = useState({
     date: "",
     name: "",
@@ -92,6 +154,7 @@ const Dashboard = () => {
         description: "",
         menuType: "",
       });
+      fetchTodayMenu();
     } catch (error) {
       console.error("Error adding menu:", error);
       toast.error("Failed to add menu. Please try again.");
@@ -193,9 +256,7 @@ const Dashboard = () => {
     calculateRemainingDays();
   }, []);
 
-  const handleButtonClick = () => {
-    navigate(`/add-user`);
-  };
+
 
   const [menuTime, setMenuTime] = useState([]);
   const fetchMenuTime = async () => {
@@ -286,7 +347,8 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <Main />
+              <Main mealToday={mealToday} fetchTodayMenu={fetchTodayMenu} />
+
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-5 mt-5  ">
                 <div
@@ -465,13 +527,13 @@ const Dashboard = () => {
                 />
               </div>
 
-              {/* Menu Price Input */}
+             
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
                   Menu Price
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   name="price"
                   value={menuData.price}
                   onChange={handleChange}

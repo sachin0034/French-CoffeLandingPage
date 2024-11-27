@@ -6,16 +6,17 @@ import Navbar from "../Sidebar/Sidebar";
 import { toast } from "react-toastify";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
-const Main = () => {
+const Main = ({ mealToday, fetchTodayMenu }) => {
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
-  const [mealToday, setMealToday] = useState({
-    breakfast: [],
-    lunch: [],
-    dinner: [],
-  });
+  
+  // const [mealToday, setMealToday] = useState({
+  //   breakfast: [],
+  //   lunch: [],
+  //   dinner: [],
+  // });
 
   const [currentDate, setCurrentDate] = useState("");
 
@@ -81,45 +82,8 @@ const Main = () => {
     return `${year}-${month}-${day}`;
   };
 
-  const fetchTodayMenu = async () => {
-    try {
-      const todayDate = getFormattedDate();
-      const response = await axios.get(
-        `${process.env.REACT_APP_SERVER}/api/menu/${todayDate}`
-      );
-      if (response && response.data.items) {
-        let breakfastItems = [];
-        let lunchItems = [];
-        let dinnerItems = [];
 
-        response.data.items.forEach((item) => {
-          if (item.menuType === "Breakfast" && breakfastItems.length < 1) {
-            breakfastItems.push(item);
-          } else if (item.menuType === "Lunch" && lunchItems.length < 1) {
-            lunchItems.push(item);
-          } else if (item.menuType === "Dinner" && dinnerItems.length < 1) {
-            dinnerItems.push(item);
-          }
-        });
-
-        setMealToday({
-          breakfast: breakfastItems,
-          lunch: lunchItems,
-          dinner: dinnerItems,
-        });
-      } else {
-        console.warn("No meal data found for today.");
-        setMealToday({
-          breakfast: [],
-          lunch: [],
-          dinner: [],
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching menu:", error);
-    }
-  };
-
+  
   const [chef, setChef] = useState({});
 
   const fetchMealToday = async () => {
@@ -145,7 +109,13 @@ const Main = () => {
     fetchUsers();
     fetchMealToday();
     fetchTodayMenu();
-  }, []);
+
+    const interval = setInterval(() => {
+      fetchTodayMenu();
+    }, 60000); 
+  
+    return () => clearInterval(interval);
+  }, [fetchTodayMenu]);
 
   return (
     <div>
@@ -166,55 +136,41 @@ const Main = () => {
             </div>
 
             <div className="ml-20 mt-0">
-              <h3 className="text-lg font-bold text-[#000] mb-3">Meal Today</h3>
-              <div className="space-y-4 text-gray-500 text-sm">
-                {mealToday.breakfast.length > 0 && (
-                  <div>
-                    <h4 className="text-md font-semibold text-[#000] mb-2">
-                      Breakfast
-                    </h4>
-                    {mealToday.breakfast.map((item, index) => (
-                      <p
-                        key={index}
-                        className="hover:text-[#000] text-gray-400 font-bold transition"
-                      >
-                        {item.name} - {item.description}
-                      </p>
-                    ))}
-                  </div>
-                )}
-                {mealToday.lunch.length > 0 && (
-                  <div>
-                    <h4 className="text-md font-semibold text-[#000] mb-2">
-                      Lunch
-                    </h4>
-                    {mealToday.lunch.map((item, index) => (
-                      <p
-                        key={index}
-                        className="hover:text-[#000] text-gray-400 font-bold transition duration-200"
-                      >
-                        {item.name} - {item.description}
-                      </p>
-                    ))}
-                  </div>
-                )}
-                {mealToday.dinner.length > 0 && (
-                  <div>
-                    <h4 className="text-md font-semibold text-[#000] mb-2">
-                      Dinner
-                    </h4>
-                    {mealToday.dinner.map((item, index) => (
-                      <p
-                        key={index}
-                        className="hover:text-[#000] text-gray-400 font-bold transition duration-200"
-                      >
-                        {item.name} - {item.description}
-                      </p>
-                    ))}
-                  </div>
-                )}
-              </div>
+            <h3 className="text-lg font-bold text-[#000] mb-3">Meal Today</h3>
+            <div className="space-y-4 text-gray-500 text-sm">
+              {mealToday.breakfast.length > 0 && (
+                <div>
+                  <h4 className="text-md font-semibold text-[#000] mb-2">Breakfast</h4>
+                  <p
+                    className="hover:text-[#000] text-gray-400 font-bold transition"
+                  >
+                    {mealToday.breakfast[0].name} - {mealToday.breakfast[0].description}
+                  </p>
+                </div>
+              )}
+              {mealToday.lunch.length > 0 && (
+                <div>
+                  <h4 className="text-md font-semibold text-[#000] mb-2">Lunch</h4>
+                  <p
+                    className="hover:text-[#000] text-gray-400 font-bold transition duration-200"
+                  >
+                    {mealToday.lunch[0].name} - {mealToday.lunch[0].description}
+                  </p>
+                </div>
+              )}
+              {mealToday.dinner.length > 0 && (
+                <div>
+                  <h4 className="text-md font-semibold text-[#000] mb-2">Dinner</h4>
+                  <p
+                    className="hover:text-[#000] text-gray-400 font-bold transition duration-200"
+                  >
+                    {mealToday.dinner[0].name} - {mealToday.dinner[0].description}
+                  </p>
+                </div>
+              )}
             </div>
+          </div>
+          
           </div>
 
           {/* "See All Menu" button */}
