@@ -1,6 +1,6 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import LargeImg2 from "../../assets/Carousel/LargeImg2.jpg";
+import LargeImg2 from "../../assets/Carousel/carosual12.jpg";
 
 import "swiper/css";
 import "swiper/css/pagination";
