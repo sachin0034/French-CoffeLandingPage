@@ -3,6 +3,39 @@ import "./Sections.css";
 import { Images } from "../../assets";
 import pizzaImage from "../../assets/images/Pizza.png";
 
+
+// <div className="flex flex-wrap justify-center items-center w-full p-0 box-border">
+// {/* Card 1: A PROPOS */}
+// <div className="flex flex-col justify-center items-center w-full sm:w-1/2 md:w-1/3 lg:w-1/3 h-[350px] bg-[#f5e2cb] overflow-hidden shadow-lg relative mb-5">
+//   <div className="pt-10 text-center bg-[#f5e2cb] w-full absolute top-5 left-1/2 transform -translate-x-1/2 z-10 text-[#713d11]">
+//     <h3 className="text-[24px] sm:text-[30px] text-[#713d11] tracking-[3px] sm:tracking-[4.5px]">A PROPOS</h3>
+//   </div>
+//   <div className="flex justify-center items-center w-full h-full relative z-1">
+//     <img src={Images.NOODLES} alt="Card 1" className="max-w-[60%] sm:max-w-[45%] object-contain mt-8 sm:mt-16 mx-auto" />
+//   </div>
+// </div>
+
+// {/* Card 2: MENU */}
+// <div className="flex flex-col justify-center items-center w-full sm:w-1/2 md:w-1/3 lg:w-1/3 h-[350px] bg-[#f5e2cb] overflow-hidden shadow-lg relative mb-5">
+//   <div className="pt-10 text-center bg-[#f5e2cb] w-full absolute top-5 left-1/2 transform -translate-x-1/2 z-10 text-[#713d11]">
+//     <h3 className="text-[24px] sm:text-[30px] text-[#713d11] tracking-[3px] sm:tracking-[4.5px]">MENU</h3>
+//   </div>
+//   <div className="flex justify-center items-center w-full h-full relative z-1">
+//     <img src={Images.PUDDING} alt="Card 2" className="max-w-[60%] sm:max-w-[45%] object-contain mt-8 sm:mt-16 mx-auto" />
+//   </div>
+// </div>
+
+// {/* Card 3: CONTACT */}
+// <div className="flex flex-col justify-center items-center w-full sm:w-1/2 md:w-1/3 lg:w-1/3 h-[350px] bg-[#f5e2cb] overflow-hidden shadow-lg relative mb-5">
+//   <div className="pt-10 text-center bg-[#f5e2cb] w-full absolute top-5 left-1/2 transform -translate-x-1/2 z-10 text-[#713d11]">
+//     <h3 className="text-[24px] sm:text-[30px] text-[#713d11] tracking-[3px] sm:tracking-[4.5px]">CONTACT</h3>
+//   </div>
+//   <div className="flex justify-center items-center w-full h-full relative z-1">
+//     <img src={Images.SUSHE} alt="Card 3" className="max-w-[60%] sm:max-w-[45%] object-contain mt-8 sm:mt-16 mx-auto" />
+//   </div>
+// </div>
+// </div>
+
 function Sections() {
   return (
     <>
